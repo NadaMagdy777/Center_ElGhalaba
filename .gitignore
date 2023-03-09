@@ -2,9 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Center-ElGhalaba/UserIdentity/appsettings.json
-/Center-ElGhalaba/UserIdentity/appsettings.Development.json
-/Center-ElGhalaba/UserIdentity/bin
-/Center-ElGhalaba/UserIdentity/obj
-/Center-ElGhalaba/.vs
+/CenterElGhlaba/UserIdentity/appsettings.json
+/CenterElGhalaba/UserIdentity/appsettings.Development.json
+/CenterElGhalaba/UserIdentity/bin
+/CenterElGhalaba/UserIdentity/obj
+/CenterElGhalaba/.vs
 
