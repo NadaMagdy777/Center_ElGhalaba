@@ -4,6 +4,7 @@ using Center_ElGhalaba.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Center_ElGhalaba.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230309174251_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,7 +159,7 @@ namespace Center_ElGhalaba.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LevelID")
+                    b.Property<int>("LevelID")
                         .HasColumnType("int");
 
                     b.Property<int>("Likes")
@@ -168,10 +171,10 @@ namespace Center_ElGhalaba.Migrations
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SubjectID")
+                    b.Property<int>("SubjectID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TeacherID")
+                    b.Property<int>("TeacherID")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -330,6 +333,23 @@ namespace Center_ElGhalaba.Migrations
                     b.ToTable("LevelsSubject");
                 });
 
+            modelBuilder.Entity("Center_ElGhalaba.Models.Payment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Payment");
+                });
+
             modelBuilder.Entity("Center_ElGhalaba.Models.Stage", b =>
                 {
                     b.Property<int>("ID")
@@ -413,15 +433,10 @@ namespace Center_ElGhalaba.Migrations
                     b.Property<int>("LessonID")
                         .HasColumnType("int");
 
-                    b.Property<string>("PaymentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentID")
+                        .HasColumnType("int");
 
                     b.Property<string>("PaymentValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentVlaue")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -434,6 +449,8 @@ namespace Center_ElGhalaba.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("LessonID");
+
+                    b.HasIndex("PaymentID");
 
                     b.HasIndex("StudentID");
 
@@ -520,18 +537,19 @@ namespace Center_ElGhalaba.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("PaymentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentVlaue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentID")
+                        .HasColumnType("int");
 
                     b.Property<int>("TeacherID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Vlaue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("PaymentID");
 
                     b.HasIndex("TeacherID");
 
@@ -678,13 +696,13 @@ namespace Center_ElGhalaba.Migrations
             modelBuilder.Entity("Center_ElGhalaba.Models.Follows", b =>
                 {
                     b.HasOne("Center_ElGhalaba.Models.Student", "Student")
-                        .WithMany("Follows")
+                        .WithMany()
                         .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Center_ElGhalaba.Models.Teacher", "Teacher")
-                        .WithMany("Follows")
+                        .WithMany()
                         .HasForeignKey("TeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -698,15 +716,21 @@ namespace Center_ElGhalaba.Migrations
                 {
                     b.HasOne("Center_ElGhalaba.Models.Level", "Level")
                         .WithMany("Lessons")
-                        .HasForeignKey("LevelID");
+                        .HasForeignKey("LevelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Center_ElGhalaba.Models.Subject", "Subject")
                         .WithMany("Lessons")
-                        .HasForeignKey("SubjectID");
+                        .HasForeignKey("SubjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Center_ElGhalaba.Models.Teacher", "Teacher")
                         .WithMany("Lessons")
-                        .HasForeignKey("TeacherID");
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Level");
 
@@ -828,6 +852,12 @@ namespace Center_ElGhalaba.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Center_ElGhalaba.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Center_ElGhalaba.Models.Student", "Student")
                         .WithMany("Orders")
                         .HasForeignKey("StudentID")
@@ -835,6 +865,8 @@ namespace Center_ElGhalaba.Migrations
                         .IsRequired();
 
                     b.Navigation("Lesson");
+
+                    b.Navigation("Payment");
 
                     b.Navigation("Student");
                 });
@@ -853,13 +885,13 @@ namespace Center_ElGhalaba.Migrations
             modelBuilder.Entity("Center_ElGhalaba.Models.TeacherLogs", b =>
                 {
                     b.HasOne("Center_ElGhalaba.Models.Teacher", "Teacher")
-                        .WithMany("Logs")
+                        .WithMany()
                         .HasForeignKey("TeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Center_ElGhalaba.Models.TeacherPaymentMethod", "TeacherPaymentMethod")
-                        .WithMany("Logs")
+                        .WithMany()
                         .HasForeignKey("TeacherPaymentMethodID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -871,11 +903,19 @@ namespace Center_ElGhalaba.Migrations
 
             modelBuilder.Entity("Center_ElGhalaba.Models.TeacherPaymentMethod", b =>
                 {
+                    b.HasOne("Center_ElGhalaba.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Center_ElGhalaba.Models.Teacher", "Teacher")
-                        .WithMany("PaymentMethods")
+                        .WithMany()
                         .HasForeignKey("TeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Payment");
 
                     b.Navigation("Teacher");
                 });
@@ -933,9 +973,11 @@ namespace Center_ElGhalaba.Migrations
 
             modelBuilder.Entity("Center_ElGhalaba.Models.AppUser", b =>
                 {
-                    b.Navigation("Student");
+                    b.Navigation("Student")
+                        .IsRequired();
 
-                    b.Navigation("Teacher");
+                    b.Navigation("Teacher")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Center_ElGhalaba.Models.Lesson", b =>
@@ -965,8 +1007,6 @@ namespace Center_ElGhalaba.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Follows");
-
                     b.Navigation("History");
 
                     b.Navigation("Orders");
@@ -981,18 +1021,7 @@ namespace Center_ElGhalaba.Migrations
 
             modelBuilder.Entity("Center_ElGhalaba.Models.Teacher", b =>
                 {
-                    b.Navigation("Follows");
-
                     b.Navigation("Lessons");
-
-                    b.Navigation("Logs");
-
-                    b.Navigation("PaymentMethods");
-                });
-
-            modelBuilder.Entity("Center_ElGhalaba.Models.TeacherPaymentMethod", b =>
-                {
-                    b.Navigation("Logs");
                 });
 #pragma warning restore 612, 618
         }
