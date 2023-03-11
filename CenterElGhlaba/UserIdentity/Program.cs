@@ -1,7 +1,9 @@
+using Center_ElGhalaba.Helpers;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Repositories;
 using Center_ElGhlaba.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using UserIdentity.Data;
@@ -26,6 +28,7 @@ namespace UserIdentity
                     opt.Password.RequireNonAlphanumeric = false;
                     opt.Password.RequireUppercase = false;
                     opt.Password.RequireDigit = false;
+                    opt.SignIn.RequireConfirmedAccount = true;
                 }
             )
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -37,6 +40,7 @@ namespace UserIdentity
 
             //builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             //builder.Services.AddHealthChecks();
             builder.Services.AddRazorPages();

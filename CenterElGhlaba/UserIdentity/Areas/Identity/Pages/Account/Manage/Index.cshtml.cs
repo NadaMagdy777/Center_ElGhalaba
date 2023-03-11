@@ -88,8 +88,8 @@ namespace UserIdentity.Areas.Identity.Pages.Account.Manage
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Address = user.Address,
-                Image = user.Image,
                 PhoneNumber = phoneNumber,
+                Image = user.Image
             };
         }
 
@@ -142,7 +142,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account.Manage
                 {
                     var file = Request.Form.Files.FirstOrDefault();
 
-                    file.CopyToAsync(dataStram);
+                    await file.CopyToAsync(dataStram);
                     user.Image = dataStram.ToArray();
                     await _userManager.UpdateAsync(user);
                 }
