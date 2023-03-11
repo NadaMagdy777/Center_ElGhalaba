@@ -1,3 +1,5 @@
+using Center_ElGhlaba.Interfaces;
+using Center_ElGhlaba.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -32,8 +34,11 @@ namespace UserIdentity
 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
             //builder.Services.AddHealthChecks();
             builder.Services.AddRazorPages();
+
 
             var app = builder.Build();
 
