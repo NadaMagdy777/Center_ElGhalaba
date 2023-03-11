@@ -14,12 +14,15 @@
             <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" class="form-control" placeholder="Please choose your first name."  />
                 <label asp-for="Input.FirstName" class="form-label"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div><div class="form-floating mb-3">
                 <input asp-for="Input.LastName" class="form-control" placeholder="Please choose your last name."  />
                 <label asp-for="Input.LastName" class="form-label"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div><div class="form-floating mb-3">
                 <input asp-for="Input.Address" class="form-control" placeholder="Please choose your address."  />
                 <label asp-for="Input.Address" class="form-label"></label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
             </div><div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
                 <label asp-for="Username" class="form-label"></label>
@@ -31,17 +34,22 @@
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating mb-3">
-                <label asp-for="Input.Image" class="w-100"></label>
+        <div class="col-md-6" >
+            <div class="form-floating mb-3 w-75">
+                <label asp-for="Input.Image" class="form-label"></label>
                 @if(Model.Input.Image != null)
                 {
-                    <img id="profilePic" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.Image))" alt="Profile Picture" />
+                    <img id="profilePic" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.Image))" alt="Profile Picture" class="w-75 h-75" />
                 }
                 else
                 {
-					<img id="profilePic" src="~/images/defaultpp.jpeg" alt="Profile Picture" />
+                    <img id="profilePic" src="~/images/defaultpp.jpeg" alt="Profile Picture" class="w-75 h-75" />
                 }
+                <div class="mb-3 w-75">
+                    <input asp-for="Input.Image" class="form-control mt-2" type="file" id="imageUpload" 
+                    onchange="document.getElementById('profilePic').src = window.URL.createObjectURL(this.files[0])">
+                    <span asp-validation-for="Input.Image" class="text-danger"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -49,4 +57,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        //function ChangeImg(ele) {
+        //    $("#profilePic").src = window.URL.createObjectURL(ele.files[0]);
+        //        }
+    </script>
 }

@@ -89,7 +89,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account.Manage
                 LastName = user.LastName,
                 Address = user.Address,
                 Image = user.Image,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
             };
         }
 
@@ -136,7 +136,17 @@ namespace UserIdentity.Areas.Identity.Pages.Account.Manage
                 await _userManager.UpdateAsync(user);
             }
 
+            if (Request.Form.Files.Count > 0)
+            {
+                using (MemoryStream dataStram = new MemoryStream())
+                {
+                    var file = Request.Form.Files.FirstOrDefault();
 
+                    file.CopyToAsync(dataStram);
+                    user.Image = dataStram.ToArray();
+                    await _userManager.UpdateAsync(user);
+                }
+            }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)

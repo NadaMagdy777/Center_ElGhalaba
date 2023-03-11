@@ -23,8 +23,13 @@ body {
 
     /*Custome Styles*/
     /*Profile Pic At Index Page*/
-#profilePic{
-    height: 350px;
-    width: 350px;
+/*#profilePic{
+    height: 340px;
+    width: 340px;
+    object-fit:cover;
+}*/
+#_Avatar{
+    height: 40px;
+    width: 40px;
     object-fit:cover;
 }

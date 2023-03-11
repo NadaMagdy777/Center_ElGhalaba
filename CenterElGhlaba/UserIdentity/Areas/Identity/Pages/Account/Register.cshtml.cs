@@ -119,8 +119,17 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            public bool IsStudent { get; set; }
-            public bool IsTeacher { get; set; }
+            //public string[] RegistryType = new string[]
+            //{
+            //    "Teacher",
+            //    "Student"
+            //};
+
+            //[Display(Name = "Student")]
+            //public bool? IsStudent { get; set; }
+
+            //[Display(Name = "Teacher")]
+            //public bool? IsTeacher { get; set; }
         }
 
 
