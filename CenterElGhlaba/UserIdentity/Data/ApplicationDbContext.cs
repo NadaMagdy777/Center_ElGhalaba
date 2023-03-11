@@ -67,6 +67,24 @@ namespace UserIdentity.Data
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                 }
             );
+
+            //builder.Entity<IdentityUserRole<string>>().HasData(
+            //    new IdentityUserRole<string>
+            //    {
+            //        UserId = "10e61531-51c6-4109-be14-99c0a4fa4fb2",
+            //        RoleId = "5f8e3c6a-aacc-401e-8b81-6e4528b83401"
+            //    },
+            //    new IdentityUserRole<string>
+            //    {
+            //        UserId = "10e61531-51c6-4109-be14-99c0a4fa4fb2",
+            //        RoleId = "b36c2a5a-e10c-4b82-b86b-20b01a85dc8a"
+            //    },
+            //    new IdentityUserRole<string>
+            //    {
+            //        UserId = "10e61531-51c6-4109-be14-99c0a4fa4fb2",
+            //        RoleId = "d5e973db-be06-4e57-93f9-6bc4e475f6b9"
+            //    }
+            //);
         }
     }
 }

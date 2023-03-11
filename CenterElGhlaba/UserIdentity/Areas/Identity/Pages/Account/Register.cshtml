@@ -1,8 +1,11 @@
 ﻿@page
+@using Center_ElGhalaba.Constants;
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
 }
+
+@inject RoleManager<IdentityRole> roleManager;
 
 <h1>@ViewData["Title"]</h1>
 
@@ -37,7 +40,8 @@
                     <label asp-for="Input.Birthdate"></label>        
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Birthdate" class="form-control" type="date" placeholder="Birth Date" />
-                    </div>       
+                    </div>
+                    <span asp-validation-for="Input.Birthdate" class="text-danger"></span>
                 </div>       
             </div>       
             <div class="form-floating mb-3">
@@ -50,18 +54,16 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            @*@*<div class="form-floating mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" asp-for="Input.IsStudent" checked>
-                    <label asp-for="Input.IsStudent"></label>
-                </div>
+            <div class="list-group mb-3">
+                @foreach (IdentityRole role in roleManager.Roles.Where(r => r.Name != RolesConsts.Admin.ToString()).OrderByDescending(r => r.Name))
+                {
+                        <div class="form-check">
+                            <input asp-for="Input.RegistryType" type="radio" value="@role.Name" class="form-check-input" checked />
+                            <label asp-for="Input.RegistryType" class="form-check-label">@role.Name</label>
+                            <span asp-validation-for="Input.RegistryType" class="text-danger"></span>
+                        </div>
+                }
             </div>
-            <div class="form-floating mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" asp-for="Input.IsTeacher">
-                    <label asp-for="Input.IsTeacher"></label>
-                </div>
-            </div>*@
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>

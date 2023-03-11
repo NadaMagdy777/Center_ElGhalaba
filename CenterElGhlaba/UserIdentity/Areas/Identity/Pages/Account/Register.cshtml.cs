@@ -119,17 +119,8 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            //public string[] RegistryType = new string[]
-            //{
-            //    "Teacher",
-            //    "Student"
-            //};
-
-            //[Display(Name = "Student")]
-            //public bool? IsStudent { get; set; }
-
-            //[Display(Name = "Teacher")]
-            //public bool? IsTeacher { get; set; }
+            [Required]
+            public string RegistryType { get; set; }
         }
 
 
@@ -160,6 +151,8 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, Input.RegistryType);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

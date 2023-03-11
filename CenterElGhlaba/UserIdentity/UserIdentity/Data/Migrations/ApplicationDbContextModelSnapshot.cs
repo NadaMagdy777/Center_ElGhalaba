@@ -477,22 +477,22 @@ namespace UserIdentity.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d345c42f-38bc-44cb-bbb2-86ec9aca23ed",
-                            ConcurrencyStamp = "eea05618-09b5-4541-affc-5ef8a6f4cea4",
+                            Id = "5dcbfd3d-a704-4874-8d82-34819ff25bc6",
+                            ConcurrencyStamp = "2b7b89c8-9421-4ea2-8c49-7d10d5558c07",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7df06f36-371c-46c1-b69e-cf71c63af2a3",
-                            ConcurrencyStamp = "dcad198a-2d22-4345-a802-eacb0d7de633",
+                            Id = "500a8ffb-ae68-470f-988b-48cd5f88418f",
+                            ConcurrencyStamp = "ed6a7e91-4b9e-45e2-823e-5f75da2e6d3a",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "3e8dfdb8-f042-4982-a04f-bfc10992b027",
-                            ConcurrencyStamp = "86ae3ab0-10af-4b26-9cf4-f348c2b95f92",
+                            Id = "7e4a839c-1819-4592-bd94-ddcb27efe2ef",
+                            ConcurrencyStamp = "e83da0ea-3ef6-4e7c-addb-9a2c5be80974",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -583,6 +583,23 @@ namespace UserIdentity.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole", "Security");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "10e61531-51c6-4109-be14-99c0a4fa4fb2",
+                            RoleId = "5f8e3c6a-aacc-401e-8b81-6e4528b83401"
+                        },
+                        new
+                        {
+                            UserId = "10e61531-51c6-4109-be14-99c0a4fa4fb2",
+                            RoleId = "b36c2a5a-e10c-4b82-b86b-20b01a85dc8a"
+                        },
+                        new
+                        {
+                            UserId = "10e61531-51c6-4109-be14-99c0a4fa4fb2",
+                            RoleId = "d5e973db-be06-4e57-93f9-6bc4e475f6b9"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
