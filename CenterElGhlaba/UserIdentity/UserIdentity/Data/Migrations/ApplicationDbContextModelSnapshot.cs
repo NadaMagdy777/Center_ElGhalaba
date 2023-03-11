@@ -473,6 +473,29 @@ namespace UserIdentity.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Role", "Security");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d345c42f-38bc-44cb-bbb2-86ec9aca23ed",
+                            ConcurrencyStamp = "eea05618-09b5-4541-affc-5ef8a6f4cea4",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "7df06f36-371c-46c1-b69e-cf71c63af2a3",
+                            ConcurrencyStamp = "dcad198a-2d22-4345-a802-eacb0d7de633",
+                            Name = "Teacher",
+                            NormalizedName = "TEACHER"
+                        },
+                        new
+                        {
+                            Id = "3e8dfdb8-f042-4982-a04f-bfc10992b027",
+                            ConcurrencyStamp = "86ae3ab0-10af-4b26-9cf4-f348c2b95f92",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
