@@ -80,24 +80,31 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
+
             [Required]
             [StringLength(500, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
             [Display(Name = "Address")]
             public string Address { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
+
+            [Display(Name = "Birth Date")]
+			public DateTime Birthdate { get; set; }
+
+			/// <summary>
+			///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+			///     directly from your code. This API may change or be removed in future releases.
+			/// </summary>
+			[Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -111,6 +118,9 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public bool IsStudent { get; set; }
+            public bool IsTeacher { get; set; }
         }
 
 
@@ -134,6 +144,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.Address = Input.Address;
+                user.Birthdate = Input.Birthdate;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

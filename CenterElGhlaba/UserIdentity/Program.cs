@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using UserIdentity.Data;
 using UserIdentity.Models;
 
@@ -17,7 +18,13 @@ namespace UserIdentity
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
+                {
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequireUppercase = false;
+                    opt.Password.RequireDigit = false;
+                }
+            )
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders()
