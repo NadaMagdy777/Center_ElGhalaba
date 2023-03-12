@@ -1,0 +1,200 @@
+﻿@using Center_ElGhalaba.Models;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model Student
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+
+<style>
+
+
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Noto Sans', sans-serif
+    }
+
+    html,
+    body {
+        height: 100%
+    }
+
+    body {
+        display: grid;
+        place-items: center;
+        background: gray;
+    }
+
+    .card {
+        color: black;
+        width: 350px;
+        border-radius: 10px;
+        background: linear-gradient(145deg, white, #gray);
+        box-shadow: 10px 10px 10px gray, -10px -10px 10px gray;
+        border: none
+    }
+
+    .neo-button {
+        width: 40px;
+        height: 40px;
+        outline: 0 !important;
+        cursor: pointer;
+        color: #fff;
+        font-size: 15px;
+        border: none;
+        margin-right: 10px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #9a40a9, #b74cc9);
+        box-shadow: inset 20px 20px 60px #913ca0, inset -20px -20px 60px #c552d8;
+    }
+
+    .num {
+        color: black !important;
+    }
+
+    .line {
+        color: #fff;
+    }
+
+    .neo-button:active {
+        border-radius: 50%;
+        background: #AB47BC;
+        box-shadow: 28px 28px 57px #933da2, -28px -28px 57px #c351d6;
+    }
+
+    .fa-facebook {
+        color: #3b5998
+    }
+
+
+
+    .profile_button {
+        color: #fff;
+        padding: 10px;
+        border: none;
+        outline: 0 !important;
+        border-radius: 50px;
+        background: #AB47BC;
+    }
+
+</style>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+<main>
+    <!--? slider Area Start-->
+    <section class="slider-area " style="background-color:cadetblue">
+        <div class="slider-active" style="background: linear-gradient(rgb(234, 226, 254) 0%, rgb(163, 118, 255) 1%, rgb(234, 104, 255) 98%, rgb(236, 125, 254) 99%, rgb(243, 243, 250) 99%, rgb(244, 245, 250) 100%); ;height:300px;">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height d-flex align-items-center">
+            </div>
+        </div>
+    </section>
+    <!-- ? services-area -->
+    <div class="services-area">
+        <div class="row justify-content-sm-center" style="background-color:white;border:none">
+
+
+            @* <div class=" col-lg-4 col-md-6 col-sm-8 card hovercard" style="background-color:white; border:none">
+            <div class="cardheader" style="background-color:white">
+            </div>
+            <div class="avatar" style="background-color:white">
+            <img alt="" src="~/assets/img/blog/author.png">
+            </div>
+            <div class="info" style="background-color:white">
+            <div class="title">
+            <a target="_blank" href="https://scripteden.com/">Script Eden</a>
+            </div>
+            <div class="desc">Passionate designer</div>
+            <div class="desc">Curious developer</div>
+            <div class="desc">Tech geek</div>
+            </div>
+
+            </div>
+
+            </div>
+
+            </div>*@
+            <div class="container d-flex justify-content-center">
+                <div class="card p-3 py-4">
+                    <div class="text-center">
+                        @if (UserManager.GetUserAsync(User).Result != null)
+                        {
+                            @if (UserManager.GetUserAsync(User).Result.Image != null)
+                            {
+                                <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.Image))" />
+                            }
+                            else
+                            {
+                                <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
+                            }
+
+                        }
+                        else
+                        {
+                            <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
+                        }
+
+
+                        <h3 class="mt-2">@Model.AppUser.FirstName+" "+@Model.AppUser.LastName</h3>
+                        <span class="mt-1 clearfix">@Model.AppUser.Address.ToString()</span>
+
+
+
+                        <div class="col">
+                            <h5>@Model.AppUser.Email.ToString()</h5>
+
+                        </div>
+                        <div class="col">
+                            <h5>@Model.AppUser.PhoneNumber</h5>
+
+                        </div>
+                        <div class="col">
+                            <h5>@Model.AppUser.Birthdate</h5>
+
+                        </div>
+
+                        <div class="profile mt-5">
+
+                            <button class="profile_button px-5">Edit profile</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Courses area start -->
+    <div class="courses-area section-padding40 fix">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8">
+                    <div class="section-tittle text-center mb-55">
+                        <h2>Our featured courses</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End-->
+</main>
+
+
+
+
+
+
+
+
