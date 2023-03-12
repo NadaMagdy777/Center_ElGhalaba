@@ -106,39 +106,14 @@
         <div class="row justify-content-sm-center" style="background-color:white;border:none">
 
 
-            @* <div class=" col-lg-4 col-md-6 col-sm-8 card hovercard" style="background-color:white; border:none">
-            <div class="cardheader" style="background-color:white">
-            </div>
-            <div class="avatar" style="background-color:white">
-            <img alt="" src="~/assets/img/blog/author.png">
-            </div>
-            <div class="info" style="background-color:white">
-            <div class="title">
-            <a target="_blank" href="https://scripteden.com/">Script Eden</a>
-            </div>
-            <div class="desc">Passionate designer</div>
-            <div class="desc">Curious developer</div>
-            <div class="desc">Tech geek</div>
-            </div>
-
-            </div>
-
-            </div>
-
-            </div>*@
             <div class="container d-flex justify-content-center">
                 <div class="card p-3 py-4">
                     <div class="text-center">
-                        @if (UserManager.GetUserAsync(User).Result != null)
+                        @if (Model.AppUser.Image != null)
                         {
-                            @if (UserManager.GetUserAsync(User).Result.Image != null)
-                            {
+                           
                                 <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.Image))" />
-                            }
-                            else
-                            {
-                                <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
-                            }
+                          
 
                         }
                         else
@@ -147,7 +122,7 @@
                         }
 
 
-                        <h3 class="mt-2">@Model.AppUser.FirstName+" "+@Model.AppUser.LastName</h3>
+                        <h3 class="mt-2">@Model.AppUser.FirstName @Model.AppUser.LastName</h3>
                         <span class="mt-1 clearfix">@Model.AppUser.Address.ToString()</span>
 
 
