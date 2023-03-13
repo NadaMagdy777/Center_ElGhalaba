@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Center_ElGhalaba.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -145,6 +146,15 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 user.Address = Input.Address;
                 user.Birthdate = Input.Birthdate;
+
+                if (Input.RegistryType == RolesConsts.Student.ToString())
+                {
+                    user.Student = new Center_ElGhalaba.Models.Student();
+                }
+                else
+                {
+                    user.Teacher = new Center_ElGhalaba.Models.Teacher();
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
