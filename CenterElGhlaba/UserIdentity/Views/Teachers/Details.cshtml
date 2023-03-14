@@ -1,43 +1,98 @@
-﻿@model Center_ElGhalaba.Models.Teacher
+﻿@using Center_ElGhalaba.Models
+@model Center_ElGhalaba.Models.Teacher
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_PageLayout.cshtml";
 }
 
-<h1>Details</h1>
+<main>
+    <!--? slider Area Start-->
+    <section class="slider-area">
+        <div class="slider-active" style="background: linear-gradient(rgb(234, 226, 254) 0%, rgb(163, 118, 255) 1%, rgb(234, 104, 255) 98%, rgb(236, 125, 254) 99%, rgb(243, 243, 250) 99%, rgb(244, 245, 250) 100%); height:300px;">
 
-<div>
-    <h4>Teacher</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Balance)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Likes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Likes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUserID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppUserID)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+        </div>
+    </section>
+    <!-- ? services-area -->
+    <div class="services-area">
+        <div class="container">
+            <div class="row justify-content-sm-center">
+                <div class="col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-30 py-5 shadow-lg border-1">
+                        <div class="container d-flex py-1 justify-content-center">
+                            <div class="card w-100  border-0 text-center">
+                                <div class="card-headerbg-light px-3 d-flex text-center justify-content-around">
+                                    <div class="left mr-2">
+                                        @if (Model.AppUser.Image != null)
+                                        {
+                                            <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
+                                        }
+                                        else
+                                        {
+
+                                            <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
+                                        }
+                                    </div>
+                                    <div class="right mt-5">
+                                        <h2>@Model.AppUser.FirstName @Model.AppUser.LastName</h2>
+                                        <h4>@Model.AppUser.Email</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body mt-3 fw-bold">
+                                    <h2 class="card-title">
+                                        <span class="badge bg-danger text-light">Your Likes: @Model.Likes</span>
+                                    </h2>
+                                    <h4 class="card-title">@Model.AppUser.Address</h4>
+                                    <h3 class="card-title">@Model.AppUser.PhoneNumber</h3>
+                                    <h5 class="card-title">@Model.AppUser.Birthdate</h5>
+                                    <div class="profile mt-5 button-header ">
+                                        <button class="btn">Edit profile</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Courses area start -->
+    <div class="courses-area section-padding40 fix">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8">
+                    <div class="section-tittle text-center mb-55">
+                        <h2>Your Lessons</h2>
+                        @if(Model.Lessons.Count > 0)
+                        {
+                            @foreach (Lesson lesson in Model.Lessons)
+                            {
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top" src="https://i.imgur.com/stD0Q19.jpg" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@lesson.Title</h5>
+                                        <p class="card-text">@lesson.Description</p>
+                                        <a asp-action="EditCourse" class="text-info">Edit </a> | 
+                                        <a asp-action="RemoveCourse" class="text-danger">Remove </a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="AddCourse" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End-->
+</main>
+
+
+
+
+
+
+

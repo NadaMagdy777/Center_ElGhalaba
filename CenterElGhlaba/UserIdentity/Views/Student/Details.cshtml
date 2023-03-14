@@ -11,10 +11,6 @@
 
 
 <style>
-
-
-
-
     * {
         margin: 0;
         padding: 0;
@@ -105,45 +101,36 @@
     <div class="services-area">
         <div class="row justify-content-sm-center" style="background-color:white;border:none">
 
-
             <div class="container d-flex justify-content-center">
                 <div class="card p-3 py-4">
                     <div class="text-center">
                         @if (Model.AppUser.Image != null)
                         {
                            
-                                <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.Image))" />
-                          
-
+                            <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.Image))" />
                         }
                         else
                         {
                             <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
                         }
 
-
                         <h3 class="mt-2">@Model.AppUser.FirstName @Model.AppUser.LastName</h3>
                         <span class="mt-1 clearfix">@Model.AppUser.Address.ToString()</span>
 
-
-
                         <div class="col">
                             <h5>@Model.AppUser.Email.ToString()</h5>
+                         </div>
 
-                        </div>
                         <div class="col">
                             <h5>@Model.AppUser.PhoneNumber</h5>
-
                         </div>
+
                         <div class="col">
                             <h5>@Model.AppUser.Birthdate</h5>
-
                         </div>
 
                         <div class="profile mt-5">
-
                             <button class="profile_button px-5">Edit profile</button>
-
                         </div>
 
                     </div>
