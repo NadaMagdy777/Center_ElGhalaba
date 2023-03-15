@@ -1,4 +1,6 @@
-﻿namespace Center_ElGhalaba.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Center_ElGhalaba.Models
 {
     public class Lesson
     {
@@ -12,13 +14,22 @@
         public int Likes { get; set; }
         public int Views { get; set; }
         public bool IsDeleted { get; set; }
+
+        [JsonIgnore]
         public virtual Subject? Subject { get; set; }
+        [JsonIgnore]
         public virtual Level? Level { get; set; }
+        [JsonIgnore]
         public virtual Teacher? Teacher { get; set; }
+        [JsonIgnore]
         public virtual List<LessonResource>? Resources { get; set; }
+        [JsonIgnore]
         public virtual List<LessonQuiz>? Quizzes { get; set; }
-		public virtual List<StudentOrder>? Orders { get; set; }
-		public virtual List<LessonComment>? Comments { get; set; }
-		public virtual List<StudentHistory>? History { get; set; }
+        [JsonIgnore]
+        public virtual List<StudentOrder>? Orders { get; set; }
+        [JsonIgnore]
+        public virtual List<LessonComment>? Comments { get; set; }
+        [JsonIgnore]
+        public virtual List<StudentHistory>? History { get; set; }
 	}
 }
