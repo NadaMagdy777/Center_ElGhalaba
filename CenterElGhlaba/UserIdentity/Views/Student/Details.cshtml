@@ -1,40 +1,35 @@
 ﻿@using Center_ElGhalaba.Models;
-@using Microsoft.AspNetCore.Identity;
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
-
 @model Student
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_PageLayout.cshtml";
+    List<Lesson> lessons = ViewBag.Lessons;
+
+    Pager pager = new Pager();
+    int pageNO = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNO = pager.CurrentPage;
+
+    }
+
 }
 
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Noto Sans', sans-serif
-    }
 
-    html,
-    body {
-        height: 100%
-    }
 
-    body {
-        display: grid;
-        place-items: center;
-        background: gray;
-    }
+
+
+
 
     .card {
         color: black;
         width: 350px;
         border-radius: 10px;
         background: linear-gradient(145deg, white, #gray);
-        box-shadow: 10px 10px 10px gray, -10px -10px 10px gray;
+        box-shadow: 0px 25px 60px rgba(66,85,164,0.06);
         border: none
     }
 
@@ -81,12 +76,14 @@
         background: #AB47BC;
     }
 
-</style>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        .profile_button:hover {
+            cursor: pointer;
+            background-color: orangered
+        }
 
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 <main>
     <!--? slider Area Start-->
@@ -101,36 +98,43 @@
     <div class="services-area">
         <div class="row justify-content-sm-center" style="background-color:white;border:none">
 
+
             <div class="container d-flex justify-content-center">
                 <div class="card p-3 py-4">
                     <div class="text-center">
                         @if (Model.AppUser.Image != null)
                         {
-                           
-                            <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.Image))" />
+
+                            <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
+
+
                         }
                         else
                         {
                             <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
                         }
 
+
                         <h3 class="mt-2">@Model.AppUser.FirstName @Model.AppUser.LastName</h3>
-                        <span class="mt-1 clearfix">@Model.AppUser.Address.ToString()</span>
+
+
+
 
                         <div class="col">
                             <h5>@Model.AppUser.Email.ToString()</h5>
-                         </div>
 
+                        </div>
                         <div class="col">
                             <h5>@Model.AppUser.PhoneNumber</h5>
-                        </div>
 
-                        <div class="col">
-                            <h5>@Model.AppUser.Birthdate</h5>
                         </div>
+                        <span class="mt-1 clearfix">@Model.AppUser.Address.ToString()</span>
+
 
                         <div class="profile mt-5">
+
                             <button class="profile_button px-5">Edit profile</button>
+
                         </div>
 
                     </div>
@@ -138,20 +142,138 @@
             </div>
         </div>
     </div>
+
     <!-- Courses area start -->
     <div class="courses-area section-padding40 fix">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-7 col-lg-8">
-                    <div class="section-tittle text-center mb-55">
-                        <h2>Our featured courses</h2>
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-8">
+                <div class="section-tittle text-center mb-55">
+                    <h2>Your Lessons</h2>
+                    <div class="row justify-content-center" id="LessonContainer">
+                        @foreach (var item in lessons)
+                        {
+                            <div class="col-3">
+                                <div class="properties properties2 mb-30">
+                                    <div class="properties__card">
+                                        <div class="properties__img overlay1">
+                                            <a href="#"><img src="~/assets/img/gallery/featured1.png" alt=""></a>
+                                        </div>
+                                        <div class="properties__caption">
+                                            <h3><a href="#">@item.Title</a></h3>
+                                            <div class="properties__footer d-flex justify-content-between align-items-center">
+
+                                                <li class="bi bi-heart-fill" style="color:red">@item.Likes</li>
+                                                <p>@item.Price EGP</p>
+
+
+                                            </div>
+                                            <a href="#" class="border-btn border-btn2">Watch Lesson</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+    <partial name="_Pager" model="@pager"></partial>
+
     <!-- Footer End-->
 </main>
+
+<script>
+    function GetLessons(value) {
+        console.log(value);
+        var page = parseInt(value)
+        $("#LessonContainer").html("");
+        console.log("hello");
+
+        console.log(page);
+
+        $.ajax(
+            {
+                url: "/Student/GetStudentLessons",
+                data: { "id": @Model.ID, "pg": page },
+                success: function (result) {
+                    console.log(result);
+                    for (let item of result) {
+                        addCard(item.title, item.likes, item.price)
+
+
+                    }
+                }
+            });
+    }
+    function addCard(title, NOLikes, price) {
+
+
+        const cardParent = document.querySelector("#LessonContainer")
+
+        const colDiv = document.createElement('div')
+        colDiv.className = 'col-3'
+
+        cardParent.appendChild(colDiv)
+
+        const card = document.createElement('div')
+        card.classList.add('properties', 'properties2', 'mb-30')
+
+        colDiv.appendChild(card)
+
+        const prpertiesCardDiv = document.createElement('div')
+        prpertiesCardDiv.classList.add('properties__card')
+
+        card.appendChild(prpertiesCardDiv)
+
+        const imgDiv = document.createElement('div')
+        imgDiv.classList.add('properties__img', 'overlay1')
+
+
+
+        const img = document.createElement('img')
+        img.classList.add('img-fluid')
+        img.src = '/assets/img/gallery/featured1.png'
+
+        const propertiescaptionDiv = document.createElement('div')
+        propertiescaptionDiv.classList.add('properties__caption')
+
+        const lessonTitle = document.createElement("h3")
+        lessonTitle.innerText = title
+
+        prpertiesCardDiv.appendChild(img)
+        prpertiesCardDiv.appendChild(propertiescaptionDiv)
+
+        propertiescaptionDiv.appendChild(lessonTitle);
+
+        const LikesDiv = document.createElement('div')
+        LikesDiv.classList.add('properties__footer', 'd-flex', 'justify-content-between', 'align-items-center')
+
+        const likies = document.createElement('li')
+        likies.classList.add('bi', 'bi-heart-fill')
+        likies.style.color = 'red'
+        likies.innerText = NOLikes;
+
+        const NoLikes = document.createElement("p")
+        NoLikes.innerText = price + ' EGP';
+
+
+        propertiescaptionDiv.appendChild(LikesDiv)
+        LikesDiv.appendChild(likies);
+        LikesDiv.appendChild(NoLikes)
+
+
+        const ViewCourseBtn = document.createElement('a')
+        ViewCourseBtn.classList.add('border-btn', 'border-btn2')
+        ViewCourseBtn.innerText = 'Watch Lesson'
+
+        propertiescaptionDiv.appendChild(ViewCourseBtn);
+
+
+    }
+</script>
 
 
 
