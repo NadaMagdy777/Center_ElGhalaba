@@ -9,11 +9,11 @@ using UserIdentity.Data;
 
 #nullable disable
 
-namespace CenterElGhlaba.Migrations
+namespace Center_ElGhlaba.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230313193558_setroles")]
-    partial class setroles
+    [Migration("20230314183642_lesson")]
+    partial class lesson
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,10 @@ namespace CenterElGhlaba.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<byte[]>("CoverPicture")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -65,6 +69,10 @@ namespace CenterElGhlaba.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -480,22 +488,22 @@ namespace CenterElGhlaba.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0c81c7dd-34cf-46f0-937c-18b8576f4c7b",
-                            ConcurrencyStamp = "2149e6e3-4976-41e9-a598-ca241179ee9a",
+                            Id = "1967740d-434d-4fdb-81dc-6c673e46b55b",
+                            ConcurrencyStamp = "ca934175-0d1f-45f8-84b3-7d87bac179eb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "14c648c6-60d3-4334-9ed9-246db3f3461f",
-                            ConcurrencyStamp = "e5411f25-c768-4f52-8237-2735b8ae2e66",
+                            Id = "22cb3c88-fe16-4966-b240-8a3875ccd173",
+                            ConcurrencyStamp = "2b8b6df9-f728-40c3-ab4a-e99ed9f2e359",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "8d0117b7-25d1-4b28-b52c-e798f0342bb2",
-                            ConcurrencyStamp = "efb668fc-5d81-45cc-a56b-cf65c10b0c46",
+                            Id = "53cc711b-81f5-437e-bba5-1e239213cc89",
+                            ConcurrencyStamp = "ee3bdefc-34ba-47ba-83ee-351c436915f0",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });

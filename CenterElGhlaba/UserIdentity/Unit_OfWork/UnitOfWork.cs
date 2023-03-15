@@ -3,7 +3,7 @@ using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Repositories;
 using UserIdentity.Data;
 
-namespace Center_ElGhlaba.UnitOfWork
+namespace Center_ElGhlaba.Unit_OfWork
 {
     public class UnitOfWork: IUnitOfWork
     {
@@ -22,6 +22,10 @@ namespace Center_ElGhlaba.UnitOfWork
             Teachers = new BaseRepository<Teacher>(_context);
             History = new BaseRepository<StudentHistory>(_context);
 
+        }
+
+        public UnitOfWork()
+        {
         }
 
         public int Complete() 

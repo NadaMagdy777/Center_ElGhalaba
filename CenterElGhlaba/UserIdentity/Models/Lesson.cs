@@ -7,6 +7,8 @@ namespace Center_ElGhalaba.Models
         public int ID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string FilePath { get; set; }
+        public byte[] CoverPicture { get; set; }
         public DateTime PublishDate { get; set; }
         public int Duration { get; set; }
         public decimal Price { get; set; }

@@ -8,7 +8,7 @@ using UserIdentity.Data;
 
 #nullable disable
 
-namespace CenterElGhlaba.Migrations
+namespace Center_ElGhlaba.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -53,6 +53,10 @@ namespace CenterElGhlaba.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<byte[]>("CoverPicture")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -62,6 +66,10 @@ namespace CenterElGhlaba.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -477,22 +485,37 @@ namespace CenterElGhlaba.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<< Updated upstream
                             Id = "a9b33c73-9b77-457d-bbd4-06e3116a0e1d",
                             ConcurrencyStamp = "290dcba0-1b7c-481e-ad73-6b83f7b74434",
+=======
+                            Id = "1967740d-434d-4fdb-81dc-6c673e46b55b",
+                            ConcurrencyStamp = "ca934175-0d1f-45f8-84b3-7d87bac179eb",
+>>>>>>> Stashed changes
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
+<<<<<<< Updated upstream
                             Id = "632d2b3f-299b-4dc0-a382-25c331b20aeb",
                             ConcurrencyStamp = "25829d4c-e3f6-40c5-b173-8c6ea8cda00e",
+=======
+                            Id = "22cb3c88-fe16-4966-b240-8a3875ccd173",
+                            ConcurrencyStamp = "2b8b6df9-f728-40c3-ab4a-e99ed9f2e359",
+>>>>>>> Stashed changes
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
+<<<<<<< Updated upstream
                             Id = "3ea6ac1c-b245-490f-9df9-c8341b02a5cc",
                             ConcurrencyStamp = "d4d394b0-09ac-4435-871e-677ee762e72f",
+=======
+                            Id = "53cc711b-81f5-437e-bba5-1e239213cc89",
+                            ConcurrencyStamp = "ee3bdefc-34ba-47ba-83ee-351c436915f0",
+>>>>>>> Stashed changes
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
