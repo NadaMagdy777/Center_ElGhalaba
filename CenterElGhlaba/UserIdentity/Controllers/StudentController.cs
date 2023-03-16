@@ -31,8 +31,6 @@ namespace Center_ElGhlaba.Controllers
             int recSkip = (pg - 1) * pageSize;
             var data = lessons.Skip(recSkip).Take(pageSize).ToList();
             return Json(data);
-
-
         }
 
         public async Task<IActionResult> Details(string id)
