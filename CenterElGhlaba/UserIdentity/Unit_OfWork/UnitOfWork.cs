@@ -12,6 +12,7 @@ namespace Center_ElGhlaba.Unit_OfWork
         public IBaseRepository<Student> Students { get; private set; }
         public IBaseRepository<Teacher> Teachers { get; private set; }
         public IBaseRepository<StudentHistory> History { get; private set; }
+        public IBaseRepository<StudentOrder> Orders { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context) 
         {
@@ -21,7 +22,7 @@ namespace Center_ElGhlaba.Unit_OfWork
             Students = new BaseRepository<Student>(_context);
             Teachers = new BaseRepository<Teacher>(_context);
             History = new BaseRepository<StudentHistory>(_context);
-
+            Orders = new BaseRepository<StudentOrder>(_context);
         }
 
         public UnitOfWork()

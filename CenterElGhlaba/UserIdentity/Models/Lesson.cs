@@ -16,7 +16,7 @@ namespace Center_ElGhalaba.Models
         public int Likes { get; set; }
         public int Views { get; set; }
         public bool IsDeleted { get; set; }
-
+       
         [JsonIgnore]
         public virtual Subject? Subject { get; set; }
         [JsonIgnore]

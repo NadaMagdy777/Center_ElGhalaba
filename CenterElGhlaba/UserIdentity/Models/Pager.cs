@@ -1,4 +1,4 @@
-﻿namespace Center_ElGhalaba.Models
+﻿namespace Center_ElGhlaba.Models
 {
     public class Pager
     {
@@ -9,19 +9,20 @@
         public int StartPage { get; set; }
         public int EndPage { get; set; }
 
-        public Pager() { 
+        public Pager()
+        {
 
         }
-        public Pager(int totalItems,int page,int pageSize=10)
+        public Pager(int totalItems, int page, int pageSize = 10)
         {
-            int totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
+            int totalPages = (int)Math.Ceiling(totalItems / (decimal)pageSize);
             int currentPage = page;
 
             int startPage = currentPage - totalPages;
-            int endPage = currentPage +totalPages;
+            int endPage = currentPage + totalPages;
             if (startPage <= 0)
             {
-                endPage=endPage-(startPage-1);
+                endPage = endPage - (startPage - 1);
                 startPage = 1;
             }
             if (endPage > TotalPages)
@@ -29,11 +30,11 @@
                 endPage = TotalPages;
                 if (endPage > 10)
                 {
-                    startPage=endPage-9;
+                    startPage = endPage - 9;
                 }
             }
             TotalItems = totalItems;
-            PageSize=pageSize;
+            PageSize = pageSize;
             TotalPages = totalPages;
             StartPage = startPage;
             EndPage = endPage;

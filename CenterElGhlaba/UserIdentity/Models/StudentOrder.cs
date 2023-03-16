@@ -8,7 +8,6 @@
         public int LessonID { get; set; }
         public virtual Lesson? Lesson { get; set; }
         public string PaymentName { get; set; }
-        public string PaymentVlaue { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public DateTime Date { get; set; }
