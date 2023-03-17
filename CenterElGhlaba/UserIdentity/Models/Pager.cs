@@ -1,4 +1,4 @@
-﻿namespace Center_ElGhlaba.Models
+﻿namespace Center_ElGhalaba.Models
 {
     public class Pager
     {

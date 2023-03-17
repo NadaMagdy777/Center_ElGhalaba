@@ -1,4 +1,4 @@
-﻿@using Center_ElGhlaba.Models;
+﻿@using Center_ElGhalaba.Models;
 @model Student
 @{
     ViewData["Title"] = "Details";
@@ -15,15 +15,7 @@
     }
 
 }
-
-
 <style>
-
-
-
-
-
-
     .card {
         color: black;
         width: 350px;
@@ -186,21 +178,56 @@
 </main>
 
 <script>
+    var CurrentPage=1;
     function GetLessons(value) {
-        console.log(value);
-        var page = parseInt(value)
-        $("#LessonContainer").html("");
-        console.log("hello");
 
-        console.log(page);
+       if( !Number.isInteger(value)){
+           if(value=='next'){
+                value = CurrentPage+1
+                CurrentPage = CurrentPage + 1;
+           }
+           else if (value == 'pref') {
+                value = CurrentPage - 1
+                CurrentPage = CurrentPage - 1;
+            }
+           else{
+                pref = CurrentPage;
+                CurrentPage = parseInt(value);
+           }
+
+
+
+       }
+           if(CurrentPage>@pager.TotalPages){
+            CurrentPage = CurrentPage -1;
+                return
+           }
+           if (CurrentPage < @pager.StartPage) {
+            CurrentPage = CurrentPage +1;
+                return
+            }
+            if (CurrentPage == pref) {
+                return
+            }
+
+        console.log(value);
+
+        var page = parseInt(value)
+
+        console.log(CurrentPage);
+
+
+
+
 
         $.ajax(
             {
                 url: "/Student/GetStudentLessons",
                 data: { "id": @Model.ID, "pg": page },
                 success: function (result) {
-                    console.log(result);
+                    $("#LessonContainer").html("");
                     for (let item of result) {
+
                         addCard(item.title, item.likes, item.price)
 
 
