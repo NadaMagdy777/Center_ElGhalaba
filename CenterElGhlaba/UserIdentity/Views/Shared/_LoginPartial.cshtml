@@ -16,7 +16,13 @@
         </li>
     }
 
-    if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+    if (await UserManager.IsInRoleAsync(user, RolesConsts.Admin.ToString()))
+    {
+        <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index" title="Manage">Hello @user.FirstName!</a>
+        </li>
+    }
+    else if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
     {
         <li class="nav-item">
                 <a class="nav-link text-dark" asp-controller="Student" asp-action="Details" asp-route-Id="@user.Id" title="Manage">Hello @user.FirstName!</a>

@@ -9,6 +9,7 @@ namespace Center_ElGhlaba.Interfaces
         IBaseRepository<Teacher> Teachers { get; }
         IBaseRepository<StudentHistory> History { get; }
         IBaseRepository<StudentOrder> Orders { get;}
+        IBaseRepository<LessonComment> comments { get;}
 
         int Complete();
     }
