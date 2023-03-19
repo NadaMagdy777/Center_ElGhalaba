@@ -1,5 +1,6 @@
 ﻿using Center_ElGhalaba.Models;
 using Center_ElGhlaba.Interfaces;
+using Center_ElGhlaba.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Center_ElGhlaba.Controllers
@@ -7,11 +8,11 @@ namespace Center_ElGhlaba.Controllers
     public class StudentController : Controller
     {
       
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly StudentServices services;
 
-        public StudentController(IUnitOfWork unitOfWork)
+        public StudentController(StudentServices services)
         {
-            _unitOfWork = unitOfWork;
+            this.services = services;
         }
 
         public IActionResult Index()
@@ -19,12 +20,10 @@ namespace Center_ElGhlaba.Controllers
             return View();
         }
         public async Task<IActionResult> GetStudentLessons(int id, int pg)
-        {
-            var StudentHistory = await _unitOfWork.History.FindAllAsync(H => H.StudentID == id, new[] { "Lesson" });
+        {            
 
-            var lessons = StudentHistory.Select(L => L.Lesson).ToList();
+            List<Lesson> lessons =await services.GetStudentLessons(id);
             const int pageSize = 1;
-
 
 
             int recentCount = lessons.Count();
@@ -35,11 +34,9 @@ namespace Center_ElGhlaba.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            Student student = await _unitOfWork.Students.FindAsync(S => S.AppUser.Id == id, new[] { "AppUser" });
+            Student student = await services.GetStudent(id);
 
-            var StudentHistory = await _unitOfWork.History.FindAllAsync(H => H.StudentID == student.ID, new[] { "Lesson" });
-
-            List<Lesson> lessons = StudentHistory.Select(L => L.Lesson).ToList();
+            List<Lesson> lessons = await services.GetStudentLessons(student.ID);
             const int pageSize = 1;
 
             int recentCount = lessons.Count();
