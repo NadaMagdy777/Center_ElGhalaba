@@ -167,12 +167,13 @@
                         }
 
                     </div>
+                    <partial name="_Pager" model="@pager"></partial>
 
                 </div>
             </div>
         </div>
     </div>
-    <partial name="_Pager" model="@pager"></partial>
+   
 
     <!-- Footer End-->
 </main>
@@ -180,6 +181,7 @@
 <script>
     var CurrentPage=1;
     function GetLessons(value) {
+        pref = CurrentPage;
 
        if( !Number.isInteger(value)){
            if(value=='next'){
@@ -198,7 +200,8 @@
 
 
        }
-           if(CurrentPage>@pager.TotalPages){
+       console.log(CurrentPage)
+       if(CurrentPage>@pager.TotalPages){
             CurrentPage = CurrentPage -1;
                 return
            }
@@ -210,11 +213,9 @@
                 return
             }
 
-        console.log(value);
 
         var page = parseInt(value)
 
-        console.log(CurrentPage);
 
 
 
