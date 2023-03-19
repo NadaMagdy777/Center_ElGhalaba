@@ -30,5 +30,9 @@ namespace Center_ElGhlaba.Controllers
         //{
 
         //}
+        public IActionResult New()
+        {
+            return View();
+        }
     }
 }
