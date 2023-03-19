@@ -4,7 +4,7 @@ using Center_ElGhlaba.Unit_OfWork;
 
 namespace Center_ElGhlaba.Services
 {
-    public class StudentServices:IStudentServices
+    public class StudentServices
     {
         private readonly IUnitOfWork unit;
 
