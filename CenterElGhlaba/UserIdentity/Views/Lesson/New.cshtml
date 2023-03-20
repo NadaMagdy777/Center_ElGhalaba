@@ -11,41 +11,78 @@
     <link rel="stylesheet" href="~/assets/css/NewPagSstyle.css">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 </head>
+<form >
+
 
     <h3 class="heading">Upload New Video</h3>
 
 
-    <div>
-        <div class="selectDivs">
-            <label for="stage" class="label">Select Stage:</label>
-            <select name="stage" id="stage" class="select">
+    
+       <div style="margin-top:20px">
+        <div class="ggg">
+           <div class="selectDivs">
+               <div class="ddd"> <label for="stage" class="labell">Select Stage:</label> </div>
+             <div class="ddd"><select name="stage" id="stage" class="select">
                 <option value="prim">Primary</option>
                 <option value="prep">Prepratory</option>
                 <option value="sec">Secondary</option>
-            </select>
-        </div>
+                    </select>
+                </div>
+            </div>
         <div class="selectDivs">
-            <label for="level" class="label">Select Level:</label>
-            <select name="level" id="level" class="select">
+                <div class="ddd"><label for="level" class="labell">Select Level:</label></div>
+                <div class="ddd">
+                    <select name="level" id="level" class="select">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
-            </select>
+                    </select>
+            </div>
         </div>
         <div class="selectDivs">
-            <label for="subject" class="label">Select Subject:</label>
-            <select name="subject" id="subject" class="select">
+                <div class="ddd"> <label for="subject" class="labell">Select Subject:</label></div>
+                <div class="ddd">
+                    <select name="subject" id="subject" class="select">
                 <option value="arb">Arabic</option>
                 <option value="en">English</option>
                 <option value="m">Math</option>
             </select>
+                </div>
         </div>
-    </div>
+        </div>
+        
+                <div class="container ggg">
+                  @*  <input type="file" id="file" accept="image/*" hidden>
+                    <div class="img-area" data-img="">
+                        <i class='bx bxs-cloud-upload icon'></i>
+                        <h3>Upload Image</h3>
+                    </div>
+                    <button class="select-image">Select Video's Cover</button>*@
 
+                    <label for="img" class="select-image">Select image:</label>
+                        <input type="file" id="img" name="img" accept="image/*">
+                        <input type="submit">
+                    
+                </div>
+        
+                   <div class="videoContainer">
+                    <video autoplay id="video" controls>
+                        <source id="source" type="video/mp4">
+                    </video>
+                    <input type="file" name="file" class="videoText" onchange="selectedVeideo(this);" />
+
+                </div>
+
+
+        </div>
+        
+    
+    <br />
+    <br />
 
     <!-- ////////////////////////////////////////////////////////////////////////// -->
-    <div class="spann">
-        <div class="spann">
+    <div>
+        <div class="rrr">
             <div class="inputBox">
                 <label for="Vtitle" class="label">Video Title:</label><br>
                 <input type="text" id="Vtitle" name="Vtitle" class="inputt"><br>
@@ -54,18 +91,15 @@
                 <label for="Vdescribtion" class="label">Video Describtion:</label><br>
                 <input type="text" id="Vdescribtion" name="Vdescribtion" class="inputt"><br>
             </div>
-            <!-- <div class="inputBox">
-                <label for="Vrecourses" class="label">Video Recourses:</label><br>
-                <input type="text" id="Vrecourses" name="Vrecourses" class="inputt"><br>
-            </div> -->
             <div class="inputBox">
                 <label for="Vprice" class="label">Video Price:</label><br>
                 <input type="text" id="Vprice" name="Vprice" class="inputt"><br>
 
             </div>
+            </div>
         </div>
         <!-- ///////////////////  -->
-        <div class="spann">
+        <div class="rrr">
 
             <div class="inputBox">
                 <label for="discount" class="label">Discount:</label><br>
@@ -84,36 +118,17 @@
 
         </div>
         <!-- ////////////////////////////////////////////////////////////////////////// -->
-        <div>
-            <div class="media">
-                <div class="container">
-                    <input type="file" id="file" accept="image/*" hidden>
-                    <div class="img-area" data-img="">
-                        <i class='bx bxs-cloud-upload icon'></i>
-                        <h3>Upload Image</h3>
-                    </div>
-                    <button class="select-image">Select Video's Cover</button>
-                </div>
-            </div>
-            <div class="media">
-
-                <div class="videoContainer">
-                    <video autoplay id="video" controls>
-                        <source id="source" type="video/mp4">
-                    </video>
-                    <input type="file" name="file" class="videoText" onchange="selectedVeideo(this);" />
-
-                </div>
-
-            </div>
-            <div class="section media">
+        
+           
+            
+            <div class="section rrr">
 
                 <div class="fileContainer">
-                    <input type="file" id="upload" style="display: none;">
-                    <label for="upload">Select Recourses:</label>
+               @*     <input type="file" id="upload" style="display: none;">
+                    <label for="upload" class="lll">Select Recourses:</label>
                 </div>
-                <button><span>&#8682; Upload</span> <span class="uploading">Uploading....</span></button>
-                <button>Cancle Upload</button>
+                <button style="width : 200px;" class="btn2"><span class="eee">&#8682; Upload</span> <span class="uploading">Uploading....</span></button>
+                <button class="cancel">Cancle Upload</button>
                 <div class="pr">
                     <strong>
                         <h4 class="ex">PDF</h4>
@@ -122,59 +137,136 @@
                     <progress min="0" max="100" value="0"></progress>
                     <span class="progress-indicator"></span>
 
+*@
+
+            <form action="/action_page.php">
+                <label for="myFile" class="select-image">Select File:</label>
+                <input type="file" id="myFile" name="filename">
+                <input type="submit">
+            </form>
+
                 </div>
             </div>
+        
+       
+            <button type="submit" class="save">Save</button>
+        
+</form>
+<script>
 
 
-        </div>
-        <div>
-            <button class="save">Save</button>
-        </div>
-        <!-- ///////////////////////////////////////////////////////////////////////////////////////// -->
-        <script>
-                const selectImage = document.querySelector('.select-image');
-                const inputFile = document.querySelector('#file');
-                const imgArea = document.querySelector('.img-area');
+    //const selectImage = document.querySelector('.select-image');
+    //const inputFile = document.querySelector('#file');
+    //const imgArea = document.querySelector('.img-area');
 
-            selectImage.addEventListener('click', function () {
-                inputFile.click();
-            })
+    //selectImage.addEventListener('click', function () {
+    //    inputFile.click();
+    //})
 
-            inputFile.addEventListener('change', function () {
-                const image = this.files[0]
-                if(image.size < 2000000) {
-                    const reader = new FileReader();
-                    reader.onload = ()=> {
-                        const allImg = imgArea.querySelectorAll('img');
-                        allImg.forEach(item=> item.remove());
-                        const imgUrl = reader.result;
-                        const img = document.createElement('img');
-                        img.src = imgUrl;
-                        imgArea.appendChild(img);
-                        imgArea.classList.add('active');
-                        imgArea.dataset.img = image.name;
-                    }
-                    reader.readAsDataURL(image);
-                } else {
-                    alert("Image size more than 2MB");
-                }
-            })
+    //inputFile.addEventListener('change', function () {
+    //    const image = this.files[0]
+    //    if (image.size < 2000000) {
+    //        const reader = new FileReader();
+    //        reader.onload = () => {
+    //            const allImg = imgArea.querySelectorAll('img');
+    //            allImg.forEach(item => item.remove());
+    //            const imgUrl = reader.result;
+    //            const img = document.createElement('img');
+    //            img.src = imgUrl;
+    //            imgArea.appendChild(img);
+    //            imgArea.classList.add('active');
+    //            imgArea.dataset.img = image.name;
+    //        }
+    //        reader.readAsDataURL(image);
+    //    } else {
+    //        alert("Image size more than 2MB");
+    //    }
+    //})
 
 
-            function selectedVeideo(self){
-                var file = self.files[0];
-                var reader = new FileReader();
 
-                reader.onload = function(e){
-                    var src = e.target.result;
-                    var video = document.getElementById("video");
-                    var source = document.getElementById("source");
 
-                    source.setAttribute("src",src);
-                    video.load();
-                    video.play();
-                };
-                reader.readAsDataURL(file);
-            }
-        </script>
+    function selectedVeideo(self) {
+        var file = self.files[0];
+        var reader = new FileReader();
 
+        reader.onload = function (e) {
+            var src = e.target.result;
+            var video = document.getElementById("video");
+            var source = document.getElementById("source");
+
+            source.setAttribute("src", src);
+            video.load();
+            video.play();
+        };
+        reader.readAsDataURL(file);
+    }
+
+
+    //let file = document.querySelector('.upload');
+    //let button = document.querySelector('btn2');
+    //let progress = document.querySelector('progress');
+    //let p_i = document.querySelector('.progress-indicator');
+    //let load = 0;
+    //let procces = "";
+
+    //file.oninput = () => {
+    //    let filename = file.files[0].name;
+    //    let extension = filename.split('.').pop();
+    //    let filesize = file.files[0].size;
+
+    //    if (filesize <= 1000000) {
+    //        filesize = (filesize / 1000).toFixed(2) + 'kb';
+    //    }
+    //    if (filesize == 1000000 || filesize <= 1000000000) {
+    //        filesize = (filesize / 1000000).toFixed(2) + 'mb';
+    //    }
+    //    if (filesize == 1000000000 || filesize <= 1000000000000) {
+    //        filesize = (filesize / 1000000000).toFixed(2) + 'gb';
+    //    }
+
+    //    document.querySelector('.lll').innerText = filename;
+    //    document.querySelector('.ex').innerText = extension;
+    //    document.querySelector('.size').innerText = filesize;
+
+    //    getFile(filename);
+    //}
+    //let upload = () => {
+    //    if (load >= 100) {
+    //        clearInterval(procces);
+    //        p_i.innerHTML = '100%' + ' ' + 'Upload Completed';
+    //        button[0].classList.remove('active');
+    //    }
+    //    else {
+    //        load++;
+    //        progress.value = load;
+    //        p_i.innerHTML = load + '%' + ' ' + 'Upload';
+    //        button[1].onClick = e => {
+    //            e.preventDefault();
+    //            clearInterval(procces);
+    //            document.querySelector('.pr').style.display = "none";
+    //            button[1].style.visibility = 'hidden';
+    //            button[0].classList.remove('active');
+
+    //        }
+    //    }
+    //}
+    //function getFile(filename) {
+    //    if (filename) {
+    //        document.querySelector('.pr').style.display = "block";
+    //        load = 0;
+    //        progress.value = 0;
+    //        p_i.innerText = ' ';
+    //        button[0].onClick = e => {
+    //            e.preventDefault();
+    //            button[0].classList.add('active');
+    //            button[1].style.visibility = 'visible';
+    //            procces = setInterval(upload, 100);
+    //        }
+    //    }
+    //}
+
+</script>
+  
+@*<script src="~/assets/js/NewLessonScript.js"></script>
+*@
