@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Admin panel</h1>
+
+<div class="row justify-content-center align-items-center gap-1 mt-3">
+    <div class="offset-4 col-8 ">
+        <a asp-action="Students">Students</a>
+        <a asp-action="Teachers">Teachers</a>
+        <a asp-action="Lessons">Lessons</a>
+        <a asp-action="Comments">Comments</a>
+    </div>
+    <div class="offset-3 col-8">
+        <a asp-action="DeletedStudents">Deleted Students</a>
+        <a asp-action="DeletedTeachers">Deleted Teachers</a>
+        <a asp-action="DeletedLessons">Deleted Lessons</a>
+    </div>
+</div>
+<hr />
+

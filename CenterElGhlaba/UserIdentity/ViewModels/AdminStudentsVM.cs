@@ -2,9 +2,13 @@
 
 namespace Center_ElGhlaba.ViewModels
 {
-    public class AdminStudentsVM
+    public class AdminUsersVM
     {
-        public List<Student> ActiveStudents { get; set; }
-        public List<Student> DeletedStudents { get; set; }
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public DateTime JoinDate { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

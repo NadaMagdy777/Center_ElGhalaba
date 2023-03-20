@@ -43,6 +43,7 @@ namespace UserIdentity
             builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddTransient<StudentServices, StudentServices>();
+            builder.Services.AddTransient<AdminServices, AdminServices>();
 
 
             //builder.Services.AddHealthChecks();
