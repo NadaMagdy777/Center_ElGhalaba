@@ -1,10 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Students";
+﻿
+@{
+    ViewData["Title"] = "Deleted Lessons";
 }
+
 
 <partial name="index" />
 
-<h2>Students</h2>
+<h2>DeletedLessons</h2>
 
 <hr />
 
@@ -12,11 +14,12 @@
     <table id="studentsDT" class="table table-striped table-bordered dt-responsive nowrap">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Join Date</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Views</th>
+                <th>Orders</th>
+                <th>PublishDate</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,8 +35,8 @@
                 "serverSide": true,
                 "filter": true,
                 "ajax": {
-                    "url": "/Admin/GetStudents",
-                    "data": { "IsDeleted": false },
+                    "url": "/Admin/GetLessons",
+                    "data": { "IsDeleted": true },
                     "method": "POST",
                     "dataType": "json"
                 },
@@ -45,44 +48,45 @@
                 }],
                 "columns": [
                     { "data": "id", "name": "Id", "autowidth": true },
-                    { "data": "firstName", "name": "FirstName", "autowidth": true },
-                    { "data": "lastName", "name": "LastName", "autowidth": true },
-                    { "data": "email", "name": "Email", "autowidth": true },
+                    { "data": "title", "name": "Title", "autowidth": true },
+                    { "data": "price", "name": "Price", "autowidth": true },
+                    { "data": "views", "name": "Views", "autowidth": true },
+                    { "data": "orders", "name": "Orders", "autowidth": true },
                     {
-                        "render": function (data, type, row) { return '<span>' + row.joinDate.split('T')[0] + '</span>' },
-                        "name": "JoinDate"
+                        "render": function (data, type, row) { return '<span>' + row.publishDate.split('T')[0] + '</span>' },
+                        "name": "PublishDate"
                     },
 
                     {
                         "render": function (data, type, row) {
-                            return '<a href="javascript:;" class="btn btn-danger js-Suspend-Student" data-Id="' + row.id + '">Suspend</a>' +
-                            '<a class="btn btn-secondary" onclick="viewProfile(this)" href="/Student/Details/' + row.id + '">Profile</a>';
+                            return '<a href="javascript:;" class="btn btn-danger js-Delete-Lesson" data-Id="' + row.id + '">Restore</a>' +
+                                '<a class="btn btn-secondary" href="/Lesson/Details/' + row.id + '">View</a>';
                         },
                         "orderable": false
                     },
                 ]
             });
 
-            $(document).on('click', '.js-Suspend-Student', function () {
+            $(document).on('click', '.js-Delete-Lesson', function () {
                 btn = event.target;
                 bootbox.confirm({
-                    title: 'Suspend User?',
-                    message: 'Do you want to Suspend this user now?.',
+                    title: 'Restore Lesson?',
+                    message: 'Do you want to Restore this lesson now?.',
                     buttons: {
                         cancel: {
                             label: '<i class="fa fa-times"></i> Cancel',
-                            ClassName: "btn-secondary"
+                            ClassName: "btn-danger"
                         },
                         confirm: {
                             label: '<i class="fa fa-check"></i> Confirm',
-                            ClassName: "btn-danger"
+                            ClassName: "btn-secondary"
                         }
                     },
                     callback: function (result) {
                         if (result) {
                             $.ajax({
-                                url: "/Admin/SuspendUser",
-                                data: { "userId": $(btn).data('id') },
+                                url: "/Admin/RestoreLesson",
+                                data: { "lessonID": $(btn).data('id') },
                                 method: "POST",
                                 success: function () {
                                     $(btn).parents('tr').fadeOut();
@@ -96,5 +100,5 @@
                 });
             });
         });
-     </script>
+    </script>
 }

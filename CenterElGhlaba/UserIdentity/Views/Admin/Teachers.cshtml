@@ -55,7 +55,8 @@
 
                     {
                         "render": function (data, type, row) {
-                            return '<a href="javascript:;" class="btn btn-danger js-Suspend-Student" data-Id="' + row.id + '">Suspend</a>';
+                            return '<a href="javascript:;" class="btn btn-danger js-Suspend-Student" data-Id="' + row.id + '">Suspend</a>' +
+                                '<a class="btn btn-secondary" onclick="viewProfile(this)" href="/Teachers/Details/' + row.id + '">Profile</a>';
                         },
                         "orderable": false
                     },

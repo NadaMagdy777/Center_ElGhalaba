@@ -60,6 +60,11 @@ namespace Center_ElGhlaba.Controllers
             return View();
         }
 
+        public IActionResult Comments()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult GetStudents(bool IsDeleted)
         {
@@ -252,7 +257,7 @@ namespace Center_ElGhlaba.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UnDeleteLesson(int lessonID)
+        public async Task<IActionResult> RestoreLesson(int lessonID)
         {
             Lesson lesson = await context.Lessons.FindAsync(lessonID);
             if (lesson == null)

@@ -55,7 +55,8 @@
 
                     {
                         "render": function (data, type, row) {
-                            return '<a href="javascript:;" class="btn btn-danger js-Suspend-Student" data-Id="' + row.id + '">Suspend</a>';
+                            return '<a href="javascript:;" class="btn btn-danger js-Suspend-Student" data-Id="' + row.id + '">Unsuspend</a>' +
+                                '<a class="btn btn-secondary" onclick="viewProfile(this)" href="/Teachers/Details/' + row.id + '">Profile</a>';
                         },
                         "orderable": false
                     },
@@ -66,21 +67,21 @@
                 btn = event.target;
                 bootbox.confirm({
                     title: 'Suspend User?',
-                    message: 'Do you want to Suspend this user now?.',
+                    message: 'Do you want to Unsuspend this user?.',
                     buttons: {
                         cancel: {
                             label: '<i class="fa fa-times"></i> Cancel',
-                            ClassName: "btn-secondary"
+                            ClassName: "btn-danger"
                         },
                         confirm: {
                             label: '<i class="fa fa-check"></i> Confirm',
-                            ClassName: "btn-danger"
+                            ClassName: "btn-secondary"
                         }
                     },
                     callback: function (result) {
                         if (result) {
                             $.ajax({
-                                url: "/Admin/SuspendUser",
+                                url: "/Admin/UnSuspendUser",
                                 data: { "userId": $(btn).data('id') },
                                 method: "POST",
                                 success: function () {

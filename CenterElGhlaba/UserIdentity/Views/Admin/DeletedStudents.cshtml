@@ -56,7 +56,8 @@
 
                     {
                         "render": function (data, type, row) {
-                            return '<a href="javascript:;" class="btn btn-danger js-unDelete-Student" data-Id="' + row.id + '">Unsuspend</a>';
+                            return '<a href="javascript:;" class="btn btn-danger js-unDelete-Student" data-Id="' + row.id + '">Unsuspend</a>' + 
+                                '<a class="btn btn-secondary" onclick="viewProfile(this)" href="/Student/Details/' + row.id + '">Profile</a>';
                         },
                         "orderable": false
                     },
@@ -71,11 +72,11 @@
                     buttons: {
                         cancel: {
                             label: '<i class="fa fa-times"></i> Cancel',
-                            ClassName: "btn-secondary"
+                            ClassName: "btn-danger"
                         },
                         confirm: {
                             label: '<i class="fa fa-check"></i> Confirm',
-                            ClassName: "btn-danger"
+                            ClassName: "btn-secondary"
                         }
                     },
                     callback: function (result) {
