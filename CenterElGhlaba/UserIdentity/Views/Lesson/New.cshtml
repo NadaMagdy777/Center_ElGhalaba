@@ -1,8 +1,10 @@
 ﻿@model LessonVM
 @{
-    Layout = "_PageLayout";
-    ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_PageLayout.cshtml";
+	ViewData["Title"] = "Index";
 }
+
+
 
 <head>
     <meta charset="UTF-8">
@@ -101,13 +103,13 @@
                                     </div>
                                     <div class="col-md-4 mb-4 d-flex flex-column">
                                             <label asp-for="levelID" class="form-label-lg" style="font-size:2.5rem;">Level</label>
-                                            <select asp-for="levelID" id="levelID" class="form-control" onchange="getSubjects()" ></select>
+                                            <select name="levelID" id="levelID"  onchange="getSubjects()" ></select>
 
                                     </div>
                                         <div class="col-md-4 mb-4 d-flex flex-column">
 
                                             <label asp-for="subjectID" class="form-label-lg" style="font-size:2.5rem;">Subject</label>
-                                            <select asp-for="subjectID" id="subjectID" class="form-control" style=" height:70px; font-size:2rem;"></select>
+                                            <select name="subjectID" id="subjectID"  style=" height:70px; font-size:2rem;"></select>
 
                                     </div>
                                 </div>
@@ -161,6 +163,9 @@
                         console.log(result);
                         for (let item of result) {
                             console.log(item.id);
+                            console.log(item.name);
+
+
                             $("#levelID").append("<option value=" + item.id + ">" + item.name + "</option>")
                         }
                     }
@@ -181,11 +186,14 @@
                     success: function (result) {
                         console.log(result);
                         for (let item of result) {
-                            $("#subjectID").append("<option value=" + item.id + ">" + item.name + "</option>")
+
+                            $("#subjectID").append("<option value=" + item.id + ">" + item.name + "</option>");
                         }
                     }
                 });
         }
     </script>
 }
+
+
 

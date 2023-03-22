@@ -89,7 +89,7 @@ namespace Center_ElGhlaba.Controllers
             if (File != null)
             {
                 string uploads = Path.Combine(hosting.WebRootPath, path);
-                 fileName = File.FileName;
+                fileName = File.FileName;
                 string fullpath = Path.Combine(uploads, fileName);
                 using var fileStream = new FileStream(fullpath, FileMode.Create);
 
