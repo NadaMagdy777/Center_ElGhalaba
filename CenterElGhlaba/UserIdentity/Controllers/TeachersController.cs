@@ -16,15 +16,49 @@ namespace Center_ElGhlaba.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-
-
         // GET: TeachersController/Details/5
-        [Authorize(Roles = "Teacher")]
+        [Authorize]
         public async Task<ActionResult> Details(string id)
         {
-            return View(await unitOfWork.Teachers.FindAsync(t => t.AppUserID == id, new[] { "AppUser", "Lessons" }));
+            return View(await unitOfWork.Teachers.FindAsync(t => t.AppUserID == id, new[] { "AppUser", "Lessons", "Follows" }));
+            //User follow and un follow 
+            //withdrow  
+        
         }
 
+        public async Task<ActionResult> IsFolowwing(string studentId,string teacherId)
+        {
+            Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Follows" });
+            Follows isfolow = teacher.Follows.FirstOrDefault(f => f.StudentID == student.ID && f.TeacherID == teacher.ID);
+            if(isfolow != null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
+        public async Task AddFollower(string studentId, string teacherId)
+        {
+            Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Follows" });
+            teacher.Follows.Add(new Follows { StudentID = student.ID, TeacherID = teacher.ID });
+            unitOfWork.Complete();
+        }
+        public async Task RemoveFollower(string studentId, string teacherId)
+        {
+            Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Follows" });
+            Follows isfolow = teacher.Follows.FirstOrDefault(f => f.StudentID == student.ID && f.TeacherID == teacher.ID);
+            if (isfolow != null)
+            {
+                teacher.Follows.Remove(isfolow);
+                unitOfWork.Complete();
+            }
+            
+        }
         //// GET: TeachersController/Details/5
         //[Authorize(Roles = "Teacher")]
         //public ActionResult AddCourse(int id)
@@ -52,8 +86,8 @@ namespace Center_ElGhlaba.Controllers
         //{
         //    return View(await unitOfWork.Teachers.GetAllAsync());
         //}
-        
-        
+
+
 
         //// GET: TeachersController/Create
         //[Authorize(Roles ="Admin")]
@@ -96,7 +130,7 @@ namespace Center_ElGhlaba.Controllers
         //        Teacher OreginalTeacher = await unitOfWork.Teachers.FindAsync(t=>t.ID == id , new[] {"AppUser"});
 
         //        OreginalTeacher.AppUser.FirstName = UpdatedTeacher.AppUser.FirstName;
-                
+
         //        //unitOfWork.Teachers.Insert(teacher);
         //        //unitOfWork.Complete();
         //        //return RedirectToAction("Index");
