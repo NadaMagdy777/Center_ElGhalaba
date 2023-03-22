@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewData["Title"] = "Comments";
+}
+
+<partial name="index" />
+
+<h2>Comments</h2>
+
+<hr />
+
+<div class="container">
+    <table id="commentsDT" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Lesson</th>
+                <th>Student</th>
+                <th>Date</th>
+                <th>Body</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section Scripts{
+    <script src="/lib/datatables/js/jquery.datatables.js"></script>
+    <script src="/lib/datatables/js/datatables.bootstrap4.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#commentsDT").dataTable({
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Admin/GetComments",
+                    "data": { "IsDeleted": false },
+                    "method": "POST",
+                    "dataType": "json"
+                },
+
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "columns": [
+                    { "data": "id", "name": "Id", "autowidth": true },
+                    { "data": "lesson", "name": "Lesson", "autowidth": true },
+                    { "data": "student", "name": "Student", "autowidth": true },
+                    { "data": "body", "name": "Body", "autowidth": true },
+                    {
+                        "render": function (data, type, row) { return '<span>' + row.date.split('T')[0] + '</span>' },
+                        "name": "PublishDate"
+                    },
+
+                    {
+                        "render": function (data, type, row) {
+                            return '<a href="javascript:;" class="btn btn-danger js-Delete-comment" data-Id="' + row.id + '">Delete</a>' +
+                                '<a class="btn btn-secondary" href="/Lesson/Details/' + row.lessonID + '#' + row.id + '">View</a>';
+                        },
+                        "orderable": false
+                    },
+                ]
+            });
+
+            $(document).on('click', '.js-Delete-comment', function () {
+                btn = event.target;
+                //console.log($(btn).data('id'));
+                bootbox.confirm({
+                    title: 'Delete Comment?',
+                    message: 'Do you want to Delete this comment now?.',
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel',
+                            ClassName: "btn-secondary"
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm',
+                            ClassName: "btn-danger"
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/Admin/DeleteComment",
+                                data: { "commentID": $(btn).data('id') },
+                                method: "POST",
+                                success: function () {
+                                    $(btn).parents('tr').fadeOut();
+                                },
+                                error: function () {
+                                    console.log("unsuccessful")
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

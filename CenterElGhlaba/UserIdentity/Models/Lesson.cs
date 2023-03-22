@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Center_ElGhalaba.Models
 {
@@ -16,6 +17,15 @@ namespace Center_ElGhalaba.Models
         public int Likes { get; set; }
         public int Views { get; set; }
         public bool IsDeleted { get; set; }
+       
+        [ForeignKey("Subject")]
+        public int subjectID { get; set; }
+
+        [ForeignKey("Level")]
+        public int levelID { get; set; }
+
+        [ForeignKey("Teacher")]
+        public int TeacherID { get; set; }
 
         [JsonIgnore]
         public virtual Subject? Subject { get; set; }

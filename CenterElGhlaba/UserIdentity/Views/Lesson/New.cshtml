@@ -1,0 +1,199 @@
+﻿@model LessonVM
+@{
+	Layout = "~/Views/Shared/_PageLayout.cshtml";
+	ViewData["Title"] = "Index";
+}
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New</title>
+
+</head>
+<style>
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
+
+
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+</style>
+<section class="h-100  m-5">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card card-registration my-4">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none d-xl-block">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                 alt="Sample photo" class="img-fluid"
+                                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                        </div>
+
+                        <div class="col-xl-6">
+                           <form asp-action="New" asp-controller="Lesson" method="post" enctype="multipart/form-data">
+
+                            <div class="card-body p-md-5 text-black">
+                                <h3 class="mb-5 text-uppercase" style="font-size:3.5rem;">Add new Lesson</h3>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                           
+                                                <label asp-for="Title" class="form-label-lg" style="font-size:2.5rem;">Title</label>
+                                                <input asp-for="Title" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
+                                                <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                                
+                                                <label asp-for="Duration" class="form-label-lg" style="font-size:2.5rem;">Discount</label>
+                                                <input type="number" asp-for="Duration" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
+                                                <span asp-validation-for="Duration" class="text-danger"></span>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                                <label asp-for="Price" class="form-label-lg" style="font-size:2.5rem;">Price</label>
+                                                <input type="number" asp-for="Price" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;"/>
+                                                <span asp-validation-for="Price" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                                <label asp-for="Discount" class="form-label-lg" style="font-size:2.5rem;">Discount</label>
+                                                <input type="number" asp-for="Discount" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
+                                                <span asp-validation-for="Discount" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                        <label asp-for="Description" class="form-label-lg" style="font-size:2.5rem;">Description</label>
+                                        <textarea asp-for="Description" id="form3Example1m" class="form-control form-control-lg" style="height:70px; font-size:2rem;"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="row">
+                                        <div class="col-md-4 mb-4 d-flex flex-column">
+                                            <label for="Stage_id" class="form-label-lg" style="font-size:2.5rem;">Stage</label>
+
+                                            <select id="Stage_id" class="select" style=" height:70px; font-size:2rem;" onchange="GetLevels()">
+                                                @foreach (Stage stage in ViewBag.stages)
+                                                {
+                                                    <option value="@stage.ID" style=" height:70px; font-size:2rem;">@stage.Name</option>
+
+                                                }
+                                            </select>
+
+                                    </div>
+                                    <div class="col-md-4 mb-4 d-flex flex-column">
+                                            <label asp-for="levelID" class="form-label-lg" style="font-size:2.5rem;">Level</label>
+                                            <select name="levelID" id="levelID"  onchange="getSubjects()" ></select>
+
+                                    </div>
+                                        <div class="col-md-4 mb-4 d-flex flex-column">
+
+                                            <label asp-for="subjectID" class="form-label-lg" style="font-size:2.5rem;">Subject</label>
+                                            <select name="subjectID" id="subjectID"  style=" height:70px; font-size:2rem;"></select>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                        <label asp-for="ImageFile" class="form-label-lg" style="font-size:2.5rem;">Select Lesson Cover</label>
+                                        <input type="file" asp-for="ImageFile" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" accept="image/*" />
+                                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                </div>
+                                
+
+                                <div class="form-outline mb-4">
+                                        <label asp-for="VideoFile" class="form-label-lg" style="font-size:2.5rem;">Upload Video</label>
+                                        <input type="file" asp-for="VideoFile" id="" class="form-control form-control-lg" style="height:40px; font-size:2rem;"  accept="video/*" />
+                                        <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                        <input type="hidden" value="@ViewBag.TeacherId" asp-for="TeacherID" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;"  />
+                                        <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-end pt-3">
+                                        <button type="submit" class="btn btn-warning btn-lg ms-2" style="height:70px; font-size:2.5rem;">Add Lesson</button>
+                                </div>
+
+                           
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        function GetLevels() {
+            var StageID = $("#Stage_id").val();
+            StageID = parseInt(StageID)
+            $("#levelID").html("");
+            $("#subjectID").html("");
+            console.log(StageID, typeof (StageID))
+            $.ajax(
+                {
+                    url: "/Lesson/GetLevels",
+                    data: { "StageID": StageID },
+
+                    success: function (result) {
+                        console.log(result);
+                        for (let item of result) {
+                            console.log(item.id);
+                            console.log(item.name);
+
+
+                            $("#levelID").append("<option value=" + item.id + ">" + item.name + "</option>")
+                        }
+                    }
+                });
+
+        }
+        function getSubjects() {
+            var StageID = $("#Stage_id").val();
+            var levelID = $("#levelID").val();
+            $("#subjectID").html("");
+
+            console.log(levelID)
+            $.ajax(
+                {
+                    url: "/Lesson/GetSubjects",
+                    data: { "levelID": levelID, "StageID": StageID },
+
+                    success: function (result) {
+                        console.log(result);
+                        for (let item of result) {
+
+                            $("#subjectID").append("<option value=" + item.id + ">" + item.name + "</option>");
+                        }
+                    }
+                });
+        }
+    </script>
+}
+
+
+

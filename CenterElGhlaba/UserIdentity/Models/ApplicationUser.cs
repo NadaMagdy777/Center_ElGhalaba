@@ -14,6 +14,7 @@ namespace UserIdentity.Models
         public string Address { get; set; }
         public byte[]? Image { get; set; }
 		public DateTime Birthdate { get; set; }
+		public DateTime JoinDate { get; set; }
 		public bool IsAvailable { get; set; }
 		public bool IsDeleted { get; set; }
 		public virtual Student? Student { get; set; }

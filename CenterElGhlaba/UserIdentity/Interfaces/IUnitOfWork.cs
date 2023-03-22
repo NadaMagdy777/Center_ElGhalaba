@@ -8,7 +8,14 @@ namespace Center_ElGhlaba.Interfaces
         IBaseRepository<Student> Students { get; }
         IBaseRepository<Teacher> Teachers { get; }
         IBaseRepository<StudentHistory> History { get; }
+        IBaseRepository<StudentOrder> Orders { get;}
+        IBaseRepository<LessonComment> comments { get;}
 
+        IBaseRepository<Stage> stages { get; }
+        IBaseRepository<Level> levels { get; }
+        IBaseRepository<Subject> subjects { get; }
+
+        IBaseRepository<LevelSubject> levelSubjects { get; }
         int Complete();
     }
 }

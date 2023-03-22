@@ -8,6 +8,7 @@
         public int StudentID { get; set; }
         public virtual Student? Student { get; set; }
         public string  Body { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime Date { get; set; }
     }
 }

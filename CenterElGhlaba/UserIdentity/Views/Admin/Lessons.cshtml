@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewData["Title"] = "Lessons";
+}
+
+<partial name="index" />
+
+<h2>Lessons</h2>
+
+<hr />
+
+<div class="container">
+    <table id="studentsDT" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Views</th>
+                <th>Orders</th>
+                <th>PublishDate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section Scripts{
+    <script src="/lib/datatables/js/jquery.datatables.js"></script>
+    <script src="/lib/datatables/js/datatables.bootstrap4.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#studentsDT").dataTable({
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Admin/GetLessons",
+                    "data": { "IsDeleted": false },
+                    "method": "POST",
+                    "dataType": "json"
+                },
+
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "columns": [
+                    { "data": "id", "name": "Id", "autowidth": true },
+                    { "data": "title", "name": "Title", "autowidth": true },
+                    { "data": "price", "name": "Price", "autowidth": true },
+                    { "data": "views", "name": "Views", "autowidth": true },
+                    { "data": "orders", "name": "Orders", "autowidth": true },
+                    {
+                        "render": function (data, type, row) { return '<span>' + row.publishDate.split('T')[0] + '</span>' },
+                        "name": "PublishDate"
+                    },
+
+                    {
+                        "render": function (data, type, row) {
+                            return '<a href="javascript:;" class="btn btn-danger js-Delete-Lesson" data-Id="' + row.id + '">Delete</a>' +
+                            '<a class="btn btn-secondary" href="/Lesson/Details/' + row.id + '">View</a>';
+                        },
+                        "orderable": false
+                    },
+                ]
+            });
+
+            $(document).on('click', '.js-Delete-Lesson', function () {
+                btn = event.target;
+                console.log($(btn).data('id'));
+                bootbox.confirm({
+                    title: 'Delete Lesson?',
+                    message: 'Do you want to Delete this lesson now?.',
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel',
+                            ClassName: "btn-secondary"
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm',
+                            ClassName: "btn-danger"
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/Admin/DeleteLesson",
+                                data: { "lessonID": $(btn).data('id') },
+                                method: "POST",
+                                success: function () {
+                                    $(btn).parents('tr').fadeOut();
+                                },
+                                error: function () {
+                                    console.log("unsuccessful")
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        </script>
+}

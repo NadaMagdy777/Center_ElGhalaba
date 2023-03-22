@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewData["Title"] = "Deleted Teachers";
+}
+
+<partial name="index" />
+
+<h1>DeletedTeachers</h1>
+<hr />
+<div class="container">
+    <table id="teachersDT" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Join Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="/lib/datatables/js/jquery.datatables.js"></script>
+    <script src="/lib/datatables/js/datatables.bootstrap4.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#teachersDT").dataTable({
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Admin/GetTeachers",
+                    "data" : {"IsDeleted" : true},
+                    "method": "POST",
+                    "dataType": "json"
+                },
+
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "columns": [
+                    { "data": "id", "name": "Id", "autowidth": true },
+                    { "data": "firstName", "name": "FirstName", "autowidth": true },
+                    { "data": "lastName", "name": "LastName", "autowidth": true },
+                    { "data": "email", "name": "Email", "autowidth": true },
+                    {
+                        "render": function (data, type, row) { return '<span>' + row.joinDate.split('T')[0] + '</span>' },
+                        "name": "JoinDate"
+                    },
+
+                    {
+                        "render": function (data, type, row) {
+                            return '<a href="javascript:;" class="btn btn-danger js-Suspend-Student" data-Id="' + row.id + '">Unsuspend</a>' +
+                                '<a class="btn btn-secondary" onclick="viewProfile(this)" href="/Teachers/Details/' + row.id + '">Profile</a>';
+                        },
+                        "orderable": false
+                    },
+                ]
+            });
+
+            $(document).on('click', '.js-Suspend-Student', function () {
+                btn = event.target;
+                bootbox.confirm({
+                    title: 'Suspend User?',
+                    message: 'Do you want to Unsuspend this user?.',
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel',
+                            ClassName: "btn-danger"
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm',
+                            ClassName: "btn-secondary"
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/Admin/UnSuspendUser",
+                                data: { "userId": $(btn).data('id') },
+                                method: "POST",
+                                success: function () {
+                                    $(btn).parents('tr').fadeOut();
+                                },
+                                error: function () {
+                                    console.log("unsuccessful")
+                                }
+                            });
+                        }
+                    }
+                });
+            })
+        });
+    </script>
+}

@@ -5,6 +5,11 @@
         @if (Model.TotalPages > 0)
         {
 
+
+            <li class="page-item">
+                <a class="page-link" onclick="GetLessons('pref')">Pref</a>
+            </li>
+
             for (var pge = Model.StartPage; pge <= Model.TotalPages; pge++)
             {
 
@@ -12,24 +17,19 @@
                     <a class="page-link" onclick="GetLessons(this.innerHTML)">@pge</a>
                 </li>
             }
-          @*  if (Model.CurrentPage < Model.TotalPages)
-            {
-                <li class="page-item">
-                    <a class="page-link" onclick="GetLessons(@Model.CurrentPage)">Next</a>
+            <li class="page-item">
+                <a class="page-link" id="next" value="0" onclick="GetLessons('next')">Next</a>
+            </li>
 
 
-                </li>
-                <li class="page-item">
-                    <a class="page-link" onclick="GetLessons(@Model.CurrentPage)">Last</a>
 
 
-                </li>
-            }*@
+
 
 
 
         }
-        
+
     </ul>
 
 </div>

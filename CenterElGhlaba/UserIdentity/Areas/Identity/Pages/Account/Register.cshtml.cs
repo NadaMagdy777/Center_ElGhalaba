@@ -146,6 +146,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 user.Address = Input.Address;
                 user.Birthdate = Input.Birthdate;
+                user.JoinDate = DateTime.Now;
 
                 if (Input.RegistryType == RolesConsts.Student.ToString())
                 {
@@ -183,6 +184,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        user.IsAvailable = true;
                         return LocalRedirect(returnUrl);
                     }
                 }

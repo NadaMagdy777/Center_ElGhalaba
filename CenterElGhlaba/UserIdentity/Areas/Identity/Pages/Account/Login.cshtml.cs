@@ -127,6 +127,9 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    user.IsAvailable = true;
+                    await _userManager.UpdateAsync(user);
+                        
                     return LocalRedirect(returnUrl);
                 }
 

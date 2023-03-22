@@ -17,16 +17,22 @@ namespace UserIdentity.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
             await _signInManager.SignOutAsync();
+            user.IsAvailable = false;
+            userManager.UpdateAsync(user);                      //                      ========> May Throw Exc
+
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
