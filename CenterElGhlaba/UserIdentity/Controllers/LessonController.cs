@@ -46,58 +46,104 @@ namespace Center_ElGhlaba.Controllers
         [HttpPost]
         public async Task<IActionResult> New(LessonVM newLesson)
         {
-            
-
-            string fileName = string.Empty;
-            Lesson lesson = new Lesson();
-
-            if (newLesson.ImageFile!= null)
+            if (ModelState.IsValid)
             {
+				string fileName = string.Empty;
+
+				Lesson lesson = new Lesson();
+				if (newLesson.VideoFile != null)
+				{
+					string uploads = Path.Combine(hosting.WebRootPath, "LessonsMaterial\\LessonVideos");
+					fileName = newLesson.VideoFile.FileName;
+					string fullpath = Path.Combine(uploads, fileName);
+					using var fileStream = new FileStream(fullpath, FileMode.Create);
+
+					newLesson.VideoFile.CopyTo(fileStream);
+                    fileStream.Close();
+
+				}
                 
-                fileName = newLesson.ImageFile.FileName;
-              
-                using (var dataStream = new MemoryStream())
+
+                if (newLesson.Resourses != null)
                 {
-                    await newLesson.ImageFile.CopyToAsync(dataStream);
-                    lesson.CoverPicture = dataStream.ToArray();
+                    string resName = string.Empty;
+                    string uploads = Path.Combine(hosting.WebRootPath, "LessonsMaterial\\LessonResourses");
+                    foreach (var res in newLesson.Resourses)
+                    {
+                        
+                        resName = res.FileName;
+                        string fullpath = Path.Combine(uploads, resName);
+                        using var ResStream = new FileStream(fullpath, FileMode.Create);
+                        res.CopyTo(ResStream);
+                        ResStream.Close();
+
+                    }
+                   
+
+                   
+
                 }
 
 
-            }
-            
-            lesson.subjectID = 1;
-            lesson.FilePath = await ConvertFileToFolder(newLesson.VideoFile,"LessonsMaterial/LessonVideos");
-            lesson.Duration = newLesson.Duration;
-            lesson.Description = newLesson.Description;
-            lesson.Title = newLesson.Title;
-            lesson.Discount = newLesson.Discount;
-            lesson.levelID = 1;
-            lesson.TeacherID = newLesson.TeacherID;
-            _UnitOfWork.Lessons.Insert(lesson);
-            _UnitOfWork.Complete();
+
+                if (newLesson.ImageFile != null)
+				{
+
+
+					using (var dataStream = new MemoryStream())
+					{
+						await newLesson.ImageFile.CopyToAsync(dataStream);
+						lesson.CoverPicture = dataStream.ToArray();
+						dataStream.Close();
+					}
+
+
+				}
+
+				lesson.subjectID = newLesson.subjectID;
+                lesson.FilePath = fileName;
+				lesson.Duration = newLesson.Duration;
+				lesson.Description = newLesson.Description;
+				lesson.Title = newLesson.Title;
+				lesson.Discount = newLesson.Discount;
+				lesson.levelID = newLesson.levelID;
+				lesson.TeacherID = newLesson.TeacherID;
+				_UnitOfWork.Lessons.Insert(lesson);
+				_UnitOfWork.Complete();
 
 
 
 
 
-            return View(newLesson);
-        }
+				
+
+			}
+			ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
+			ViewBag.TeacherId=newLesson.TeacherID;
+
+			return View(newLesson);
+
+
+
+		}
 
         public async Task<string> ConvertFileToFolder(IFormFile File,string path)
         {
             string fileName = string.Empty;
-            if (File != null)
-            {
-                string uploads = Path.Combine(hosting.WebRootPath, path);
-                fileName = File.FileName;
-                string fullpath = Path.Combine(uploads, fileName);
-                using var fileStream = new FileStream(fullpath, FileMode.Create);
+			if (File != null)
+			{
+				string uploads = Path.Combine(hosting.WebRootPath,path );
+				fileName = File.FileName;
+				string fullpath = Path.Combine(uploads, fileName);
+				using var fileStream = new FileStream(fullpath, FileMode.Create);
 
-                File.CopyToAsync(fileStream);
+				File.CopyToAsync(fileStream);
+				fileStream.Close();
 
-            }
+			}
 
-            return fileName;
+
+			return fileName;
         }
         public async Task<IActionResult> GetLevels(int StageID)
         {

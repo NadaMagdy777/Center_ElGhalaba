@@ -16,6 +16,7 @@ namespace Center_ElGhlaba.ViewModels
         public IFormFile ImageFile { get; set; }
 		public IFormFile VideoFile { get; set; }
 
+		public List<IFormFile>? Resourses { get; set; }
 		[ForeignKey("Subject")]
 		public int subjectID { get; set; }
 

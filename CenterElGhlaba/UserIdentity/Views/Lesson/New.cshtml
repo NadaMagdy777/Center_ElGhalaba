@@ -56,7 +56,7 @@
                                     <div class="col-md-6 mb-4">
                                         <div class="form-outline">
                                                 
-                                                <label asp-for="Duration" class="form-label-lg" style="font-size:2.5rem;">Discount</label>
+                                                <label asp-for="Duration" class="form-label-lg" style="font-size:2.5rem;">Duration</label>
                                                 <input type="number" asp-for="Duration" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
                                                 <span asp-validation-for="Duration" class="text-danger"></span>
                                            
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="col-md-4 mb-4 d-flex flex-column">
                                             <label asp-for="levelID" class="form-label-lg" style="font-size:2.5rem;">Level</label>
-                                            <select name="levelID" id="levelID"  onchange="getSubjects()" ></select>
+                                            <select name="levelID" id="levelID" onchange="getSubjects()"  style=" height:70px; font-size:2rem;"></select>
 
                                     </div>
                                         <div class="col-md-4 mb-4 d-flex flex-column">
@@ -126,10 +126,15 @@
                                         <input type="file" asp-for="VideoFile" id="" class="form-control form-control-lg" style="height:40px; font-size:2rem;"  accept="video/*" />
                                         <span asp-validation-for="VideoFile" class="text-danger"></span>
                                 </div>
+                                    <div class="form-outline mb-4">
+                                        <label asp-for="Resourses" class="form-label-lg" style="font-size:2.5rem;">Resources</label>
+                                        <input type="file"  multiple asp-for="Resourses" id="" class="form-control form-control-lg" style="height:40px; font-size:2rem;" accept="" />
+                                        <span asp-validation-for="Resourses" class="text-danger"></span>
+                                    </div>
 
                                 <div class="form-outline mb-4">
-                                        <input type="hidden" value="@ViewBag.TeacherId" asp-for="TeacherID" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;"  />
-                                        <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                        <input type="hidden" value="@ViewBag.TeacherId" asp-for="TeacherID" id="form3Example1m" class="form-control form-control-lg" style="height:0px; font-size:2rem;"  />
+                                        <span asp-validation-for="TeacherID" class="text-danger"></span>
                                 </div>
 
                                 <div class="d-flex justify-content-end pt-3">
