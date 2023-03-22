@@ -1,0 +1,15 @@
+﻿@model Stage
+
+<div class="offset-2 col-8">
+    <form asp-action="CreateStage" class="form-floating">
+        <div class="d-flex justify-content-evenly form-group">
+
+            <label asp-for="Name" class="form-label" ></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+            <input type="submit"  class="btn btn-outline-success"/>
+        </div>
+    </form>
+</div>
+
