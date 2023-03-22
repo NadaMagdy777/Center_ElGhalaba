@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\test.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Models\2ljiguxo.czo~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\test.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,6 +107,7 @@
     <None Include="wwwroot\assets\scss\_top-sub.scss" />
     <None Include="wwwroot\assets\scss\_variables.scss" />
     <None Include="wwwroot\assets\scss\_wantTowork.scss" />
+    <None Include="wwwroot\js\test.js" />
   </ItemGroup>
 
 </Project>

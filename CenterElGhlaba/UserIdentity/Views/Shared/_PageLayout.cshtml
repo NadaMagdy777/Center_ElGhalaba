@@ -1,4 +1,12 @@
-﻿<!doctype html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+<!doctype html>
 <html class="no-js" lang="zxx">
 <head>
     <meta charset="utf-8">
@@ -23,7 +31,11 @@
     <link rel="stylesheet" href="~/assets/css/slick.css">
     <link rel="stylesheet" href="~/assets/css/nice-select.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
-
+    <style>
+        html{
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,11 +68,12 @@
                                     <!-- Main-menu -->
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
-                                            <ul id="navigation">                                                                                          
-                                                <li class="active" ><a href="index.html">Home</a></li>
-                                                <li><a href="courses.html">Courses</a></li>
+                                            <ul id="navigation">
+                                                <li class="active"><a href="index.html">Home</a></li>
+                                                <li><a href="#Courses">Courses</a></li>
                                                 <li><a href="about.html">About</a></li>
-                                                <li><a href="#">Blog</a>
+                                                <li>
+                                                    <a href="#">Blog</a>
                                                     <ul class="submenu">
                                                         <li><a href="~/blog.html">Blog</a></li>
                                                         <li><a href="~/blog_details.html">Blog Details</a></li>
@@ -68,9 +81,45 @@
                                                     </ul>
                                                 </li>
                                                 <li><a href="contact.html">Contact</a></li>
-                                                <!-- Button -->
-                                                <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
-                                                <li class="button-header"><a href="login.html" class="btn btn3">Log in</a></li>
+
+                                                @if (SignInManager.IsSignedIn(User))
+                                                {
+                                                    if (user.Image != null)
+                                                    {
+                                                        <li class="nav-item">
+                                                            <img class="rounded-circle" id="_Avatar" src="data:image/*;base64,@(Convert.ToBase64String(user.Image))" alt="Profile Picture" />
+                                                        </li>
+                                                    }
+
+                                                    if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                                    {
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-light" asp-controller="Student" asp-action="Details" asp-route-Id="@user.Id" title="Manage">Hello @user.FirstName!</a>
+                                                        </li>
+                                                    }
+                                                    else if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()))
+                                                    {
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-light" asp-controller="Teachers" asp-action="Details" asp-route-Id="@user.Id" title="Manage">Hello @user.FirstName!</a>
+                                                        </li>
+                                                    }
+
+                                                    <li class="nav-item">
+                                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                                                        </form>
+                                                    </li>
+
+                                                }
+                                                else
+                                                {
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                                    </li>
+                                                }
                                             </ul>
                                         </nav>
                                     </div>
@@ -136,6 +185,7 @@
 <!-- Jquery Plugins, main Jquery -->	
 <script src="~/assets/js/plugins.js"></script>
 <script src="~/assets/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>

@@ -25,7 +25,7 @@
     else if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()))
     {
         <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Details" asp-route-Id="@user.Id" title="Manage">Hello @user.FirstName!</a>
+                <a class="nav-link text-dark" asp-controller="Teachers" asp-action="Details" asp-route-Id="@user.Id" title="Manage">Hello @user.FirstName!</a>
         </li>
     }
 

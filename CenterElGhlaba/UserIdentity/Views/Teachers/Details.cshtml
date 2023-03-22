@@ -1,4 +1,13 @@
-﻿@using Center_ElGhalaba.Models
+﻿@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+
+@using Center_ElGhalaba.Models
 @model Center_ElGhalaba.Models.Teacher
 
 @{
@@ -40,14 +49,30 @@
                                 </div>
                                 <div class="card-body mt-3 fw-bold">
                                     <h2 class="card-title">
+                                        <span class="badge bg-danger text-light">Your Balance: @Model.Balance</span>
+                                    </h2>
+                                    <h2 class="card-title">
                                         <span class="badge bg-danger text-light">Your Likes: @Model.Likes</span>
+                                        <span class="badge bg-danger text-light">Your Followers: @Model.Follows.Count</span>
                                     </h2>
                                     <h4 class="card-title">@Model.AppUser.Address</h4>
                                     <h3 class="card-title">@Model.AppUser.PhoneNumber</h3>
                                     <h5 class="card-title">@Model.AppUser.Birthdate</h5>
-                                    <div class="profile mt-5 button-header ">
-                                        <button class="btn">Edit profile</button>
-                                    </div>
+
+                                    @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+                                    {
+                                        <a class="btn" asp-area="Identity" asp-page="/Account/Manage/Index">Edit profile</a>
+                                    }
+                                    else
+                                    {
+                                        <div id="data">not teacher</div>
+                                        <script>
+                                            window.onload = function(){
+                                                Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')
+                                            }
+                                        </script>
+
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -57,7 +82,7 @@
         </div>
     </div>
     <!-- Courses area start -->
-    <div class="courses-area section-padding40 fix">
+    <div id="Courses" class="courses-area section-padding40 fix">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-7 col-lg-8">
@@ -67,11 +92,15 @@
                         {
                             @foreach (Lesson lesson in Model.Lessons)
                             {
-                                <div class="card" style="width: 18rem;">
+                                <div class="card d-inline-block m-2" style="width: 20rem;">
                                     <img class="card-img-top" src="https://i.imgur.com/stD0Q19.jpg" alt="Card image cap">
                                     <div class="card-body">
-                                        <h5 class="card-title">@lesson.Title</h5>
+                                        <h5 class="card-title">@lesson.Title => @lesson.Price EG</h5>
+                                        <h5 class="card-title">PublishDate: @lesson.PublishDate</h5>
+                                        <h5 class="card-title">Likes: @lesson.Likes</h5>
                                         <p class="card-text">@lesson.Description</p>
+                                        <h5 class="card-text">Views: @lesson.Views</h5>
+                                        <h5 class="card-text">Discount: @lesson.Discount</h5>
                                         <a asp-action="EditCourse" class="text-info">Edit </a> | 
                                         <a asp-action="RemoveCourse" class="text-danger">Remove </a>
                                     </div>
@@ -90,9 +119,91 @@
     <!-- Footer End-->
 </main>
 
+@section Scripts{
+
+    <script>
+    function Add(s, t) {
+        $.ajax({
+            url: '/Teachers/AddFollower',
+            data: { studentId: s, teacherId: t },
+            success: function (result) {
+                console.log(result);
+                //$('#courseList').html(result);
+            },
+            error: function (xhr, status) {
+                alert("Add error "+status);
+            }
+        });
+    };
+    function Remove(s, t) {
+        $.ajax({
+            url: '/Teachers/RemoveFollower',
+            data: { studentId: s, teacherId: t },
+            success: function (result) {
+                console.log(result);
+                //$('#courseList').html(result);
+            },
+            error: function (xhr, status) {
+                alert("Remove error "+status);
+            }
+        });
+    };
+    function Folow(s, t) {
+        $.ajax({
+            url: '/Teachers/IsFolowwing',
+            data: { studentId: s, teacherId: t },
+            success: function (result) {
+                if (result) {
+                    alert("Following");
+                        $("#data").html("<a class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
+                }
+                else {
+                    alert("Notfollowing");
+                        $("#data").html("<a class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
+                }
+
+                //$('#courseList').html(result);
+            },
+            error: function (xhr, status) {
+
+                alert("Follow error " + status);
+            }
+        });
+    };
+
+</script>
 
 
 
+    @*@{
+        if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+        {
+            <a class="btn" asp-area="Identity" asp-page="/Account/Manage/Index">Edit profile</a>
+        }
+    }
+    @{
+        else
+        {
+            <script>
+                window.onload = function () {
+                    if (Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')) {
+                        alert("Following");
+                        //<a class="btn" asp - area="Identity" asp - page="/Account/Manage/Index" > Edit profile < /a>
+                    }
+                    else {
+                        alert("Notfollowing");
+                        //<a class="btn" asp - area="Identity" asp - page="/Account/Manage/Index" > Edit profile < /a>
+                    }
+                }
+            </script>
+        }
+    }*@
 
-
-
+    @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+    {
+    }
+    else
+    {
+        @*<script src="~/js/test.js"></script>*@
+    }
+}
