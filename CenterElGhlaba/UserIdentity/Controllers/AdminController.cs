@@ -64,6 +64,83 @@ namespace Center_ElGhlaba.Controllers
         {
             return View();
         }
+        
+        public IActionResult AddNew()
+        {
+            List<Stage> stages = context.Stages.ToList();
+            List<Level> levels = context.Levels.ToList();
+            AdminAddNewVM vm = new()
+            {
+                LvlVM = new() { Stages = stages },
+                subVm = new() { Stages = stages, Levels = levels },
+                Stage = new()
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult CreateStage(Stage stage)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("AddNew");
+            }
+
+            context.Stages.Add(stage);
+            context.SaveChanges();
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        public IActionResult CreateLevel(AdminLevelVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("AddNew");
+            }
+
+            Level lvl = new()
+            {
+                StageID = vm.StageID,
+                Name = vm.Name
+            };
+
+            context.Levels.Add(lvl);
+            context.SaveChanges();
+
+            return View("Index");      
+        }
+
+        [HttpPost]
+        public IActionResult CreateSubject(AdminLvlSubjectVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("AddNew");
+            }
+
+            LevelSubject levelSubject = new()
+            {
+                StageID = vm.StageID,
+                LevelID = vm.LevelID,
+                Subject = new() { Name = vm.Name}
+            };
+
+            context.LevelsSubject.Add(levelSubject);
+            context.SaveChanges();
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        public IActionResult CureentStageLevel(int Id)
+        {
+            List<Level> lvls = context.Levels.Where(l => l.StageID == Id).ToList();
+
+            return Json(lvls);
+        }
 
         [HttpPost]
         public IActionResult GetStudents(bool IsDeleted)
