@@ -98,4 +98,9 @@
     <None Include="wwwroot\assets\scss\_wantTowork.scss" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\LessonsMaterial\LessonVideos\" />
+    <Folder Include="wwwroot\LessonsMaterial\LessonResourses\" />
+  </ItemGroup>
+
 </Project>

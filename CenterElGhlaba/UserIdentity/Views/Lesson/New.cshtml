@@ -1,4 +1,5 @@
-﻿@{
+﻿@model LessonVM
+@{
     Layout = "_PageLayout";
     ViewData["Title"] = "Index";
 }
@@ -8,265 +9,183 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New</title>
-    <link rel="stylesheet" href="~/assets/css/NewPagSstyle.css">
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+
 </head>
-<form >
-
-
-    <h3 class="heading">Upload New Video</h3>
-
-
-    
-       <div style="margin-top:20px">
-        <div class="ggg">
-           <div class="selectDivs">
-               <div class="ddd"> <label for="stage" class="labell">Select Stage:</label> </div>
-             <div class="ddd"><select name="stage" id="stage" class="select">
-                <option value="prim">Primary</option>
-                <option value="prep">Prepratory</option>
-                <option value="sec">Secondary</option>
-                    </select>
-                </div>
-            </div>
-        <div class="selectDivs">
-                <div class="ddd"><label for="level" class="labell">Select Level:</label></div>
-                <div class="ddd">
-                    <select name="level" id="level" class="select">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                    </select>
-            </div>
-        </div>
-        <div class="selectDivs">
-                <div class="ddd"> <label for="subject" class="labell">Select Subject:</label></div>
-                <div class="ddd">
-                    <select name="subject" id="subject" class="select">
-                <option value="arb">Arabic</option>
-                <option value="en">English</option>
-                <option value="m">Math</option>
-            </select>
-                </div>
-        </div>
-        </div>
-        
-                <div class="container ggg">
-                  @*  <input type="file" id="file" accept="image/*" hidden>
-                    <div class="img-area" data-img="">
-                        <i class='bx bxs-cloud-upload icon'></i>
-                        <h3>Upload Image</h3>
-                    </div>
-                    <button class="select-image">Select Video's Cover</button>*@
-
-                    <label for="img" class="select-image">Select image:</label>
-                        <input type="file" id="img" name="img" accept="image/*">
-                        <input type="submit">
-                    
-                </div>
-        
-                   <div class="videoContainer">
-                    <video autoplay id="video" controls>
-                        <source id="source" type="video/mp4">
-                    </video>
-                    <input type="file" name="file" class="videoText" onchange="selectedVeideo(this);" />
-
-                </div>
-
-
-        </div>
-        
-    
-    <br />
-    <br />
-
-    <!-- ////////////////////////////////////////////////////////////////////////// -->
-    <div>
-        <div class="rrr">
-            <div class="inputBox">
-                <label for="Vtitle" class="label">Video Title:</label><br>
-                <input type="text" id="Vtitle" name="Vtitle" class="inputt"><br>
-            </div>
-            <div class="inputBox">
-                <label for="Vdescribtion" class="label">Video Describtion:</label><br>
-                <input type="text" id="Vdescribtion" name="Vdescribtion" class="inputt"><br>
-            </div>
-            <div class="inputBox">
-                <label for="Vprice" class="label">Video Price:</label><br>
-                <input type="text" id="Vprice" name="Vprice" class="inputt"><br>
-
-            </div>
-            </div>
-        </div>
-        <!-- ///////////////////  -->
-        <div class="rrr">
-
-            <div class="inputBox">
-                <label for="discount" class="label">Discount:</label><br>
-                <input type="text" id="discount" name="discount" class="inputt"><br>
-
-            </div>
-            <div class="inputBox">
-                <label for="Vduration" class="label">Video Duration:</label><br>
-                <input type="text" id="Vduration" name="Vduration" class="inputt"><br>
-
-            </div>
-            <div class="inputBox">
-                <label for="Vquiz" class="label">Video Quiz:</label><br>
-                <input type="text" id="Vquiz" name="Vquiz" class="inputt"><br>
-            </div>
-
-        </div>
-        <!-- ////////////////////////////////////////////////////////////////////////// -->
-        
-           
-            
-            <div class="section rrr">
-
-                <div class="fileContainer">
-               @*     <input type="file" id="upload" style="display: none;">
-                    <label for="upload" class="lll">Select Recourses:</label>
-                </div>
-                <button style="width : 200px;" class="btn2"><span class="eee">&#8682; Upload</span> <span class="uploading">Uploading....</span></button>
-                <button class="cancel">Cancle Upload</button>
-                <div class="pr">
-                    <strong>
-                        <h4 class="ex">PDF</h4>
-                        <h5 class="size">2.5kb</h5>
-                    </strong>
-                    <progress min="0" max="100" value="0"></progress>
-                    <span class="progress-indicator"></span>
-
-*@
-
-            <form action="/action_page.php">
-                <label for="myFile" class="select-image">Select File:</label>
-                <input type="file" id="myFile" name="filename">
-                <input type="submit">
-            </form>
-
-                </div>
-            </div>
-        
-       
-            <button type="submit" class="save">Save</button>
-        
-</form>
-<script>
-
-
-    //const selectImage = document.querySelector('.select-image');
-    //const inputFile = document.querySelector('#file');
-    //const imgArea = document.querySelector('.img-area');
-
-    //selectImage.addEventListener('click', function () {
-    //    inputFile.click();
-    //})
-
-    //inputFile.addEventListener('change', function () {
-    //    const image = this.files[0]
-    //    if (image.size < 2000000) {
-    //        const reader = new FileReader();
-    //        reader.onload = () => {
-    //            const allImg = imgArea.querySelectorAll('img');
-    //            allImg.forEach(item => item.remove());
-    //            const imgUrl = reader.result;
-    //            const img = document.createElement('img');
-    //            img.src = imgUrl;
-    //            imgArea.appendChild(img);
-    //            imgArea.classList.add('active');
-    //            imgArea.dataset.img = image.name;
-    //        }
-    //        reader.readAsDataURL(image);
-    //    } else {
-    //        alert("Image size more than 2MB");
-    //    }
-    //})
-
-
-
-
-    function selectedVeideo(self) {
-        var file = self.files[0];
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            var src = e.target.result;
-            var video = document.getElementById("video");
-            var source = document.getElementById("source");
-
-            source.setAttribute("src", src);
-            video.load();
-            video.play();
-        };
-        reader.readAsDataURL(file);
+<style>
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
     }
 
 
-    //let file = document.querySelector('.upload');
-    //let button = document.querySelector('btn2');
-    //let progress = document.querySelector('progress');
-    //let p_i = document.querySelector('.progress-indicator');
-    //let load = 0;
-    //let procces = "";
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+</style>
+<section class="h-100  m-5">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card card-registration my-4">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none d-xl-block">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                 alt="Sample photo" class="img-fluid"
+                                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                        </div>
 
-    //file.oninput = () => {
-    //    let filename = file.files[0].name;
-    //    let extension = filename.split('.').pop();
-    //    let filesize = file.files[0].size;
+                        <div class="col-xl-6">
+                           <form asp-action="New" asp-controller="Lesson" method="post" enctype="multipart/form-data">
 
-    //    if (filesize <= 1000000) {
-    //        filesize = (filesize / 1000).toFixed(2) + 'kb';
-    //    }
-    //    if (filesize == 1000000 || filesize <= 1000000000) {
-    //        filesize = (filesize / 1000000).toFixed(2) + 'mb';
-    //    }
-    //    if (filesize == 1000000000 || filesize <= 1000000000000) {
-    //        filesize = (filesize / 1000000000).toFixed(2) + 'gb';
-    //    }
+                            <div class="card-body p-md-5 text-black">
+                                <h3 class="mb-5 text-uppercase" style="font-size:3.5rem;">Add new Lesson</h3>
 
-    //    document.querySelector('.lll').innerText = filename;
-    //    document.querySelector('.ex').innerText = extension;
-    //    document.querySelector('.size').innerText = filesize;
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                           
+                                                <label asp-for="Title" class="form-label-lg" style="font-size:2.5rem;">Title</label>
+                                                <input asp-for="Title" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
+                                                <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                                
+                                                <label asp-for="Duration" class="form-label-lg" style="font-size:2.5rem;">Discount</label>
+                                                <input type="number" asp-for="Duration" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
+                                                <span asp-validation-for="Duration" class="text-danger"></span>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
 
-    //    getFile(filename);
-    //}
-    //let upload = () => {
-    //    if (load >= 100) {
-    //        clearInterval(procces);
-    //        p_i.innerHTML = '100%' + ' ' + 'Upload Completed';
-    //        button[0].classList.remove('active');
-    //    }
-    //    else {
-    //        load++;
-    //        progress.value = load;
-    //        p_i.innerHTML = load + '%' + ' ' + 'Upload';
-    //        button[1].onClick = e => {
-    //            e.preventDefault();
-    //            clearInterval(procces);
-    //            document.querySelector('.pr').style.display = "none";
-    //            button[1].style.visibility = 'hidden';
-    //            button[0].classList.remove('active');
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                                <label asp-for="Price" class="form-label-lg" style="font-size:2.5rem;">Price</label>
+                                                <input type="number" asp-for="Price" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;"/>
+                                                <span asp-validation-for="Price" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                                <label asp-for="Discount" class="form-label-lg" style="font-size:2.5rem;">Discount</label>
+                                                <input type="number" asp-for="Discount" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" />
+                                                <span asp-validation-for="Discount" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
 
-    //        }
-    //    }
-    //}
-    //function getFile(filename) {
-    //    if (filename) {
-    //        document.querySelector('.pr').style.display = "block";
-    //        load = 0;
-    //        progress.value = 0;
-    //        p_i.innerText = ' ';
-    //        button[0].onClick = e => {
-    //            e.preventDefault();
-    //            button[0].classList.add('active');
-    //            button[1].style.visibility = 'visible';
-    //            procces = setInterval(upload, 100);
-    //        }
-    //    }
-    //}
+                                <div class="form-outline mb-4">
+                                        <label asp-for="Description" class="form-label-lg" style="font-size:2.5rem;">Description</label>
+                                        <textarea asp-for="Description" id="form3Example1m" class="form-control form-control-lg" style="height:70px; font-size:2rem;"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
 
-</script>
-  
-@*<script src="~/assets/js/NewLessonScript.js"></script>
-*@
+
+                                <div class="row">
+                                        <div class="col-md-4 mb-4 d-flex flex-column">
+                                            <label for="Stage_id" class="form-label-lg" style="font-size:2.5rem;">Stage</label>
+
+                                            <select id="Stage_id" class="select" style=" height:70px; font-size:2rem;" onchange="GetLevels()">
+                                                @foreach (Stage stage in ViewBag.stages)
+                                                {
+                                                    <option value="@stage.ID" style=" height:70px; font-size:2rem;">@stage.Name</option>
+
+                                                }
+                                            </select>
+
+                                    </div>
+                                    <div class="col-md-4 mb-4 d-flex flex-column">
+                                            <label asp-for="levelID" class="form-label-lg" style="font-size:2.5rem;">Level</label>
+                                            <select asp-for="levelID" id="levelID" class="form-control" onchange="getSubjects()" ></select>
+
+                                    </div>
+                                        <div class="col-md-4 mb-4 d-flex flex-column">
+
+                                            <label asp-for="subjectID" class="form-label-lg" style="font-size:2.5rem;">Subject</label>
+                                            <select asp-for="subjectID" id="subjectID" class="form-control" style=" height:70px; font-size:2rem;"></select>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                        <label asp-for="ImageFile" class="form-label-lg" style="font-size:2.5rem;">Select Lesson Cover</label>
+                                        <input type="file" asp-for="ImageFile" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;" accept="image/*" />
+                                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                </div>
+                                
+
+                                <div class="form-outline mb-4">
+                                        <label asp-for="VideoFile" class="form-label-lg" style="font-size:2.5rem;">Upload Video</label>
+                                        <input type="file" asp-for="VideoFile" id="" class="form-control form-control-lg" style="height:40px; font-size:2rem;"  accept="video/*" />
+                                        <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                        <input type="hidden" value="@ViewBag.TeacherId" asp-for="TeacherID" id="form3Example1m" class="form-control form-control-lg" style="height:40px; font-size:2rem;"  />
+                                        <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-end pt-3">
+                                        <button type="submit" class="btn btn-warning btn-lg ms-2" style="height:70px; font-size:2.5rem;">Add Lesson</button>
+                                </div>
+
+                           
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        function GetLevels() {
+            var StageID = $("#Stage_id").val();
+            StageID = parseInt(StageID)
+            $("#levelID").html("");
+            $("#subjectID").html("");
+            console.log(StageID, typeof (StageID))
+            $.ajax(
+                {
+                    url: "/Lesson/GetLevels",
+                    data: { "StageID": StageID },
+
+                    success: function (result) {
+                        console.log(result);
+                        for (let item of result) {
+                            console.log(item.id);
+                            $("#levelID").append("<option value=" + item.id + ">" + item.name + "</option>")
+                        }
+                    }
+                });
+
+        }
+        function getSubjects() {
+            var StageID = $("#Stage_id").val();
+            var levelID = $("#levelID").val();
+            $("#subjectID").html("");
+
+            console.log(levelID)
+            $.ajax(
+                {
+                    url: "/Lesson/GetSubjects",
+                    data: { "levelID": levelID, "StageID": StageID },
+
+                    success: function (result) {
+                        console.log(result);
+                        for (let item of result) {
+                            $("#subjectID").append("<option value=" + item.id + ">" + item.name + "</option>")
+                        }
+                    }
+                });
+        }
+    </script>
+}
+

@@ -44,6 +44,7 @@ namespace Center_ElGhlaba.Repositories
             Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending)
         {
             IQueryable<T> query = _context.Set<T>();
+            query = query.Where(criteria);
 
             if (includes != null)
             {
