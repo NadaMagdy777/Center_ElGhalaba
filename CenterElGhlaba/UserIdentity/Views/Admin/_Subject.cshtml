@@ -8,15 +8,14 @@
 <div class="offset-2 col-8">
     <form asp-action="CreateSubject" class="form-floating">
         <div class="d-flex justify-content-evenly form-group">
-
-            <label asp-for="LevelID"></label>
-            <select asp-items="@lvls" asp-for="LevelID" class="form-select LevelSelec"></select>
-            <span asp-validation-for="LevelID" class="text-danger"></span>
-
+            
             <label asp-for="StageID"></label>
-            <select  asp-items="@stages" asp-for="StageID" class="form-select" ></select>
+            <select id="subStage" asp-items="@stages" asp-for="StageID" class="form-select"></select>
             <span asp-validation-for="StageID" class="text-danger"></span>
 
+            <label asp-for="LevelID"></label>
+            <select id="subLvl" asp-items="@lvls" asp-for="LevelID" class="form-select LevelSelec"></select>
+            <span asp-validation-for="LevelID" class="text-danger"></span>
 
             <label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control" />

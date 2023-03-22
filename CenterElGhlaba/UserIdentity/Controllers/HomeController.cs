@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Center_ElGhalaba.Constants;
+using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Interfaces;
+using Center_ElGhlaba.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UserIdentity.Models;
 
@@ -6,16 +10,37 @@ namespace UserIdentity.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IUnitOfWork unit;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IUnitOfWork unit, ILogger<HomeController> logger)
         {
+            this.unit = unit;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IndexViewModel indexViewModel = new IndexViewModel();
+
+            List<Teacher> teacherModel = await unit.Teachers            //////////Throw Exception ===> Likes
+                .FindAllAsync(t => true, new string[] { "AppUser" }, t => t.Lessons.SelectMany(l => l.Orders).Count(), OrderBy.Descending);
+
+            List<Subject> subjectModel = await unit.subjects.GetAllAsync();
+
+            List<Lesson> NewAddedlessonModel = unit.Lessons
+                .FindAllAsync(l => true, null, l => l.PublishDate, OrderBy.Descending).Result.Take(3).ToList();
+
+            indexViewModel.higestLessonslistviews = NewAddedlessonModel;
+
+            List<Lesson> HighViewslessonModel = unit.Lessons
+                .FindAllAsync(l => true, null, l => l.Views, OrderBy.Descending).Result.Take(3).ToList();
+
+            indexViewModel.Teacherslist = teacherModel;
+            indexViewModel.Subjectslist = subjectModel;
+            indexViewModel.higestLessonslistviews = HighViewslessonModel;
+
+            return View(indexViewModel);
         }
 
         public IActionResult Privacy()

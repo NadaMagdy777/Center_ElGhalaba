@@ -11,60 +11,14 @@
     <div class="d-grid">
 
         <partial name="_Stage" model="Model.Stage"/>
-
-
-        @*<div class="offset-2 col-8">
-            <div class="d-flex justify-content-evenly form-group">
-                <label class="form-label" for="stage_stage">Stage :</label>
-                <input class="form-control" id="stage_stage" name="Name" placeholder="Stage Name" />
-                <a id="stage_Btn" class="btn btn-outline-success" href="javascript:;" >Add</a>
-            </div>
-        </div>*@
         <br />
         <hr />
         <br />
         <partial name="_Lvl" model="Model.LvlVM" />
-
-       @* <div class="offset-2 col-8">
-            <div class="d-flex justify-content-evenly form-group">
-                <label class="form-label" for="level_stage">Stage :</label>
-                <select class="form-control form-select" id="level_stage" Name="StageID">
-                    @foreach (var item in ViewBag.stages)
-                    {
-                        <option value="@item.ID">@item.Name</option>
-                    }
-                </select>
-                <label class="form-label" for="levelSub_lvl">Level :</label>
-                <input class="form-control" id="levelSub_lvl" name="Name" placeholder="Level Name" />
-                <a id="level_Btn" class="btn btn-outline-success" href="javascript:;">Add</a>
-            </div>
-        </div>*@
         <br />
         <hr />
         <br />
         <partial name="_Subject" model="Model.subVm" />
-       
-        @* <div class="offset-2 col-8">
-            <div class="d-flex justify-content-evenly form-group">
-                <label class="form-label" for="subject_stage">Stage :</label>
-                <select class="form-control form-select" id="subject_stage" Name="StageID">
-                    @foreach (var item in ViewBag.stages)
-                    {
-                        <option value="@item.ID">@item.Name</option>
-                    }
-                </select>
-                <label class="form-label" for="subject_lvl">Level :</label>
-                <select class="form-control form-select" id="subject_lvl" Name="LevelID">
-                    @foreach (var item in ViewBag.levels)
-                    {
-                        <option value="@item.ID">@item.Name</option>
-                    }
-                </select>
-                <label class="form-label" for="subject_subject">Subject :</label>
-                <input class="form-control" id="subject_subject" name="Name" placeholder="Subject Name" />
-                <a id="subject_Btn" class="btn btn-outline-success" href="javascript:;">Add</a>
-            </div>
-        </div>*@
     </div>
 </div>
 
@@ -76,37 +30,34 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        console.log("before awy ")
+
         $(document).ready(function(){
-            var subLvlSel = $("#LevelID");
-            var subStageSelec = $("#StageID");
-
-            console.log(subLvlSel)
-            console.log(subLvlSel.innerHTML)
-            console.log(subStageSelec)
-            console.log(subStageSelec.innerHTML)
-            //console.log(document.querySelector("LevelSelec"));
-            //console.log(subStageSelec)
-
-            subLvlSel.change(()=>{
-                console.log(subLvlSel)
-                console.log(subStageSelec)
-            })
-
-            subStageSelec.change(() => {
+            console.log("before ")
+            
+            $("#subStage").change(function () {
+                $("#subLvl").empty();
+                $("#subLvl").html("")
+                console.log("TST")
                 $.ajax({
                     url: "/Admin/CureentStageLevel",
-                    data: { "Id": subStageSelec.val() },
+                    data: { "Id": $("#subStage").val() },
                     method: "POST",
                     success: function (result) {
-                    subLvlSel.remove()
+                    console.log("From ajax")
+                    $("#subLvl").empty();
+                    $("#subLvl").html("")
+
+                        $('#mySelect')
+                            .find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="whatever">text</option>')
+                            .val('whatever');
+
                     for (let item of result) {
-                        //subLvlSel.append('<option value="' + item.id + '">' + item.name + '</option>');
                         console.log(item);
-                            $("#tstdv").after(item);
-                        //console.log(subLvlSel);
-                        //console.log(item);
-                        //console.log(item.id);
-                        //console.log(item.name);
+                        $("#subLvl").append('<option value="' + item.id + '">' + item.name + '</option>');
                     }},
                     error: function () {
                         console.log("FAILED")
@@ -115,60 +66,4 @@
             })
         })
     </script>
-
-@*    <script>
-        $(document).ready(function(){
-            var stageBtn = $("#stage_Btn")
-            var lvlBtn = $("#level_Btn")
-            var subBtn = $("#subject_Btn")
-
-            $(document).on('click', stageBtn, function (){
-                $.ajax({
-                    url: "/Admin/CreateStage",
-                    data: { "Name": $("#stage_stage").val() },
-                    method: "POST",
-                    success: function () {
-                        console.log("Succeded");
-                    },
-                    error: function () {
-                        console.log("FAILED")
-                    }
-                });
-            })
-
-
-
-
-            $(document).on('click', lvlBtn, function () {
-                $.ajax({
-                    url: "/Admin/CreateLevel",
-                    data: { "Name": $("#levelSub_lvl").val(), "StageID": parseInt($("#level_stage").val()) },
-                    method: "POST",
-                    success: function () {
-                        console.log("Succeded");
-                    },
-                    error: function () {
-                        console.log("FAILED");
-                    }
-                });
-            })
-
-
-
-
-            $(document).on('click', subBtn, function () {
-                $.ajax({
-                    url: "/Admin/CreateSubject",
-                    data: { "Name": $("#subject_subject").val(), "StageID": parseInt($("#subject_stage").val()), "LevelID": parseInt($("#subject_lvl").val()) },
-                    method: "POST",
-                    success: function () {
-                        console.log("Succeded");
-                    },
-                    error: function () {
-                        console.log("FAILED");
-                    }
-                });
-            })
-        })
-    </script>*@
 }
