@@ -1,4 +1,5 @@
 using Center_ElGhalaba.Helpers;
+using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Repositories;
 using Center_ElGhlaba.Services;
@@ -23,6 +24,9 @@ namespace UserIdentity
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddSignalR();
+
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
                 {
@@ -66,6 +70,8 @@ namespace UserIdentity
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapHub<TeacherHub>("/TeacherHub");
 
             app.MapControllerRoute(
                 name: "default",

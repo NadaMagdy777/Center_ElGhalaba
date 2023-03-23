@@ -67,7 +67,7 @@
                                 <p class="small text-muted mb-0">Likes</p>
                             </div>
                             <div>
-                                <p class="mb-1 h5">@Model.Follows.Count</p>
+                                <p id="Followerscount" class="mb-1 h5">@Model.Follows.Count</p>
                                 <p class="small text-muted mb-0">Followers</p>
                             </div>
                         </div>
@@ -157,14 +157,42 @@
 
 @section Scripts{
 
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    
     <script>
+        //define Hub
+        var hub = new signalR.HubConnectionBuilder().withUrl("/TeacherHub").build();
+
+        //start connect
+        hub.start().then(function () {
+            console.log("Connect Success");
+        });
+
+        ////lesten To The Server If There Is New Comment
+        hub.on("RemoveFollower", function () {
+            var follows = $("#Followerscount").html();
+            $("#Followerscount").html((parseInt(follows) - 1));
+        });
+
+        ////lesten To The Server If There Is New Comment
+        hub.on("AddFollower", function () {
+            let beat = new Audio('/assets/Sounds/Notify.mp3');
+            beat.play();
+
+            var follows = $("#Followerscount").html();
+            $("#Followerscount").html((parseInt(follows) + 1));
+        });
+
         function Add(s, t) {
             $.ajax({
                 url: '/Teachers/AddFollower',
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
-                    console.log(result);
-                    //$('#courseList').html(result);
+                    $("#data").html("<a class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
+
+                    var follows = $("#Followerscount").html();
+                    $("#Followerscount").html((parseInt(follows) + 1));
+
                 },
                 error: function (xhr, status) {
                     alert("Add error " + status);
@@ -176,8 +204,11 @@
                 url: '/Teachers/RemoveFollower',
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
-                    console.log(result);
-                    //$('#courseList').html(result);
+                    $("#data").html("<a class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
+
+                    var follows = $("#Followerscount").html();
+                    $("#Followerscount").html((parseInt(follows) - 1));
+
                 },
                 error: function (xhr, status) {
                     alert("Remove error " + status);
@@ -190,18 +221,13 @@
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
                     if (result) {
-                        alert("Following");
-                        $("#data").html("<a class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
+                        $("#data").html("<a id='Followbtn' class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
                     }
                     else {
-                        alert("Notfollowing");
-                        $("#data").html("<a class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
+                        $("#data").html("<a id='Followbtn' class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
                     }
-
-                    //$('#courseList').html(result);
                 },
                 error: function (xhr, status) {
-
                     alert("Follow error " + status);
                 }
             });
@@ -209,37 +235,4 @@
 
     </script>
 
-
-
-    @*@{
-        if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
-        {
-            <a class="btn" asp-area="Identity" asp-page="/Account/Manage/Index">Edit profile</a>
-        }
-    }
-    @{
-        else
-        {
-            <script>
-                window.onload = function () {
-                    if (Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')) {
-                        alert("Following");
-                        //<a class="btn" asp - area="Identity" asp - page="/Account/Manage/Index" > Edit profile < /a>
-                    }
-                    else {
-                        alert("Notfollowing");
-                        //<a class="btn" asp - area="Identity" asp - page="/Account/Manage/Index" > Edit profile < /a>
-                    }
-                }
-            </script>
-        }
-    }*@
-
-    @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
-    {
-    }
-    else
-    {
-        @*<script src="~/js/test.js"></script>*@
-    }
 }
