@@ -25,7 +25,7 @@
             <div class="col col-lg-10">
                 <div class="card">
                     <div class="rounded-top text-white d-flex flex-row gradient-custom-2" style="height:200px;">
-                        <div class="ms-4 mt-5 d-flex flex-column ">
+                        <div class="ms-4 mt-5 d-flex mx-4 flex-column ">
                             @if (Model.AppUser.Image != null)
                             {
                                 <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
@@ -61,10 +61,7 @@
 
                     <div class="p-4 text-black" style="background-color: #f8f9fa;">
                         <div class="d-flex justify-content-end text-center py-1">
-                            <div>
-                                <p class="mb-1 h5">@Model.Balance</p>
-                                <p class="small text-muted mb-0">Balance</p>
-                            </div>
+                            
                             <div class="px-3">
                                 <p class="mb-1 h5">@Model.Likes</p>
                                 <p class="small text-muted mb-0">Likes</p>
@@ -79,6 +76,10 @@
                         <div class="mb-5">
                             <p class="lead fw-normal mb-1">About</p>
                             <div class="p-4" style="background-color: #f8f9fa;">
+                                @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+                                {
+                                    <p class="font-italic mb-1">Your Balance: @Model.Balance <b><a href="#" class="text-info ml-2">Withdrow</a></b></p>
+                                }
                                 <p class="font-italic mb-1">Your Adress: @Model.AppUser.Address</p>
                                 <p class="font-italic mb-1">Your PhoneNumber: @Model.AppUser.PhoneNumber</p>
                                 <p class="font-italic mb-1">Your Birthdate: @Model.AppUser.Birthdate</p>
@@ -102,8 +103,6 @@
 
                                         @foreach (Lesson lesson in Model.Lessons)
                                         {
-
-
                                             <div class="properties pb-20">
                                                 <div class="properties__card">
                                                     <div class="properties__img overlay1">
@@ -126,7 +125,7 @@
                                                             </div>
                                                         </div>
 
-                                                        @if ( !await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+                                                        @if (! ( await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID))
                                                         {
                                                             <a href="#" class="border-btn border-btn2">Find out more category</a>
                                                         }
