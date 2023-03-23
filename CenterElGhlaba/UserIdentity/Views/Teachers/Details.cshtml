@@ -16,167 +16,145 @@
 }
 
 <!-- Courses area start -->
-<div class="courses-area fix">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-7 col-lg-8">
-                <div class="section-tittle text-center mb-55">
-                    <h2 class="mt-4">Your Information</h2>
-                </div>
-            </div>
-        </div>
 
 
-        <div class="services-area mt-1">
-            <div class="container">
-                <div class="row justify-content-sm-center">
-                    <div class="col-lg-4 col-md-6 col-sm-8">
-                        <div class="single-services mb-30">
-                
-                            <div class="features-icon">
-                                @if (Model.AppUser.Image != null)
-                                {
-                                    <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
-                                }
-                                else
-                                {
-                                    <img src="https://i.imgur.com/stD0Q19.jpg" width="100" class="rounded-circle">
-                                }
+
+<section class="mt-5">
+    <div class="container-fluid h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-10">
+                <div class="card">
+                    <div class="rounded-top text-white d-flex flex-row gradient-custom-2" style="height:200px;">
+                        <div class="ms-4 mt-5 d-flex flex-column ">
+                            @if (Model.AppUser.Image != null)
+                            {
+                                <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
+                            }
+                            else
+                            {
+                                <img src="https://i.imgur.com/stD0Q19.jpg"
+                                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                     style="width: 150px; z-index: 1">
+                            }
+                            
+                            @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+                            {
+                                <a class="btn hero-btn" asp-area="Identity" asp-page="/Account/Manage/Index">Edit profile</a>
+                            }
+                            else
+                            {
+                                <div id="data">not teacher</div>
+                                <script>
+                                    window.onload = function () {
+                                        Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')
+                                    }
+                                </script>
+
+                            }
+                            
+                        </div>
+                        <div class="ms-3" style="margin-top: 130px;">
+                            <h5>Your Name: @Model.AppUser.FirstName @Model.AppUser.LastName</h5>
+                            <p>Your Email: @Model.AppUser.Email</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                        <div class="d-flex justify-content-end text-center py-1">
+                            <div>
+                                <p class="mb-1 h5">@Model.Balance</p>
+                                <p class="small text-muted mb-0">Balance</p>
                             </div>
-
-                            <div class="features-caption">
-                                <h3 class="mt-2">@Model.AppUser.FirstName @Model.AppUser.LastName</h3>
-                                <h3>@Model.AppUser.Email</h3>
-                                @*<p>The automated process all your website tasks.</p>*@
-                                <div >
-                                    <p><span>Your Balance: </span>@Model.Balance </p>
-                                    <p><span>Your Likes: </span>@Model.Likes</p>
-                                    <p><span>Your Followers: </span>@Model.Follows.Count</p>
-
-                                    <span>@Model.AppUser.Address</span>
-                                    <span>@Model.AppUser.PhoneNumber</span>
-                                    <span>@Model.AppUser.Birthdate</span>
-
-                                    @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
-                                    {
-                                        <a class="border-btn border-btn2" asp-area="Identity" asp-page="/Account/Manage/Index">Edit profile</a>
-                                    }
-                                    else
-                                    {
-                                        <div id="data">not teacher</div>
-                                        <script>
-                                            window.onload = function () {
-                                                Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')
-                                            }
-                                        </script>
-
-                                    }
-                                </div>
+                            <div class="px-3">
+                                <p class="mb-1 h5">@Model.Likes</p>
+                                <p class="small text-muted mb-0">Likes</p>
+                            </div>
+                            <div>
+                                <p class="mb-1 h5">@Model.Follows.Count</p>
+                                <p class="small text-muted mb-0">Followers</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-<div class="courses-area section-padding40 fix">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-7 col-lg-8">
-                <div class="section-tittle text-center mb-55">
-                    <h2>Your Lessons</h2>
-                </div>
-            </div>
-        </div>
-        <div class="courses-actives">
-            <!-- Single -->
-            <div class="properties pb-20">
-                <div class="properties__card">
-
-                    @if (Model.Lessons.Count > 0)
-                    {
-                        @foreach (Lesson lesson in Model.Lessons)
-                        {
-
-                            <div class="properties__img overlay1">
-                                <a href="#"><img src="https://i.imgur.com/stD0Q19.jpg" alt=""></a>
+                    <div class="card-body p-4 text-black">
+                        <div class="mb-5">
+                            <p class="lead fw-normal mb-1">About</p>
+                            <div class="p-4" style="background-color: #f8f9fa;">
+                                <p class="font-italic mb-1">Your Adress: @Model.AppUser.Address</p>
+                                <p class="font-italic mb-1">Your PhoneNumber: @Model.AppUser.PhoneNumber</p>
+                                <p class="font-italic mb-1">Your Birthdate: @Model.AppUser.Birthdate</p>
                             </div>
-                            <div class="properties__caption">
-                                <p>User Experience</p>
+                        </div>
 
-                                <h3 class="card-title">@lesson.Title => @lesson.Price EG</h3>
-                                <h3 class="card-title">PublishDate: @lesson.PublishDate</h3>
-                                <h3 class="card-title">Likes: @lesson.Likes</h3>
-                                <p class="card-text">@lesson.Description</p>
-                                <h3 class="card-text">Views: @lesson.Views</h3>
-                                <h3 class="card-text">Discount: @lesson.Discount</h3>
-                                <a asp-action="EditCourse" class="text-info">Edit </a> |
-                                <a asp-action="RemoveCourse" class="text-danger">Remove </a>
-
-                                <a href="#" class="border-btn border-btn2">Find out more category</a>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="AddCourse" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
-                    }
-
-
-
-                </div>
-            </div>
-            <!-- Single -->
-
-        </div>
-    </div>
-</div>
-
-
-
-
-
-<!-- Courses area start -->
-@*<div id="Courses" class="courses-area section-padding40 fix">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-7 col-lg-8">
-                    <div class="section-tittle text-center mb-55">
-                        <h2>Your Lessons</h2>
-                        @if(Model.Lessons.Count > 0)
-                        {
-                            @foreach (Lesson lesson in Model.Lessons)
-                            {
-                                <div class="card d-inline-block m-2" style="width: 20rem;">
-                                    <img class="card-img-top" src="https://i.imgur.com/stD0Q19.jpg" alt="Card image cap">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@lesson.Title => @lesson.Price EG</h5>
-                                        <h5 class="card-title">PublishDate: @lesson.PublishDate</h5>
-                                        <h5 class="card-title">Likes: @lesson.Likes</h5>
-                                        <p class="card-text">@lesson.Description</p>
-                                        <h5 class="card-text">Views: @lesson.Views</h5>
-                                        <h5 class="card-text">Discount: @lesson.Discount</h5>
-                                        <a asp-action="EditCourse" class="text-info">Edit </a> |
-                                        <a asp-action="RemoveCourse" class="text-danger">Remove </a>
+                        <div class="courses-area fix">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-7 col-lg-8">
+                                        <div class="section-tittle text-center mb-55">
+                                            <h2>Your Lessons</h2>
+                                        </div>
                                     </div>
                                 </div>
-                            }
-                        }
-                        else
-                        {
-                            <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="AddCourse" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
-                        }
+                                <div class="courses-actives">
+                                    <!-- Single -->
+                                    
+                                    @if (Model.Lessons.Count > 0)
+                                    {
+
+                                        @foreach (Lesson lesson in Model.Lessons)
+                                        {
+
+
+                                            <div class="properties pb-20">
+                                                <div class="properties__card">
+                                                    <div class="properties__img overlay1">
+                                                        <a href="#"><img src="https://i.imgur.com/stD0Q19.jpg" alt=""></a>
+                                                    </div>
+
+                                                    <div class="properties__caption">
+                                                        <h3 class="card-title">Title : @lesson.Title </h3>
+                                                        <p class="card-title">PublishDate: @lesson.PublishDate</p>
+                                                        <p class="card-title">Likes: @lesson.Likes</p>
+                                                        <p class="card-text">@lesson.Description</p>
+                                                        <p class="card-text">Views: @lesson.Views</p>
+                                                        <p class="card-text">Discount: @lesson.Discount</p>
+                                                        <a asp-action="EditCourse" class="text-info">Edit </a> |
+                                                        <a asp-action="RemoveCourse" class="text-danger">Remove </a>
+
+                                                        <div class="properties__footer d-flex justify-content-between align-items-center">
+                                                            <div class="price py-2">
+                                                                <span>Price: @lesson.Price EG</span>
+                                                            </div>
+                                                        </div>
+
+                                                        @if ( !await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+                                                        {
+                                                            <a href="#" class="border-btn border-btn2">Find out more category</a>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="AddCourse" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
+                                    }
+                                    <!-- Single -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>*@
+    </div>
+</section>
+
+
 
 @section Scripts{
 
