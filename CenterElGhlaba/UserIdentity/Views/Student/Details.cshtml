@@ -2,7 +2,6 @@
 @model Student
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_PageLayout.cshtml";
     List<Lesson> lessons = ViewBag.Lessons;
 
     Pager pager = new Pager();

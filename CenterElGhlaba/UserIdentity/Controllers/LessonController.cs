@@ -84,6 +84,47 @@ namespace Center_ElGhlaba.Controllers
 
 
 		}
+        public async Task<IActionResult> Edit(int id)
+        {
+
+            Lesson lesson =await _UnitOfWork.Lessons.GetByIdAsync(id);
+            EditLessonVM Lesson = new EditLessonVM();
+            Lesson.Title = lesson.Title;
+            Lesson.Price = lesson.Price;
+            Lesson.Description = lesson.Description;
+            Lesson.Discount= lesson.Discount;
+            Lesson.ID=lesson.ID;
+
+            
+            
+            return View(Lesson);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditLessonVM lesson)
+        {
+            if (ModelState.IsValid)
+            {
+               Lesson Lesson=await  _UnitOfWork.Lessons.GetByIdAsync(lesson.ID);
+
+                Lesson.Title = lesson.Title;
+                Lesson.Price = lesson.Price;
+                Lesson.Description = Lesson.Description;
+                Lesson.Discount = lesson.Discount;
+                Lesson.ID = lesson.ID;
+
+                _UnitOfWork.Lessons.Update(Lesson);
+                _UnitOfWork.Complete();
+
+              
+
+
+                return RedirectToAction("Index");
+            }
+
+            return View(lesson);
+        }
 
         public string UploadsVideoToFolder(IFormFile File,string path)
         {
@@ -103,6 +144,7 @@ namespace Center_ElGhlaba.Controllers
 
 			return fileName;
         }
+
         public void insertResoursesDB(List<string> resourses,int lessonId)
         {
           
@@ -184,6 +226,15 @@ namespace Center_ElGhlaba.Controllers
             var levelsubjects = await _UnitOfWork.levelSubjects.FindAllAsync(item => item.StageID == StageID && item.LevelID == LevelID, new[] { "Subject" });
             var subjects = levelsubjects.Select(item => item.Subject);
             return Json(subjects);
+        }
+        public IActionResult CheckDiscount(int Discount, int Price)
+        {
+            if (Discount < Price)
+            {
+                return Json(true);
+            }
+            else
+                return Json(false);
         }
     }
 }
