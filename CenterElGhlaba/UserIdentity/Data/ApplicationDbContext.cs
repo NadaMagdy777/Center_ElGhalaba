@@ -42,31 +42,31 @@ namespace UserIdentity.Data
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin", "Security");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserToken", "Security");
 
-            //builder.Entity<IdentityRole>().HasData(
-            //    new IdentityRole
-            //    {
-            //        Id = Guid.NewGuid().ToString(),
-            //        Name = RolesConsts.Admin.ToString(),
-            //        NormalizedName = RolesConsts.Admin.ToString().ToUpper(),
-            //        ConcurrencyStamp = Guid.NewGuid().ToString(),
-            //    },
-                
-            //    new IdentityRole
-            //    {
-            //        Id = Guid.NewGuid().ToString(),
-            //        Name = RolesConsts.Teacher.ToString(),
-            //        NormalizedName = RolesConsts.Teacher.ToString().ToUpper(),
-            //        ConcurrencyStamp = Guid.NewGuid().ToString(),
-            //    },
-                
-            //    new IdentityRole
-            //    {
-            //        Id = Guid.NewGuid().ToString(),
-            //        Name = RolesConsts.Student.ToString(),
-            //        NormalizedName = RolesConsts.Student.ToString().ToUpper(),
-            //        ConcurrencyStamp = Guid.NewGuid().ToString(),
-            //    }
-            //);
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = RolesConsts.Admin.ToString(),
+                    NormalizedName = RolesConsts.Admin.ToString().ToUpper(),
+                    ConcurrencyStamp = Guid.NewGuid().ToString(),
+                },
+
+                new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = RolesConsts.Teacher.ToString(),
+                    NormalizedName = RolesConsts.Teacher.ToString().ToUpper(),
+                    ConcurrencyStamp = Guid.NewGuid().ToString(),
+                },
+
+                new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = RolesConsts.Student.ToString(),
+                    NormalizedName = RolesConsts.Student.ToString().ToUpper(),
+                    ConcurrencyStamp = Guid.NewGuid().ToString(),
+                }
+            );
 
             //builder.Entity<IdentityUserRole<string>>().HasData(
             //    new IdentityUserRole<string>
