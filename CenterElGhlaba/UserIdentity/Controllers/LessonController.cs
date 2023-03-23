@@ -64,6 +64,7 @@ namespace Center_ElGhlaba.Controllers
 				lesson.Discount = newLesson.Discount;
 				lesson.levelID = newLesson.levelID;
 				lesson.TeacherID = newLesson.TeacherID;
+                lesson.Price = newLesson.Price;
 
 				_UnitOfWork.Lessons.Insert(lesson);
 				_UnitOfWork.Complete();
