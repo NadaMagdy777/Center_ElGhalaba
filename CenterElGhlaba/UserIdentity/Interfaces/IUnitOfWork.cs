@@ -10,6 +10,8 @@ namespace Center_ElGhlaba.Interfaces
         IBaseRepository<StudentHistory> History { get; }
         IBaseRepository<StudentOrder> Orders { get;}
         IBaseRepository<LessonComment> comments { get;}
+        IBaseRepository<LessonResource> resources { get; }
+
 
         IBaseRepository<Stage> stages { get; }
         IBaseRepository<Level> levels { get; }

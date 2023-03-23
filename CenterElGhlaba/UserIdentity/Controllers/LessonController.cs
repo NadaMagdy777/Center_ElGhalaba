@@ -48,76 +48,34 @@ namespace Center_ElGhlaba.Controllers
         {
             if (ModelState.IsValid)
             {
-				string fileName = string.Empty;
-
+				
 				Lesson lesson = new Lesson();
-				if (newLesson.VideoFile != null)
-				{
-					string uploads = Path.Combine(hosting.WebRootPath, "LessonsMaterial\\LessonVideos");
-					fileName = newLesson.VideoFile.FileName;
-					string fullpath = Path.Combine(uploads, fileName);
-					using var fileStream = new FileStream(fullpath, FileMode.Create);
 
-					newLesson.VideoFile.CopyTo(fileStream);
-                    fileStream.Close();
-
-				}
-                
-
-                if (newLesson.Resourses != null)
-                {
-                    string resName = string.Empty;
-                    string uploads = Path.Combine(hosting.WebRootPath, "LessonsMaterial\\LessonResourses");
-                    foreach (var res in newLesson.Resourses)
-                    {
-                        
-                        resName = res.FileName;
-                        string fullpath = Path.Combine(uploads, resName);
-                        using var ResStream = new FileStream(fullpath, FileMode.Create);
-                        res.CopyTo(ResStream);
-                        ResStream.Close();
-
-                    }
-                   
-
-                   
-
-                }
-
-
-
-                if (newLesson.ImageFile != null)
-				{
-
-
-					using (var dataStream = new MemoryStream())
-					{
-						await newLesson.ImageFile.CopyToAsync(dataStream);
-						lesson.CoverPicture = dataStream.ToArray();
-						dataStream.Close();
-					}
-
-
-				}
+                lesson.CoverPicture =await ConvertImageToByte(newLesson.ImageFile);
 
 				lesson.subjectID = newLesson.subjectID;
-                lesson.FilePath = fileName;
+                lesson.FilePath = UploadsVideoToFolder(newLesson.VideoFile, "LessonsMaterial\\LessonVideos");
 				lesson.Duration = newLesson.Duration;
 				lesson.Description = newLesson.Description;
 				lesson.Title = newLesson.Title;
 				lesson.Discount = newLesson.Discount;
 				lesson.levelID = newLesson.levelID;
 				lesson.TeacherID = newLesson.TeacherID;
+
 				_UnitOfWork.Lessons.Insert(lesson);
 				_UnitOfWork.Complete();
 
+                List<string> resourses = UploadsResoursesToFolder(newLesson.Resourses, "LessonsMaterial\\LessonResourses");
+                insertResoursesDB(resourses, lesson.ID);
 
 
 
 
-				
 
-			}
+
+
+
+            }
 			ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
 			ViewBag.TeacherId=newLesson.TeacherID;
 
@@ -127,7 +85,7 @@ namespace Center_ElGhlaba.Controllers
 
 		}
 
-        public async Task<string> ConvertFileToFolder(IFormFile File,string path)
+        public string UploadsVideoToFolder(IFormFile File,string path)
         {
             string fileName = string.Empty;
 			if (File != null)
@@ -137,13 +95,84 @@ namespace Center_ElGhlaba.Controllers
 				string fullpath = Path.Combine(uploads, fileName);
 				using var fileStream = new FileStream(fullpath, FileMode.Create);
 
-				File.CopyToAsync(fileStream);
+				File.CopyTo(fileStream);
 				fileStream.Close();
 
 			}
 
 
 			return fileName;
+        }
+        public void insertResoursesDB(List<string> resourses,int lessonId)
+        {
+          
+            if (resourses != null)
+            {
+                foreach(string name in resourses)
+                {
+                    LessonResource resourse = new LessonResource();
+                    resourse.LessonID = lessonId;
+                    resourse.Name = name;
+                    resourse.Value = name;
+                    _UnitOfWork.resources.Insert(resourse);
+                    _UnitOfWork.Complete();
+
+                }
+
+
+
+
+
+            }
+
+
+        }
+        public List<string> UploadsResoursesToFolder(List<IFormFile> Files, string path)
+        {
+            List<string> filesname = new List<string>();
+            string fileName = string.Empty;
+            if ( Files!= null)
+            {
+                string resName = string.Empty;
+                string uploads = Path.Combine(hosting.WebRootPath,path);
+                foreach (var res in Files)
+                {
+
+                    resName = res.FileName;
+                    filesname.Add(resName);
+                    string fullpath = Path.Combine(uploads, resName);
+                    using var ResStream = new FileStream(fullpath, FileMode.Create);
+                    res.CopyTo(ResStream);
+                    ResStream.Close();
+
+                }
+
+
+
+
+            }
+
+
+            return filesname;
+        }
+        public async Task<byte[]> ConvertImageToByte(IFormFile imgFile)
+        {
+            byte[] image= null;
+            if (imgFile != null)
+            {
+
+
+                using (var dataStream = new MemoryStream())
+                {
+                    await imgFile.CopyToAsync(dataStream);
+                    image = dataStream.ToArray();
+                    dataStream.Close();
+                }
+
+
+            }
+            return image;
+
         }
         public async Task<IActionResult> GetLevels(int StageID)
         {
