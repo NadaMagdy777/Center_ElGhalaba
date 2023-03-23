@@ -69,7 +69,6 @@
                                             <ul id="navigation">
                                                 
                                                 <li class="active"><a asp-action="Index" asp-controller="Home">Home</a></li>
-                                                <li><a asp-action="Index" asp-controller="Lesson">Courses</a></li>
 
                                                 @if (SignInManager.IsSignedIn(User))
                                                 {
@@ -87,9 +86,18 @@
                                                     }
                                                     else if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()))
                                                     {
+                                                         <li>
+                                                            <a href="#">Courses</a>
+                                                            <ul class="submenu">
+                                                                <li><a asp-action="TeacherLessons" asp-controller="Lesson" asp-route-Id="@user.Id">All</a></li>
+                                                                <li><a asp-action="TeacherNew" asp-controller="Lesson" asp-route-Id="@user.Id">New</a></li>
+                                                            </ul>
+                                                        </li>
+
                                                         <li class="nav-item">
                                                             <a asp-controller="Teachers" asp-action="Details" asp-route-Id="@user.Id">Hello @user.FirstName!</a>
                                                         </li>
+                                                       
                                                     }
 
                                                     <li class="nav-item">
