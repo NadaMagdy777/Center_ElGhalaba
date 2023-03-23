@@ -43,7 +43,10 @@ namespace Center_ElGhlaba.Controllers
             ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
             return View();
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> New(LessonVM newLesson)
         {
             if (ModelState.IsValid)
@@ -69,11 +72,7 @@ namespace Center_ElGhlaba.Controllers
                 insertResoursesDB(resourses, lesson.ID);
 
 
-
-
-
-
-
+                return RedirectToAction("Index");
 
             }
 			ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
