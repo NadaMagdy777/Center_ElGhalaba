@@ -33,6 +33,11 @@ namespace Center_ElGhlaba.Controllers
         {           
             return View(await _UnitOfWork.Lessons.GetAllAsync());
         }
+        public async Task<ActionResult> SubjectLessons(int id)
+        {
+            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id);
+            return View("Index", lessons);
+        }
         //public IActionResult Details()
         //{
 
