@@ -31,7 +31,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
             await _signInManager.SignOutAsync();
             user.IsAvailable = false;
-            userManager.UpdateAsync(user);                      //                      ========> May Throw Exc
+            await userManager.UpdateAsync(user);                      //                      ========> May Throw Exc
 
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
