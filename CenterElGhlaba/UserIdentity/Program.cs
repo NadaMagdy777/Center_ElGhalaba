@@ -1,4 +1,5 @@
 using Center_ElGhalaba.Helpers;
+using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Repositories;
 using Center_ElGhlaba.Services;
@@ -48,7 +49,8 @@ namespace UserIdentity
 
             //builder.Services.AddHealthChecks();
             builder.Services.AddRazorPages();
-
+            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
@@ -66,6 +68,8 @@ namespace UserIdentity
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapHub<CommentHub>("/lessonComment");
 
             app.MapControllerRoute(
                 name: "default",

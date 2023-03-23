@@ -12,8 +12,8 @@ using UserIdentity.Data;
 namespace Center_ElGhlaba.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230321201453_tst")]
-    partial class tst
+    [Migration("20230320073736_lesson")]
+    partial class lesson
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,7 +240,7 @@ namespace Center_ElGhlaba.Migrations
                     b.Property<int>("StageID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectID")
+                    b.Property<int?>("SubjectID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -791,17 +791,13 @@ namespace Center_ElGhlaba.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Center_ElGhalaba.Models.Subject", "Subject")
+                    b.HasOne("Center_ElGhalaba.Models.Subject", null)
                         .WithMany("LevelSubjects")
-                        .HasForeignKey("SubjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubjectID");
 
                     b.Navigation("Level");
 
                     b.Navigation("Stage");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("Center_ElGhalaba.Models.Student", b =>

@@ -74,6 +74,9 @@ namespace Center_ElGhlaba.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LevelID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
@@ -83,7 +86,10 @@ namespace Center_ElGhlaba.Migrations
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TeacherID")
+                    b.Property<int?>("SubjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TeacherID")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -93,19 +99,13 @@ namespace Center_ElGhlaba.Migrations
                     b.Property<int>("Views")
                         .HasColumnType("int");
 
-                    b.Property<int>("levelID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("subjectID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
+                    b.HasIndex("LevelID");
+
+                    b.HasIndex("SubjectID");
+
                     b.HasIndex("TeacherID");
-
-                    b.HasIndex("levelID");
-
-                    b.HasIndex("subjectID");
 
                     b.ToTable("Lessons");
                 });
@@ -237,7 +237,7 @@ namespace Center_ElGhlaba.Migrations
                     b.Property<int>("StageID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectID")
+                    b.Property<int?>("SubjectID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -703,23 +703,17 @@ namespace Center_ElGhlaba.Migrations
 
             modelBuilder.Entity("Center_ElGhalaba.Models.Lesson", b =>
                 {
-                    b.HasOne("Center_ElGhalaba.Models.Teacher", "Teacher")
-                        .WithMany("Lessons")
-                        .HasForeignKey("TeacherID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Center_ElGhalaba.Models.Level", "Level")
                         .WithMany("Lessons")
-                        .HasForeignKey("levelID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LevelID");
 
                     b.HasOne("Center_ElGhalaba.Models.Subject", "Subject")
                         .WithMany("Lessons")
-                        .HasForeignKey("subjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubjectID");
+
+                    b.HasOne("Center_ElGhalaba.Models.Teacher", "Teacher")
+                        .WithMany("Lessons")
+                        .HasForeignKey("TeacherID");
 
                     b.Navigation("Level");
 
@@ -794,17 +788,13 @@ namespace Center_ElGhlaba.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Center_ElGhalaba.Models.Subject", "Subject")
+                    b.HasOne("Center_ElGhalaba.Models.Subject", null)
                         .WithMany("LevelSubjects")
-                        .HasForeignKey("SubjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubjectID");
 
                     b.Navigation("Level");
 
                     b.Navigation("Stage");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("Center_ElGhalaba.Models.Student", b =>

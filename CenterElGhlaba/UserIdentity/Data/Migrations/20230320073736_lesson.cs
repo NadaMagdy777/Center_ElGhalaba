@@ -5,18 +5,18 @@
 namespace Center_ElGhlaba.Migrations
 {
     /// <inheritdoc />
-    public partial class init15 : Migration
+    public partial class lesson : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-           
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-           
+
         }
     }
 }
