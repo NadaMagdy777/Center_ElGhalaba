@@ -44,7 +44,7 @@
                             <img src="assets/img/gallery/topic1.png" alt="">
                             <div class="topic-content-box">
                                 <div class="topic-content">
-                                    <h3><a href="#">@subject.Name</a></h3>
+                                    <h3><a asp-action="Index" asp-controller="Lesson">@subject.Name</a></h3>           @*require Action*@
                                 </div>
                             </div>
                         </div>
@@ -55,8 +55,7 @@
     </div>
 </div>
 @*New lesson*@
-
-@*<div class="courses-area section-padding40 fix">
+<div class="courses-area section-padding40 fix">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-7 col-lg-8">
@@ -72,26 +71,30 @@
                 {
                     <div class="properties__card">
                         <div class="properties__img overlay1">
-                            
-                            <a href="#"><img src="@nlesson.CoverPicture" alt=""></a>
+
+                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="">
+                                @*Require ID*@
+                                <img src="data:image/*;base64,@(Convert.ToBase64String(nlesson.CoverPicture))" alt="">
+                            </a>
                         </div>
                         <div class="properties__caption">
                             <p>User Experience</p>
-                            <h3><a href="#">@nlesson.Title</a></h3>
+                            <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="">@nlesson.Title</a></h3> @*Require ID*@
                             <p>
                                 @nlesson.Description
                             </p>
                             <div class="properties__footer d-flex justify-content-between align-items-center">
                                 <div class="restaurant-name">
 
-                                    <h5>@nlesson.Views <span><del>@nlesson.Likes</del></span></h5>
+                                    <h5>@nlesson.Views <span><del>@nlesson.Likes</del></span></h5>              @*Require Attention*@
                                     <p>@nlesson.PublishDate</p>
                                 </div>
                                 <div class="price">
-                                    <p> @nlesson.Price LE <span><del>@nlesson.Discount</del></span></p>
+                                    <p> @nlesson.Price LE <span><del>@(nlesson.Price - nlesson.Discount)</del></span></p>     @*Require Attention*@
                                 </div>
                             </div>
-                            <a href="#" class="border-btn border-btn2">Find out more</a>
+                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="" class="border-btn border-btn2">Find out more</a>
+                            @*Require ID*@
                         </div>
 
                     </div>
@@ -100,10 +103,10 @@
         </div>
     </div>
 </div>
-*@
+
 @*High View lesson*@
 
-@*<div class="courses-area section-padding40 fix">
+<div class="courses-area section-padding40 fix">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-7 col-lg-8">
@@ -120,26 +123,29 @@
                 {
                     <div class="properties__card">
                         <div class="properties__img overlay1">
-                            
-                            <a href="#"><img src="@hlesson.CoverPicture" alt=""></a>
+
+                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="">     @*Require ID*@
+                                <img src="data:image/*;base64,@(Convert.ToBase64String(hlesson.CoverPicture))" alt="">
+                            </a>
                         </div>
                         <div class="properties__caption">
                             <p>User Experience</p>
-                            <h3><a href="#">@hlesson.Title</a></h3>
+                            <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="">@hlesson.Title</a></h3> @*Require ID*@
                             <p>
                                 @hlesson.Description
                             </p>
                             <div class="properties__footer d-flex justify-content-between align-items-center">
                                 <div class="restaurant-name">
 
-                                    <h5>@hlesson.Views <span><del>@hlesson.Likes</del></span></h5>
+                                    <h5>@hlesson.Views <span><del>@hlesson.Likes</del></span></h5>              @*Require Attention*@
                                     <p>@hlesson.PublishDate</p>
                                 </div>
                                 <div class="price">
-                                    <p> @hlesson.Price LE <span><del>@hlesson.Discount</del></span></p>
+                                    <p> @hlesson.Price LE <span><del>@(hlesson.Price - hlesson.Discount)</del></span></p>     @*Require Attention*@
                                 </div>
                             </div>
-                            <a href="#" class="border-btn border-btn2">Find out more</a>
+                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="" class="border-btn border-btn2">Find out more</a>
+                            @*Require ID*@
                         </div>
 
                     </div>
@@ -147,7 +153,7 @@
             </div>
         </div>
     </div>
-</div>*@
+</div>
 
 @*teacher*@
 <section class="team-area section-padding40 fix">
@@ -170,7 +176,7 @@
                         }
                     </div>
                     <div class="cat-cap">
-                        <h5><a href="services.html">Mr. @teacher.AppUser.FirstName @teacher.AppUser.LastName</a></h5>
+                        <h5><a href="/Teachers/Details/@teacher.AppUserID">Mr. @teacher.AppUser.FirstName @teacher.AppUser.LastName</a></h5>
                         <p>@teacher.Likes Likes</p>
                         <p>The automated process all your website tasks.</p>
                     </div>
