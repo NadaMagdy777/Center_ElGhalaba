@@ -160,7 +160,9 @@
                             <div class="properties properties2 mb-30">
                                 <div class="properties__card">
                                     <div class="properties__img overlay1">
-                                        <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID"><img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt=""></a>
+                                        @if(item.CoverPicture != null){
+                                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID"><img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt=""></a>
+                                        }
                                     </div>
                                     <div class="properties__caption">
                                         <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID">@item.Title</a></h3>
@@ -213,7 +215,9 @@
                             <div class="properties properties2 mb-30">
                                 <div class="properties__card">
                                     <div class="properties__img overlay1">
-                                        <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID"><img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt=""></a>
+                                        @if(item.CoverPicture != null){
+                                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID"><img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt=""></a>
+                                        }
                                     </div>
                                     <div class="properties__caption">
                                         <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID">@item.Title</a></h3>
