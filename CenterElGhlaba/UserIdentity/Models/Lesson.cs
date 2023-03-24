@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Center_ElGhlaba.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Center_ElGhalaba.Models
@@ -14,7 +15,7 @@ namespace Center_ElGhalaba.Models
         public int Duration { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
-        public int Likes { get; set; }
+        public virtual List<LessonLikes>? Likes { get; set; }
         public int Views { get; set; }
         public bool IsDeleted { get; set; }
        

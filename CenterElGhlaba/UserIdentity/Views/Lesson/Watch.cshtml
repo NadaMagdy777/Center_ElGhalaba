@@ -28,6 +28,15 @@
                     <a asp-action="Details" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id">@Model.Title</a>                   
                 </h2>
                 <br>
+                <div class="properties__footer d-flex justify-content-between align-lessons-center">
+
+                    <span class="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes</span>
+
+                    <span class="fa fa-eye" style="color:#e867ff"> @Model.Views</span>
+
+
+                </div>
+
                 <div>
                     <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
                        
@@ -117,6 +126,7 @@
     {
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
     <script src="~/assets/js/commentHub.js"></script>
+    <script src="~/assets/js/LessonHub.js"></script>
 }
 
 

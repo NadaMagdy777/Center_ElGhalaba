@@ -6,6 +6,7 @@ using Center_ElGhlaba.Services;
 using Center_ElGhlaba.Unit_OfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using UserIdentity.Data;
@@ -42,6 +43,16 @@ namespace UserIdentity
                 .AddSignInManager<SignInManager<ApplicationUser>>();
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = 104857600;
+            });
+
+            builder.Services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 104857600;
+            });
 
             //builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();

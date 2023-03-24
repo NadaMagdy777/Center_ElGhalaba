@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
+using Center_ElGhlaba.Migrations;
+using Center_ElGhlaba.Models;
 using Center_ElGhlaba.Services;
 using Center_ElGhlaba.Unit_OfWork;
 using Center_ElGhlaba.ViewModels;
@@ -39,38 +42,67 @@ namespace Center_ElGhlaba.Controllers
 
         public async Task<IActionResult> Watch(int id, string userID)
         {
-            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
-                new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", });
-
-            Student student = await _UnitOfWork.Students.FindAsync(
-                s => s.AppUserID == userID,
-                new[] { "Orders.Lesson" , "AppUser" });
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", });
+            Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == userID,new[] { "Orders.Lesson" , "AppUser" });
 
             var result = _mapper.Map<LessonDetailsVM>(lesson);
-
-            _mapper.Map<LessonDetailsVM>(student);
+                         _mapper.Map<LessonDetailsVM>(student);
 
             return View(result);
         }
         public async Task<IActionResult> Details(int id, string? userID)
         {
-            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
-               new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", });
-
-            
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", });
             var result = _mapper.Map<LessonDetailsVM>(lesson);
             
 
             if (userID != null)
             {
-                Student student = await _UnitOfWork.Students.FindAsync(
-                s => s.AppUserID == userID,
-                new[] { "Orders.Lesson" , "AppUser" });
-
+                Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == userID, new[] { "Orders.Lesson" , "AppUser" });
                 _mapper.Map<LessonDetailsVM>(student);
             }
 
             return View(result);
+        }
+
+        public async Task<ActionResult> IsLike(int lessonId, string studentId)
+        {
+            Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lessonId, new[] { "Likes" });
+            LessonLikes HasLike = lesson.Likes.FirstOrDefault(k => k.ID == lessonId && k.LessonId == lesson.ID);
+            if (HasLike != null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
+        public async Task AddLike(int lessonId, string studentId)
+        {
+
+            Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lessonId, new[] { "Likes" });
+            lesson.Likes.Add(new LessonLikes { StudentId = student.ID, LessonId = lessonId });
+            _UnitOfWork.Complete();
+
+            //await LessonHub.Clients.Users(teacherId).SendAsync("AddLike", teacherId);
+        }
+        public async Task RemoveLike(int lessonId, string studentId)
+        {
+            Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lessonId, new[] { "Likes" });
+
+            LessonLikes HasLike = lesson.Likes.FirstOrDefault(k => k.StudentId == student.ID && k.LessonId == lesson.ID);
+            if (HasLike != null)
+            {
+                lesson.Likes.Remove(HasLike);
+                _UnitOfWork.Complete();
+
+                //await LessonHub.Clients.Users(teacherId).SendAsync("RemoveLike", teacherId);
+            }
+
         }
 
         //From Moeen

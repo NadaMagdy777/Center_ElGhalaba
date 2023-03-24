@@ -34,6 +34,6 @@ namespace Center_ElGhlaba.ViewModels
         //public List<StudentOrder> Orders { get; set; }
         #endregion
 
-        //public bool? IsOwnedBy = Student.
+        
     }
 }

@@ -34,17 +34,18 @@
                                     <div class="properties__caption">
                                         <h3><a href="#">@lesson.Title</a></h3>
                                         <div class="properties__footer d-flex justify-content-between align-lessons-center">
-
                                             
                                                 <span class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes</span>
-                                           
-
-                                           
+                          
                                                 <span class="fa fa-eye" style="color:#e867ff"> @lesson.Views</span>
-                                            
-                                            <span>@lesson.Price EGP</span>
+
+                                        </div>
 
 
+                                        <div class="properties__footer d-flex justify-content-between align-items-center">
+
+                                                <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
+                                                <span><del style="color:red">@lesson.Price LE</del> </span>
                                         </div>
 
                                             @if (SignInManager.IsSignedIn(User))

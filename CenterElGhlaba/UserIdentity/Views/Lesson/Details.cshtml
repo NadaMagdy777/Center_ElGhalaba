@@ -79,6 +79,7 @@
                 {
                     if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
                     {
+                        // 
 
                         if (user.Student.Orders.Find(o => o.Lesson.ID == Model.LessonID) != null)
                         {
