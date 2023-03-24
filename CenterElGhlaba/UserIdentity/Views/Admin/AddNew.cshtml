@@ -2,25 +2,26 @@
 @{
     ViewData["Title"] = "AddNew";
 }
-
-<partial name="index" class="mt-5"/>
-
-<h1 class="mt-5">AddNew</h1>
-
-<div class="container">
-    <div class="d-grid">
-
-        <partial name="_Stage" model="Model.Stage"/>
-        <br />
-        <hr />
-        <br />
-        <partial name="_Lvl" model="Model.LvlVM" />
-        <br />
-        <hr />
-        <br />
-        <partial name="_Subject" model="Model.subVm" />
-    </div>
+<div class=" m-auto w-50 shadow p-3 mb-5 bg-body-tertiary rounded">
+    <partial name="index" class="mt-5" />
 </div>
+
+
+
+<div class=" m-auto my-4 w-50 shadow p-3 mb-5 bg-body-tertiary rounded">
+    <h1 class="mt-5">AddNew</h1>
+    <form>
+        <partial name="_Stage" model="Model.Stage" />
+
+        <partial name="_Lvl" model="Model.LvlVM" />
+
+        <partial name="_Subject" model="Model.subVm" />
+    </form>
+
+</div>
+
+
+
 
 <div id="tstdv"></div>
 
@@ -32,9 +33,9 @@
     <script>
         console.log("before awy ")
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             console.log("before ")
-            
+
             $("#subStage").change(function () {
                 $("#subLvl").empty();
                 $("#subLvl").html("")
@@ -44,9 +45,9 @@
                     data: { "Id": $("#subStage").val() },
                     method: "POST",
                     success: function (result) {
-                    console.log("From ajax")
-                    $("#subLvl").empty();
-                    $("#subLvl").html("")
+                        console.log("From ajax")
+                        $("#subLvl").empty();
+                        $("#subLvl").html("")
 
                         $('#mySelect')
                             .find('option')
@@ -55,10 +56,11 @@
                             .append('<option value="whatever">text</option>')
                             .val('whatever');
 
-                    for (let item of result) {
-                        console.log(item);
-                        $("#subLvl").append('<option value="' + item.id + '">' + item.name + '</option>');
-                    }},
+                        for (let item of result) {
+                            console.log(item);
+                            $("#subLvl").append('<option value="' + item.id + '">' + item.name + '</option>');
+                        }
+                    },
                     error: function () {
                         console.log("FAILED")
                     }

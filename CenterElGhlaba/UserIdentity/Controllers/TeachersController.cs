@@ -22,7 +22,7 @@ namespace Center_ElGhlaba.Controllers
         }
 
         // GET: TeachersController/Details/5
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> Details(string id)
         {
             return View(await unitOfWork.Teachers.FindAsync(t => t.AppUserID == id, new[] { "AppUser", "Lessons", "Follows" }));
