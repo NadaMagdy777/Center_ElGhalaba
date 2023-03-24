@@ -22,6 +22,7 @@ namespace Center_ElGhlaba.ViewModels
         
         [Required]
         [MaxLength(16)]
+        [MinLength(11)]
         [Range(0, int.MaxValue, ErrorMessage = "Please enter valid Number")]
         public string PaymentValue { get; set; }
         public decimal Price { get; set; }
