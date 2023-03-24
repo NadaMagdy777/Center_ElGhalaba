@@ -138,29 +138,38 @@
                 <div class="section-tittle text-center mb-55">
                     <h2>Your Lessons</h2>
                     <div class="row justify-content-center" id="LessonContainer">
-                        @foreach (var item in lessons)
+                        @if (lessons.Count > 0)
                         {
-                            <div class="col-3">
-                                <div class="properties properties2 mb-30">
-                                    <div class="properties__card">
-                                        <div class="properties__img overlay1">
-                                            <a href="#"><img src="~/assets/img/gallery/featured1.png" alt=""></a>
-                                        </div>
-                                        <div class="properties__caption">
-                                            <h3><a href="#">@item.Title</a></h3>
-                                            <div class="properties__footer d-flex justify-content-between align-items-center">
-
-                                                <li class="bi bi-heart-fill" style="color:red">@item.Likes</li>
-                                                <p>@item.Price EGP</p>
-
-
+                            foreach (var item in lessons)
+                            {
+                                <div class="col-3">
+                                    <div class="properties properties2 mb-30">
+                                        <div class="properties__card">
+                                            <div class="properties__img overlay1">
+                                                <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt=""></a>
                                             </div>
-                                            <a href="#" class="border-btn border-btn2">Watch Lesson</a>
+                                            <div class="properties__caption">
+                                                <h3><a href="#">@item.Title</a></h3>
+                                                <div class="properties__footer d-flex justify-content-between align-items-center">
+
+                                                    <li class="bi bi-heart-fill" style="color:red">@item.Likes</li>
+                                                    <p>@item.Price EGP</p>
+
+
+                                                </div>
+                                                <a asp-action="Watch" asp-controller="Lesson" asp-route-id="@item.ID" asp-route-userId="@Model.AppUserID" class="border-btn border-btn2">Watch Lesson</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
+                        else
+                        {
+                             <a asp-action="Index" asp-controller="Lesson"  class="border-btn border-btn2">Buy Lessons</a>
+
+                        }
+
 
                     </div>
                     <partial name="_Pager" model="@pager"></partial>
@@ -225,16 +234,19 @@
                     $("#LessonContainer").html("");
                     for (let item of result) {
 
-                        addCard(item.title, item.likes, item.price)
+                        console.log(item)
 
+                        addCard(item.title, item.likes, item.price, item.id, item.coverPicture)
+                        
 
                     }
                 }
             });
     }
-    function addCard(title, NOLikes, price) {
+    function addCard(title, NOLikes, price,id,pic) {
 
-
+    
+     
         const cardParent = document.querySelector("#LessonContainer")
 
         const colDiv = document.createElement('div')
@@ -259,7 +271,7 @@
 
         const img = document.createElement('img')
         img.classList.add('img-fluid')
-        img.src = '/assets/img/gallery/featured1.png'
+        img.src  = 'data:image/png;base64,' + pic;
 
         const propertiescaptionDiv = document.createElement('div')
         propertiescaptionDiv.classList.add('properties__caption')
@@ -281,7 +293,7 @@
         likies.innerText = NOLikes;
 
         const NoLikes = document.createElement("p")
-        NoLikes.innerText = price + ' EGP';
+        NoLikes.innerText = price + 'LE';
 
 
         propertiescaptionDiv.appendChild(LikesDiv)
@@ -292,8 +304,13 @@
         const ViewCourseBtn = document.createElement('a')
         ViewCourseBtn.classList.add('border-btn', 'border-btn2')
         ViewCourseBtn.innerText = 'Watch Lesson'
+        let path = 'http://localhost:5266/Lesson/Watch?id='+id+'&userId=@Model.AppUserID'
+        ViewCourseBtn.href = path
+       
+
 
         propertiescaptionDiv.appendChild(ViewCourseBtn);
+
 
 
     }
