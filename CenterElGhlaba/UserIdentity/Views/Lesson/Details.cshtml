@@ -1,0 +1,104 @@
+﻿@model LessonDetailsVM
+@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <link rel="stylesheet" href="~/assets/css/DetailsPageStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<div>
+
+    <div class="container">
+
+        <div class="main-video">
+
+            <div>
+@*                <video src="@Model.FilePath" controls muted autoplay  class="Mvideo"></video>
+*@
+                <img src="data:image/*;base64,@(Convert.ToBase64String(@Model.CoverPicture))" class="cover"/>
+
+                <br>
+                <h2 style="display: inline;"> @Model.Title</h2>
+                <br>
+                <div>
+                    <i class='fas fa-thumbs-up'>@Model.Likes</i>
+                    <i class="fa fa-eye">@Model.Views</i>
+                </div>
+                <div>
+                    <img src="@Model.Image" class="imgg"/>
+                    <h4 style="display: inline;">@Model.FirstName @Model.LastName</h4>
+                    
+                </div>
+                <br>
+
+                <div>
+                    <h4>Video Describtion</h4>
+                    <p>@Model.Description</p>
+                    
+                </div>
+
+            </div>
+
+            @{
+                if (SignInManager.IsSignedIn(User))
+                {
+                    if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                    {
+                        //if(Model)
+                    }
+                }
+            }
+        </div>
+
+    </div>
+
+    <br><br>
+
+    @{
+        if (Model.Comments != null)
+        {
+
+            <div class="list">
+
+                <div id="comments-Section" class="list">
+                    @foreach (LessonComment comment in Model.Comments)
+                    {
+                        <div class="vid">
+                            <div>
+                                <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
+                                <span class="gray">@comment.Date</span>
+                                <p>@comment.Body</p>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>This lesson does not have any comments yet!</p>
+        }
+
+    }
+
+   
+</div>
+
+@section Scripts 
+{
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/assets/js/commentHub.js"></script>
+}
+
+

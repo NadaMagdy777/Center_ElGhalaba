@@ -52,7 +52,8 @@ namespace UserIdentity
 
             //builder.Services.AddHealthChecks();
             builder.Services.AddRazorPages();
-
+            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
@@ -71,7 +72,11 @@ namespace UserIdentity
 
             app.UseAuthorization();
 
+
+            app.MapHub<CommentHub>("/lessonComment");
+
             app.MapHub<TeacherHub>("/TeacherHub");
+
 
             app.MapControllerRoute(
                 name: "default",

@@ -1,0 +1,157 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    font-family: 'Courier New', Courier, monospace;
+}
+body{
+    background: #eee;
+}
+.heading{
+    color: #444;
+    font-size: 40px;
+    text-align: center;
+    padding: 10px;
+}
+.container{
+    display: grid;
+    grid-template-columns: 2fr  1fr;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 5px 5%;
+}
+.main-video{
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
+}
+.Mvideo{
+    width: 100%;
+    border-radius: 5px;
+}
+.Mtitle{
+    color: #444;
+    font-size: 23px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.list{
+    background: #fff;
+    border-radius: 5px;
+    height: 520px;
+    overflow-y: scroll;
+}
+.list::-webkit-scrollbar{
+    width: 7px;
+}
+.list::-webkit-scrollbar-track{
+    background: #ccc;
+    border-radius: 50px;
+
+}
+.list::-webkit-scrollbar-thumb{
+    background: #666;
+    border-radius: 50px;
+    
+}
+
+.vid {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #f7f7f7;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+    cursor: pointer;
+
+}
+.vid:hover{
+    background: #eee;
+}
+
+.Lvideo{
+    width: 100px;
+    border-radius: 5px;
+
+}
+@media (max-width:991px){
+    .container{
+        grid-template-columns:1.5fr 1fr;
+        padding: 10px;
+    }
+}
+@media (max-width:768px){
+    .container{
+        grid-template-columns:1fr;
+        padding: 10px;
+    }
+}
+
+.imgg{
+    height: 50px;
+    width: 50px;
+    border-radius: 30px;
+}
+
+.cover {
+    width: 70%;
+    border-radius: 5px;
+}
+.title{
+    font-size: 20px;
+    font-weight: 100;
+}
+
+.comments{
+
+    background: #fff;
+    border-radius: 5px;
+    height: 520px;
+    width: 905px;   
+    margin-left: 75px;
+
+}
+
+.icon {
+    color: #474242;
+    font-size: 20px;
+    margin-left: 500px;
+    
+}
+
+.icon:hover {
+    color: #2755c1;   
+}
+
+.inputBox {
+    position: relative;
+    width: 250px;
+    margin-bottom: 15px;
+}
+
+.inputt {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #1d2b3a;
+    border-radius: 7PX;
+    background: #eee;
+    outline: none;
+    color: #1d2b3a;
+    font-size: 1em;
+    transition: 0.5s;
+}
+
+    .inputt:focus {
+        transform: translateX(10px) translateY(-3px);
+        font-size: 0.8em;
+        background: #3f5e7f8b;
+        letter-spacing: 0.2em;
+    }
+
+.gray {
+    color: darkgrey;
+}
