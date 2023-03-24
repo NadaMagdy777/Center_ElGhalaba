@@ -22,8 +22,7 @@
                         <div class="ms-4 mt-5 d-flex mx-4 flex-column ">
                             @if (Model.AppUser.Image != null)
                             {
-                                <img class="avatar rounded-circle" style="width: 150px; z-index: 1" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
-                                <span id="onlineIndicator" style="width:20px; height:20px;border-radius:50%;background-color:red;border:2px solid black;"></span>
+                                <img class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
                             }
                             else
                             {
@@ -101,7 +100,7 @@
                                         {
                                             <div class="section-tittle text-center mb-55 d-flex justify-content-between">
                                                 <h2>Your Lessons</h2>
-                                                <h2><a asp-action="New" asp-controller="Lesson" asp-route-Id="@user.Id" class="text-info ml-2">Add New</a></h2>
+                                                <h2><a asp-action="New" asp-controller="Lesson" asp-route-Id="@Model.ID" class="text-info ml-2">Add New</a></h2>
                                             @*//////////////////////////////////////////////
                                                 ////////////////////////////////////////////
                                                 Lesson/New/Id  => TeacherID "1 Or 2 ....." not AppUserID

@@ -196,10 +196,9 @@
         }
 
         $("#NewLessonForm").submit(function (e) {
+            //event.preventDefault();
+            console.log("Sendin Data");
 
-            console.log("hello")
-
-            SendMessage();
             this.submit()
 
         });
@@ -212,18 +211,9 @@
             //2-start connect as online client
 
             hub.start().then(function(){
-                console.log("Connect Success");
+                console.log("Connect Success lesson");
             });
-
-            //4-send data server
-            function SendMessage(){
-                
-                //call RPC from hub
-                hub.invoke("AddLesson", @Model);
-            }
             
-
-        
     </script>
 
     <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
