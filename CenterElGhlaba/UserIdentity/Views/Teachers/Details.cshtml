@@ -102,18 +102,6 @@
                                             <div class="section-tittle text-center mb-55 d-flex justify-content-between">
                                                 <h2>Your Lessons</h2>
                                                 <h2><a asp-action="New" asp-controller="Lesson" asp-route-Id="@Model.ID" class="text-info ml-2">Add New</a></h2>
-                                            @*//////////////////////////////////////////////
-                                                ////////////////////////////////////////////
-                                                Lesson/New/Id  => TeacherID "1 Or 2 ....." not AppUserID
-                                                انت متأكد عايز تبعتلها 
-                                                user.Id 
-                                                مش 
-                                                Model.Id
-                                                ///////////////////////////////////////////
-                                                والحتة بتاعت الكورسيز اللي في النافبار عايزة تاخد لينكات صح
-                                                ////////////////////////////////////////////////
-                                                ////////////////////////////////////////////////
-                                            *@
                                             </div>
                                         }
                                         else
@@ -254,13 +242,13 @@
 
         hub.on("UserLoggedIn", function (userId) {
             if (userId == "@Model.AppUserID.ToString()") {
-                $("#onlineIndicator").css("background-color", "green");
+                $("#onlineIndicator").css("border-color", "green");
             }
         });
         
         hub.on("UserLoggedOut", function (userId) {
             if (userId == "@Model.AppUserID.ToString()") {
-                $("#onlineIndicator").css("background-color", "Red");
+                $("#onlineIndicator").css("border-color", "Red");
             }
         });
 
