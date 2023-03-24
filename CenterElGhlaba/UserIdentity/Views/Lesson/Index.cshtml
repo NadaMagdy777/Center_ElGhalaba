@@ -26,7 +26,10 @@
                             <div class="properties properties2 mb-30">
                                 <div class="properties__card">
                                     <div class="properties__img overlay1">
-                                        <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
+                                        @if(lesson.CoverPicture != null)
+                                        {
+                                            <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
+                                        }
                                     </div>
                                     <div class="properties__caption">
                                         <h3><a href="#">@lesson.Title</a></h3>
