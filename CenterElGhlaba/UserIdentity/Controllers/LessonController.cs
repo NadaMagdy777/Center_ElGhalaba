@@ -36,6 +36,7 @@ namespace Center_ElGhlaba.Controllers
             
             return View(await _UnitOfWork.Lessons.GetAllAsync());
         }
+
         public async Task<IActionResult> Watch(int id, int userID)
         {
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
@@ -73,9 +74,35 @@ namespace Center_ElGhlaba.Controllers
 
             return View(result);
         }
-        public async Task<IActionResult> New(int Id)
-        { 
-            ViewBag.TeacherId = Id;
+        //public async Task<IActionResult> New(int Id)
+        //{ 
+        //    ViewBag.TeacherId = Id;
+
+        //From Moeen
+        public async Task<ActionResult> SubjectLessons(int id)
+        {
+            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id);
+            return View("Index", lessons);
+        }
+        //From Moeen
+        public async Task<ActionResult> TeacherLessons(string id)
+        {
+            Teacher teacher = await _UnitOfWork.Teachers.FindAsync(t => t.AppUserID == id);
+            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.TeacherID == teacher.ID);
+            return View("Index", lessons);
+        }
+        //From Moeen
+        public async Task<ActionResult> TeacherNew(string id)
+        {
+            Teacher teacher = await _UnitOfWork.Teachers.FindAsync(t => t.AppUserID == id);
+            ViewBag.TeacherId = teacher.ID;
+            ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
+            return View("New");
+        }
+     
+        public async Task<IActionResult> New(int id)
+        {
+            ViewBag.TeacherId = id;
             ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
             return View();
         }
@@ -101,6 +128,7 @@ namespace Center_ElGhlaba.Controllers
 				lesson.levelID = newLesson.levelID;
 				lesson.TeacherID = newLesson.TeacherID;
                 lesson.Price = newLesson.Price;
+                lesson.PublishDate = DateTime.Now;
 
 				_UnitOfWork.Lessons.Insert(lesson);
 				_UnitOfWork.Complete();
@@ -120,6 +148,47 @@ namespace Center_ElGhlaba.Controllers
 
 
 		}
+        public async Task<IActionResult> Edit(int id)
+        {
+
+            Lesson lesson =await _UnitOfWork.Lessons.GetByIdAsync(id);
+            EditLessonVM Lesson = new EditLessonVM();
+            Lesson.Title = lesson.Title;
+            Lesson.Price = lesson.Price;
+            Lesson.Description = lesson.Description;
+            Lesson.Discount= lesson.Discount;
+            Lesson.ID=lesson.ID;
+
+            
+            
+            return View(Lesson);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditLessonVM lesson)
+        {
+            if (ModelState.IsValid)
+            {
+               Lesson Lesson=await  _UnitOfWork.Lessons.GetByIdAsync(lesson.ID);
+
+                Lesson.Title = lesson.Title;
+                Lesson.Price = lesson.Price;
+                Lesson.Description = Lesson.Description;
+                Lesson.Discount = lesson.Discount;
+                Lesson.ID = lesson.ID;
+
+                _UnitOfWork.Lessons.Update(Lesson);
+                _UnitOfWork.Complete();
+
+              
+
+
+                return RedirectToAction("Index");
+            }
+
+            return View(lesson);
+        }
 
         public string UploadsVideoToFolder(IFormFile File,string path)
         {
@@ -139,6 +208,7 @@ namespace Center_ElGhlaba.Controllers
 
 			return fileName;
         }
+
         public void insertResoursesDB(List<string> resourses,int lessonId)
         {
           
@@ -220,6 +290,15 @@ namespace Center_ElGhlaba.Controllers
             var levelsubjects = await _UnitOfWork.levelSubjects.FindAllAsync(item => item.StageID == StageID && item.LevelID == LevelID, new[] { "Subject" });
             var subjects = levelsubjects.Select(item => item.Subject);
             return Json(subjects);
+        }
+        public IActionResult CheckDiscount(int Discount, int Price)
+        {
+            if (Discount < Price)
+            {
+                return Json(true);
+            }
+            else
+                return Json(false);
         }
     }
 }

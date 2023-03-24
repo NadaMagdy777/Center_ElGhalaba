@@ -11,13 +11,12 @@ namespace Center_ElGhlaba.Interfaces
         IBaseRepository<StudentOrder> Orders { get;}
         IBaseRepository<LessonComment> comments { get;}
         IBaseRepository<LessonResource> resources { get; }
-
-
         IBaseRepository<Stage> stages { get; }
         IBaseRepository<Level> levels { get; }
         IBaseRepository<Subject> subjects { get; }
-
         IBaseRepository<LevelSubject> levelSubjects { get; }
+        IBaseRepository<TeacherPaymentMethod> TeacherPaymentMethod { get; }
+        IBaseRepository<TeacherLogs> TeacherLogs { get; }
         int Complete();
     }
 }

@@ -26,19 +26,19 @@ namespace UserIdentity.Controllers
             List<Teacher> teacherModel = await unit.Teachers            //////////Throw Exception ===> Likes
                 .FindAllAsync(t => true, new string[] { "AppUser" }, t => t.Lessons.SelectMany(l => l.Orders).Count(), OrderBy.Descending);
 
-            List<Subject> subjectModel = await unit.subjects.GetAllAsync();
+            List<Subject> subjectModel = unit.subjects.GetAllAsync().Result.Take(8).ToList();
 
             List<Lesson> NewAddedlessonModel = unit.Lessons
                 .FindAllAsync(l => true, null, l => l.PublishDate, OrderBy.Descending).Result.Take(3).ToList();
 
-            indexViewModel.higestLessonslistviews = NewAddedlessonModel;
 
             List<Lesson> HighViewslessonModel = unit.Lessons
                 .FindAllAsync(l => true, null, l => l.Views, OrderBy.Descending).Result.Take(3).ToList();
 
-            indexViewModel.Teacherslist = teacherModel;
-            indexViewModel.Subjectslist = subjectModel;
-            indexViewModel.higestLessonslistviews = HighViewslessonModel;
+            indexViewModel.Teacherslist = teacherModel == null? new List<Teacher>() : teacherModel;
+            indexViewModel.Subjectslist = subjectModel == null? new List<Subject>() : subjectModel;
+            indexViewModel.higestLessonslistviews = HighViewslessonModel == null ? new List<Lesson>() : HighViewslessonModel;
+            indexViewModel.NewLessonslistadded = NewAddedlessonModel == null ? new List<Lesson>() : NewAddedlessonModel;
 
             return View(indexViewModel);
         }

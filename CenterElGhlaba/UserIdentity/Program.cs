@@ -25,6 +25,9 @@ namespace UserIdentity
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddSignalR();
+
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
                 {
                     opt.Password.RequireNonAlphanumeric = false;
@@ -69,7 +72,11 @@ namespace UserIdentity
 
             app.UseAuthorization();
 
+
             app.MapHub<CommentHub>("/lessonComment");
+
+            app.MapHub<TeacherHub>("/TeacherHub");
+
 
             app.MapControllerRoute(
                 name: "default",

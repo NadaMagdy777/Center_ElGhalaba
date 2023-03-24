@@ -1,8 +1,10 @@
 ﻿using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.VisualBasic;
 
 namespace Center_ElGhlaba.Controllers
@@ -11,9 +13,12 @@ namespace Center_ElGhlaba.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public TeachersController(IUnitOfWork unitOfWork)
+        public IHubContext<TeacherHub> Teacherhub { get; }
+
+        public TeachersController(IUnitOfWork unitOfWork, IHubContext<TeacherHub> _Teacherhub)
         {
             this.unitOfWork = unitOfWork;
+            Teacherhub = _Teacherhub;
         }
 
         // GET: TeachersController/Details/5
@@ -42,10 +47,15 @@ namespace Center_ElGhlaba.Controllers
         }
         public async Task AddFollower(string studentId, string teacherId)
         {
+
             Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
             Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Follows" });
             teacher.Follows.Add(new Follows { StudentID = student.ID, TeacherID = teacher.ID });
             unitOfWork.Complete();
+
+            await Teacherhub.Clients.Users(teacherId).SendAsync("AddFollower");
+
+            //await Teacherhub.Clients.All.SendAsync("AddFollower");
         }
         public async Task RemoveFollower(string studentId, string teacherId)
         {
@@ -56,8 +66,14 @@ namespace Center_ElGhlaba.Controllers
             {
                 teacher.Follows.Remove(isfolow);
                 unitOfWork.Complete();
+
+                //await Teacherhub.Clients.All.SendAsync("RemoveFollower");
+
+                await Teacherhub.Clients.Users(teacherId).SendAsync("RemoveFollower");
+                //await Teacherhub.Clients.Client(teacherId).SendAsync("RemoveFollower");
+
             }
-            
+
         }
         //// GET: TeachersController/Details/5
         //[Authorize(Roles = "Teacher")]
