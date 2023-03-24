@@ -15,25 +15,25 @@ namespace Center_ElGhlaba.ViewModels
         public DateTime PublishDate { get; set; }
         public int Likes { get; set; }
         public int Views { get; set; }
+        public bool IsDeleted { get; set; }
+        public decimal Price { get; set; }
+        public decimal Discount { get; set; }
+        public int Duration { get; set; }
+        public virtual Subject? Subject { get; set; }
+        public virtual Level? Level { get; set; }     
         public List<LessonComment> Comments { get; set; }
         #endregion
 
         #region Teacher 
-        public int ID { get; set; }
-        [Required, MaxLength(100)]
-        public string FirstName { get; set; }
-        [Required, MaxLength(100)]
-        public string LastName { get; set; }
-        public byte[]? Image { get; set; }
+        public virtual Teacher? Teacher { get; set; }
+
         #endregion
 
         #region Student   
-       
-        public int studentID { get; set; }
-        public string studentName { get; set; }
-        public List<Lesson>? Orders { get; set; }
+        public Student student { get; set; }
+        //public List<StudentOrder> Orders { get; set; }
         #endregion
 
-        public bool? IsOwnedBy { get; set; }
+        //public bool? IsOwnedBy = Student.
     }
 }
