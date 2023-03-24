@@ -58,9 +58,9 @@ namespace Center_ElGhlaba.Controllers
         //{
 
         //}
-        public async Task<IActionResult> New(int TeacherId)
+        public async Task<IActionResult> New(int id)
         {
-            ViewBag.TeacherId = TeacherId;
+            ViewBag.TeacherId = id;
             ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
             return View();
         }
@@ -86,6 +86,7 @@ namespace Center_ElGhlaba.Controllers
 				lesson.levelID = newLesson.levelID;
 				lesson.TeacherID = newLesson.TeacherID;
                 lesson.Price = newLesson.Price;
+                lesson.PublishDate = DateTime.Now;
 
 				_UnitOfWork.Lessons.Insert(lesson);
 				_UnitOfWork.Complete();
