@@ -11,59 +11,76 @@
     ViewData["Title"] = "Index";
 }
 
-<!-- Courses area start -->
-<div class="courses-area section-padding40 fix">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-7 col-lg-8">
-                <div class="section-tittle text-center mb-55">
-                    <h2>Our featured courses</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="properties properties2 mb-30">
 
-                     @foreach (var lesson in Model)
+<div class="courses-area section-padding40 fix">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="section-tittle text-center mb-55">
+                <h2>Your Lessons</h2>
+                <div class="row justify-content-center" id="LessonContainer">
+                    @foreach (Lesson lesson in Model)
                     {
-                        <div class="properties__card">
-                            <div class="properties__img overlay1">
-                                @if(lesson.CoverPicture != null)
-                                {
-                                    <img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt="Cover Picture">
-                                }
-                            </div>
-                            <div class="properties__caption">
-       
-                                <h3>@lesson.Title</h3>
-                                
-                                <div class="properties__footer d-flex justify-content-between align-items-center">
-                                    
-                                    <div>
-                                        <i class="fa fa-eye" style="font-size:24px;color:#FF9F67">
-                                            <span style="color:#FF9F67"> @lesson.Views</span>
-                                        </i>
+                       if (lesson.IsDeleted == false){
+                          
+                        <div class="col-lg-4 col-md-6  ">
+                            <div class="properties properties2 mb-30">
+                                <div class="properties__card">
+                                    <div class="properties__img overlay1">
+                                        <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
                                     </div>
-                                    <div>
-                                        <i class='fas fa-thumbs-up' style='font-size:24px;color:#FF9F67'>
-                                            <span class="bi bi-heart-fill" style="color:#FF9F67"> @lesson.Likes</span>
-                                        </i>
-                                    </div>
-                               
-                                    <div class="price">
-                                        <span>@lesson.Price EGP</span>
+                                    <div class="properties__caption">
+                                        <h3><a href="#">@lesson.Title</a></h3>
+                                        <div class="properties__footer d-flex justify-content-between align-lessons-center">
+
+                                            
+                                                <span class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes</span>
+                                           
+
+                                           
+                                                <span class="fa fa-eye" style="color:#e867ff"> @lesson.Views</span>
+                                            
+                                            <span>@lesson.Price EGP</span>
+
+
+                                        </div>
+
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+                                                if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                                {
+                                                    <a asp-action="Details" asp-route-id="@lesson.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
+                                            }
                                     </div>
                                 </div>
-                                <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
-
-@*                                <a asp-action="Student" asp-controller="Payment" asp-route-id="@lesson.ID" asp-route-AppUserID="@user.Id" class="border-btn border-btn2">Find Out More</a>
-*@                            </div>
+                            </div>
                         </div>
+                        }
                     }
 
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var hub =
+            new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
+        hub.start().then(function () {
+            console.log("Connection Success");
+        });
+        hub.on("NewLessonAdded", function (lessonObj) {
+            console.log("hello");
+            console.log(lessonObj);
+           
+        });
+
+    </script>
+}
