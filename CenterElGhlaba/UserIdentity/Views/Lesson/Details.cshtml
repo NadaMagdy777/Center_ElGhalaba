@@ -23,28 +23,53 @@
         <div class="main-video">
 
             <div>
-@*                <video src="@Model.FilePath" controls muted autoplay  class="Mvideo"></video>
-*@
-                <img src="data:image/*;base64,@(Convert.ToBase64String(@Model.CoverPicture))" class="cover"/>
+
+                <img src="data:image/*;base64,@(Convert.ToBase64String(Model.CoverPicture))" class="cover"/>
 
                 <br>
                 <h2 style="display: inline;"> @Model.Title</h2>
+                <p>@Model.PublishDate</p>
+                <div class="price">
+                    @{
+                        if(Model.Discount > 0)
+                        {
+                            <p>@(Model.Price - Model.Discount)<span style="color:red"> <del> @Model.Price LE </del></span></p>
+                        }
+                        else
+                        {
+                            <p>@Model.Price LE</p>
+                        }
+                    }
+                </div>
                 <br>
                 <div>
                     <i class='fas fa-thumbs-up'>@Model.Likes</i>
                     <i class="fa fa-eye">@Model.Views</i>
                 </div>
                 <div>
-                    <img src="@Model.Image" class="imgg"/>
-                    <h4 style="display: inline;">@Model.FirstName @Model.LastName</h4>
+                    <p>Presented By:</p>
+                    <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
+                        @{
+                            if(Model.Teacher.AppUser.Image != null)
+                            {
+                                <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Teacher.AppUser.Image)) class="imgg"/>
+                            }
+                            else
+                            {
+                                <img src="~/assets/img/gallery/Blank.png" class="imgg"/>
+                            }
+                        }
+                    </a>
+                    
+                    <span style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</span>
                     
                 </div>
                 <br>
-
                 <div>
-                    <h4>Video Describtion</h4>
+                    <p>Video Describtion</p>
                     <p>@Model.Description</p>
-                    
+                    <p>Subject: @Model.Subject.Name</p>
+                    <p>Level: @Model.Level.Name</p>
                 </div>
 
             </div>
@@ -54,45 +79,62 @@
                 {
                     if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
                     {
-                        //if(Model)
+
+                        if (user.Student.Orders.Find(o => o.Lesson.ID == Model.LessonID) != null)
+                        {
+                            <a asp-action="Watch" asp-route-id="@Model.LessonID"  asp-route-userId="@user.Id" class="border-btn border-btn2">Watch</a>
+                        }
+                        else
+                        {
+                            <a href="/Payment/Student?AppUserID=@user.Id&Id=@Model.LessonID" class="border-btn border-btn2">Buy Now</a>
+                        }
+
                     }
                 }
+                else
+                {
+                    <a href="/Identity/Account/Login" class="border-btn border-btn2">Buy Now</a>
+                   
+                }
+            }
+
+        </div>
+        <div class="comment-side">
+            <h4>comments</h4>
+            @{
+            
+                if (Model.Comments.Count > 0)
+                {
+                    <div id="comments-Section" class="list">
+                        @foreach (LessonComment comment in Model.Comments)
+                        {
+                            if (comment.IsDeleted == false)
+                            {
+                                <div class="vid">
+                                    <div>
+                                        <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
+                                        <span class="gray">@comment.Date</span>
+                                        <p>@comment.Body</p>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+
+                    </div>
+                
+                }
+                else
+                {
+                    <p>This lesson does not have any comments yet!</p>
+                }
+            
             }
         </div>
 
     </div>
 
-    <br><br>
-
-    @{
-        if (Model.Comments != null)
-        {
-
-            <div class="list">
-
-                <div id="comments-Section" class="list">
-                    @foreach (LessonComment comment in Model.Comments)
-                    {
-                        <div class="vid">
-                            <div>
-                                <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
-                                <span class="gray">@comment.Date</span>
-                                <p>@comment.Body</p>
-                            </div>
-                        </div>
-                    }
-
-                </div>
-            </div>
-        }
-        else
-        {
-            <p>This lesson does not have any comments yet!</p>
-        }
-
-    }
-
-   
+    
 </div>
 
 @section Scripts 

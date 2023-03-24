@@ -25,7 +25,11 @@ namespace Center_ElGhlaba.Hubs
             _unitOfWork.comments.Insert(newComment);
             _unitOfWork.Complete();
 
-            await Clients.All.SendAsync("CommentAdded", lessonId, studentId, comment, date);
+            Student student = await _unitOfWork.Students
+                .FindAsync(s => s.ID == studentId, new[] { "AppUser" });
+            string username = student.AppUser.FirstName + " " + student.AppUser.LastName;
+
+            await Clients.All.SendAsync("CommentAdded", username, comment, date);
         }
     }
 }

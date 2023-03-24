@@ -6,7 +6,8 @@ hub.start().then(function () {
 
 hub.on("CommentAdded", function (username, comment, date) {
 
-    $("#comments-Section").append(
+
+    $("#comments-Section").prepend(
         `
             <div class="vid">
                 <div>
@@ -22,6 +23,7 @@ hub.on("CommentAdded", function (username, comment, date) {
 function AddComment(lessonID, studentID) {
 
     let comment = $("#comment").val();
+    $("#comment").val('');
 
     hub.invoke("AddComment", lessonID, studentID, comment, new Date());
 }

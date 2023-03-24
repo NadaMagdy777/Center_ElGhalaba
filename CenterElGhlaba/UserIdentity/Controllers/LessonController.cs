@@ -37,46 +37,41 @@ namespace Center_ElGhlaba.Controllers
             return View(await _UnitOfWork.Lessons.GetAllAsync());
         }
 
-        public async Task<IActionResult> Watch(int id, int userID)
+        public async Task<IActionResult> Watch(int id, string userID)
         {
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
-                new[] { "Teacher" });
+                new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", });
 
-            List<LessonComment> comments = await _UnitOfWork.comments
-               .FindAllAsync(c => c.LessonID == id, new[] { "Student" });
-
-            Student student = await _UnitOfWork.Students.FindAsync(s => s.ID == userID,
-                new[] { "Orders" });
-
+            Student student = await _UnitOfWork.Students.FindAsync(
+                s => s.AppUserID == userID,
+                new[] { "Orders.Lesson" , "AppUser" });
 
             var result = _mapper.Map<LessonDetailsVM>(lesson);
+
             _mapper.Map<LessonDetailsVM>(student);
-            _mapper.Map<LessonDetailsVM>(comments);///////////////////
-
-            return View();
-        }
-        public async Task<IActionResult> Details(int id)
-        {
-            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
-                new[] { "Teacher" });
-
-            
-            List<LessonComment> comments = await _UnitOfWork.comments
-               .FindAllAsync(c => c.LessonID == id, new[] { "Student" });
-
-            //Student student = await _UnitOfWork.Students.FindAsync(s => s.ID == userID,
-            //    new[] { "Orders" });
-
-
-            var result = _mapper.Map<LessonDetailsVM>(lesson);
-            //_mapper.Map<LessonDetailsVM>(student);
-            _mapper.Map<LessonDetailsVM>(comments);///////////////////
 
             return View(result);
         }
-        //public async Task<IActionResult> New(int Id)
-        //{ 
-        //    ViewBag.TeacherId = Id;
+        public async Task<IActionResult> Details(int id, string? userID)
+        {
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
+               new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", });
+
+            
+            var result = _mapper.Map<LessonDetailsVM>(lesson);
+            
+
+            if (userID != null)
+            {
+                Student student = await _UnitOfWork.Students.FindAsync(
+                s => s.AppUserID == userID,
+                new[] { "Orders.Lesson" , "AppUser" });
+
+                _mapper.Map<LessonDetailsVM>(student);
+            }
+
+            return View(result);
+        }
 
         //From Moeen
         public async Task<ActionResult> SubjectLessons(int id)

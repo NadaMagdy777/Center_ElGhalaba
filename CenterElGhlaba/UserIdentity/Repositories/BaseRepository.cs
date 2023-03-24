@@ -68,7 +68,6 @@ namespace Center_ElGhlaba.Repositories
             }
             return await query.ToListAsync();
         }
-
         public void Insert(T Entity)
         {
             _context.Set<T>().Add(Entity);
@@ -89,6 +88,8 @@ namespace Center_ElGhlaba.Repositories
         {
             return await _context.Set<T>().CountAsync(criteria);
         }
+
+       
     }
 
 }
