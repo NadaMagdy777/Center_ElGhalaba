@@ -37,16 +37,19 @@
                             }
                             else
                             {
-                                <div class="d-flex">
-                                    <div id="data1" class="mx-2">not teacher</div>
-                                    <div id="data2">not teacher</div>
-                                </div>
-                                <script>
-                                    window.onload = function () {
-                                        Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')
-                                        Like('@user.Id.ToString()', '@Model.AppUserID.ToString()')
-                                    }
-                                </script>
+                                @if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                {
+                                    <div class="d-flex">
+                                        <div id="data1" class="mx-2">not teacher</div>
+                                        <div id="data2">not teacher</div>
+                                    </div>
+                                    <script>
+                                        window.onload = function () {
+                                            Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')
+                                            Like('@user.Id.ToString()', '@Model.AppUserID.ToString()')
+                                        }
+                                    </script>
+                                }
                             }
                             
                         </div>
@@ -152,7 +155,6 @@
                                                         }
                                                         else
                                                         {
-                                                            @*<form *@
                                                             <a href="/Payment/Student?AppUserID=@user.Id&Id=@lesson.ID" class="text-info">By Now</a>
                                                         }
 
@@ -168,14 +170,18 @@
                                     }
                                     else
                                     {
-                                        <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="New" asp-controller="Lesson" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
+                                        <div>Dont Have Any Courses Yet  
+                                        @if( await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
+                                        {
+                                            <span>Do You Want To</span>
+                                            <a asp-action="New" asp-controller="Lesson" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a>
+                                        }
+                                        </div>
                                     }
                                     <!-- Single -->
                                 </div>
                             </div>
                         </div>
-
-
 
                     </div>
                 </div>
@@ -200,33 +206,41 @@
         });
 
         ////lesten To The Server If There Is Follow Removed
-        hub.on("RemoveFollower", function () {
-            var follows = $("#Followerscount").html();
-            $("#Followerscount").html((parseInt(follows) - 1));
+        hub.on("RemoveFollower", function (teacherId) {
+            if(teacherId == "@Model.AppUserID.ToString()"){
+                var follows = $("#Followerscount").html();
+                $("#Followerscount").html((parseInt(follows) - 1));
+            }
         });
 
         ////lesten To The Server If There Is Follow Added
-        hub.on("AddFollower", function () {
-            let beat = new Audio('/assets/Sounds/Notify.mp3');
-            beat.play();
+        hub.on("AddFollower", function (teacherId) {
+            if (teacherId == "@Model.AppUserID.ToString()") {
+                let beat = new Audio('/assets/Sounds/Notify.mp3');
+                beat.play();
 
-            var follows = $("#Followerscount").html();
-            $("#Followerscount").html((parseInt(follows) + 1));
+                var follows = $("#Followerscount").html();
+                $("#Followerscount").html((parseInt(follows) + 1));
+            }
         });
         
         ////lesten To The Server If There Is Like Removed
-        hub.on("RemoveLike", function () {
-            var follows = $("#Likescount").html();
-            $("#Likescount").html((parseInt(follows) - 1));
+        hub.on("RemoveLike", function (teacherId) {
+            if (teacherId == "@Model.AppUserID.ToString()") {
+                var follows = $("#Likescount").html();
+                $("#Likescount").html((parseInt(follows) - 1));
+            }
         });
 
         ////lesten To The Server If There Is Like Added
-        hub.on("AddLike", function () {
-            let beat = new Audio('/assets/Sounds/Notify.mp3');
-            beat.play();
+        hub.on("AddLike", function (teacherId) {
+            if (teacherId == "@Model.AppUserID.ToString()") {
+                let beat = new Audio('/assets/Sounds/Notify.mp3');
+                beat.play();
 
-            var follows = $("#Likescount").html();
-            $("#Likescount").html((parseInt(follows) + 1));
+                var follows = $("#Likescount").html();
+                $("#Likescount").html((parseInt(follows) + 1));
+            }
         });
 
         function Add(s, t) {
@@ -301,7 +315,7 @@
                 url: '/Teachers/RemoveLike',
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
-                    $("#data2").html("<a class='btn' onclick=AddLike('" + s + "','" + t + "')>Follow</a>")
+                    $("#data2").html("<a class='btn' onclick=AddLike('" + s + "','" + t + "')>Like</a>")
 
                     var follows = $("#Likescount").html();
                     $("#Likescount").html((parseInt(follows) - 1));

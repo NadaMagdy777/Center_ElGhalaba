@@ -74,7 +74,9 @@
 
                             <a asp-action="Details" asp-controller="Lesson" asp-route-Id="">
                                 @*Require ID*@
-                                <img src="data:image/*;base64,@(Convert.ToBase64String(nlesson.CoverPicture))" alt="">
+                                @if(nlesson.CoverPicture != null){
+                                    <img src="data:image/*;base64,@(Convert.ToBase64String(nlesson.CoverPicture))" alt="">
+                                }
                             </a>
                         </div>
                         <div class="properties__caption">
@@ -125,7 +127,10 @@
                         <div class="properties__img overlay1">
 
                             <a asp-action="Details" asp-controller="Lesson" asp-route-Id="">     @*Require ID*@
-                                <img src="data:image/*;base64,@(Convert.ToBase64String(hlesson.CoverPicture))" alt="">
+                                @if(hlesson.CoverPicture != null)
+                                {
+                                    <img src="data:image/*;base64,@(Convert.ToBase64String(hlesson.CoverPicture))" alt="">
+                                }
                             </a>
                         </div>
                         <div class="properties__caption">
