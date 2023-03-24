@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Services;
 using Center_ElGhlaba.Unit_OfWork;
 using Center_ElGhlaba.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.IO;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -15,11 +17,15 @@ namespace Center_ElGhlaba.Controllers
         private readonly IUnitOfWork _UnitOfWork;
         private readonly IHostingEnvironment hosting;
         private readonly IMapper _mapper;
-        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper)//ILessonService lessonService)
+
+        public IHubContext<LessonHub> LessonHub { get; }
+
+        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub)//ILessonService lessonService)
         {
             _UnitOfWork = unitOfWork;
             this.hosting = hosting;
             _mapper = mapper;
+            LessonHub = _LessonHub;
             //_Service = lessonService;
         }
 
@@ -131,6 +137,7 @@ namespace Center_ElGhlaba.Controllers
                 List<string> resourses = UploadsResoursesToFolder(newLesson.Resourses, "LessonsMaterial\\LessonResourses");
                 insertResoursesDB(resourses, lesson.ID);
 
+                await LessonHub.Clients.Group(lesson.TeacherID.ToString()).SendAsync("NewLessonAdded",lesson);
 
                 return RedirectToAction("Index");
 
@@ -191,7 +198,7 @@ namespace Center_ElGhlaba.Controllers
 			if (File != null)
 			{
 				string uploads = Path.Combine(hosting.WebRootPath,path );
-				fileName = File.FileName;
+				fileName = Guid.NewGuid().ToString() + File.FileName;
 				string fullpath = Path.Combine(uploads, fileName);
 				using var fileStream = new FileStream(fullpath, FileMode.Create);
 
@@ -239,7 +246,7 @@ namespace Center_ElGhlaba.Controllers
                 foreach (var res in Files)
                 {
 
-                    resName = res.FileName;
+                    resName = Guid.NewGuid().ToString() + res.FileName;
                     filesname.Add(resName);
                     string fullpath = Path.Combine(uploads, resName);
                     using var ResStream = new FileStream(fullpath, FileMode.Create);

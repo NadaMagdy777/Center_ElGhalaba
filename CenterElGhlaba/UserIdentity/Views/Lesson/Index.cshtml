@@ -26,7 +26,10 @@
                             <div class="properties properties2 mb-30">
                                 <div class="properties__card">
                                     <div class="properties__img overlay1">
-                                        <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
+                                        @if(lesson.CoverPicture != null)
+                                        {
+                                            <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
+                                        }
                                     </div>
                                     <div class="properties__caption">
                                         <h3><a href="#">@lesson.Title</a></h3>
@@ -71,16 +74,13 @@
 @section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        var hub =
-            new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
-        hub.start().then(function () {
-            console.log("Connection Success");
+        var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
+        hub.start().then(function() {
+            console.log("Connection Success Lesson");
         });
-        hub.on("NewLessonAdded", function (lessonObj) {
+        hub.on("NewLessonAdded", function(lessonObj) {
             console.log("hello");
             console.log(lessonObj);
-           
         });
-
     </script>
 }

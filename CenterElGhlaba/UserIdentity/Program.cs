@@ -79,6 +79,8 @@ namespace UserIdentity
             
             app.MapHub<LessonHub>("/NewLesson");
 
+            app.MapHub<LessonHub>("/UserHub");
+
 
             app.MapControllerRoute(
                 name: "default",

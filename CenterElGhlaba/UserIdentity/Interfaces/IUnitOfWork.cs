@@ -17,6 +17,7 @@ namespace Center_ElGhlaba.Interfaces
         IBaseRepository<LevelSubject> levelSubjects { get; }
         IBaseRepository<TeacherPaymentMethod> TeacherPaymentMethod { get; }
         IBaseRepository<TeacherLogs> TeacherLogs { get; }
+        IBaseRepository<Follows> Follows { get; }
         int Complete();
     }
 }
