@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UserIdentity.Models;
+using Center_ElGhlaba.Models;
 
 namespace UserIdentity.Data
 {
@@ -24,6 +25,7 @@ namespace UserIdentity.Data
 		public DbSet<TeacherPaymentMethod> TeacherPaymentMethod { get; set; }
 		public DbSet<TeacherLogs> TeacherLogs { get; set; }
 		public DbSet<Follows> Follows { get; set; }
+		public DbSet<Likes> Likes { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
