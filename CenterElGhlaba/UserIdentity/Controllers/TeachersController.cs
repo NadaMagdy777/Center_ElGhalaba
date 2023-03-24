@@ -1,6 +1,7 @@
 ﻿using Center_ElGhalaba.Models;
 using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
+using Center_ElGhlaba.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,7 @@ namespace Center_ElGhlaba.Controllers
         [Authorize]
         public async Task<ActionResult> Details(string id)
         {
-            return View(await unitOfWork.Teachers.FindAsync(t => t.AppUserID == id, new[] { "AppUser", "Lessons", "Follows" }));
-            //User follow and un follow 
-            //withdrow  
-        
+            return View(await unitOfWork.Teachers.FindAsync(t => t.AppUserID == id, new[] { "AppUser", "Lessons", "Follows", "Likes" }));
         }
 
         public async Task<ActionResult> IsFolowwing(string studentId,string teacherId)
@@ -54,8 +52,6 @@ namespace Center_ElGhlaba.Controllers
             unitOfWork.Complete();
 
             await Teacherhub.Clients.Users(teacherId).SendAsync("AddFollower");
-
-            //await Teacherhub.Clients.All.SendAsync("AddFollower");
         }
         public async Task RemoveFollower(string studentId, string teacherId)
         {
@@ -67,14 +63,50 @@ namespace Center_ElGhlaba.Controllers
                 teacher.Follows.Remove(isfolow);
                 unitOfWork.Complete();
 
-                //await Teacherhub.Clients.All.SendAsync("RemoveFollower");
-
                 await Teacherhub.Clients.Users(teacherId).SendAsync("RemoveFollower");
-                //await Teacherhub.Clients.Client(teacherId).SendAsync("RemoveFollower");
-
             }
 
         }
+
+        public async Task<ActionResult> IsLike(string studentId, string teacherId)
+        {
+            Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Likes" });
+            Likes HasLike = teacher.Likes.FirstOrDefault(f => f.StudentID == student.ID && f.TeacherID == teacher.ID);
+            if (HasLike != null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
+        public async Task AddLike(string studentId, string teacherId)
+        {
+
+            Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Likes" });
+            teacher.Likes.Add(new Likes { StudentID = student.ID, TeacherID = teacher.ID });
+            unitOfWork.Complete();
+
+            await Teacherhub.Clients.Users(teacherId).SendAsync("AddLike");
+        }
+        public async Task RemoveLike(string studentId, string teacherId)
+        {
+            Student student = await unitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Teacher teacher = await unitOfWork.Teachers.FindAsync(t => t.AppUserID == teacherId, new[] { "Likes" });
+            Likes HasLike = teacher.Likes.FirstOrDefault(f => f.StudentID == student.ID && f.TeacherID == teacher.ID);
+            if (HasLike != null)
+            {
+                teacher.Likes.Remove(HasLike);
+                unitOfWork.Complete();
+
+                await Teacherhub.Clients.Users(teacherId).SendAsync("RemoveLike");
+            }
+
+        }
+
         //// GET: TeachersController/Details/5
         //[Authorize(Roles = "Teacher")]
         //public ActionResult AddCourse(int id)

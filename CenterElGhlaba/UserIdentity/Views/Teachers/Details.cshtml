@@ -22,7 +22,7 @@
                         <div class="ms-4 mt-5 d-flex mx-4 flex-column ">
                             @if (Model.AppUser.Image != null)
                             {
-                                <img class="avatar rounded-circle" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
+                                <img class="avatar rounded-circle" style="width: 150px; z-index: 1" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
                             }
                             else
                             {
@@ -37,10 +37,14 @@
                             }
                             else
                             {
-                                <div id="data">not teacher</div>
+                                <div class="d-flex">
+                                    <div id="data1" class="mx-2">not teacher</div>
+                                    <div id="data2">not teacher</div>
+                                </div>
                                 <script>
                                     window.onload = function () {
                                         Folow('@user.Id.ToString()', '@Model.AppUserID.ToString()')
+                                        Like('@user.Id.ToString()', '@Model.AppUserID.ToString()')
                                     }
                                 </script>
                             }
@@ -56,7 +60,7 @@
                         <div class="d-flex justify-content-end text-center py-1">
                             
                             <div class="px-3">
-                                <p class="mb-1 h5">@Model.Likes</p>
+                                <p id="Likescount" class="mb-1 h5">@Model.Likes.Count</p>
                                 <p class="small text-muted mb-0">Likes</p>
                             </div>
                             <div>
@@ -178,13 +182,13 @@
             console.log("Connect Success");
         });
 
-        ////lesten To The Server If There Is New Comment
+        ////lesten To The Server If There Is Follow Removed
         hub.on("RemoveFollower", function () {
             var follows = $("#Followerscount").html();
             $("#Followerscount").html((parseInt(follows) - 1));
         });
 
-        ////lesten To The Server If There Is New Comment
+        ////lesten To The Server If There Is Follow Added
         hub.on("AddFollower", function () {
             let beat = new Audio('/assets/Sounds/Notify.mp3');
             beat.play();
@@ -192,13 +196,28 @@
             var follows = $("#Followerscount").html();
             $("#Followerscount").html((parseInt(follows) + 1));
         });
+        
+        ////lesten To The Server If There Is Like Removed
+        hub.on("RemoveLike", function () {
+            var follows = $("#Likescount").html();
+            $("#Likescount").html((parseInt(follows) - 1));
+        });
+
+        ////lesten To The Server If There Is Like Added
+        hub.on("AddLike", function () {
+            let beat = new Audio('/assets/Sounds/Notify.mp3');
+            beat.play();
+
+            var follows = $("#Likescount").html();
+            $("#Likescount").html((parseInt(follows) + 1));
+        });
 
         function Add(s, t) {
             $.ajax({
                 url: '/Teachers/AddFollower',
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
-                    $("#data").html("<a class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
+                    $("#data1").html("<a class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
 
                     var follows = $("#Followerscount").html();
                     $("#Followerscount").html((parseInt(follows) + 1));
@@ -214,7 +233,7 @@
                 url: '/Teachers/RemoveFollower',
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
-                    $("#data").html("<a class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
+                    $("#data1").html("<a class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
 
                     var follows = $("#Followerscount").html();
                     $("#Followerscount").html((parseInt(follows) - 1));
@@ -231,10 +250,10 @@
                 data: { studentId: s, teacherId: t },
                 success: function (result) {
                     if (result) {
-                        $("#data").html("<a id='Followbtn' class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
+                        $("#data1").html("<a id='Followbtn' class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a>")
                     }
                     else {
-                        $("#data").html("<a id='Followbtn' class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
+                        $("#data1").html("<a id='Followbtn' class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
                     }
                 },
                 error: function (xhr, status) {
@@ -242,57 +261,58 @@
                 }
             });
         };
-        //function AddLike(s, t) {
-        //    $.ajax({
-        //        url: '/Teachers/AddFollower',
-        //        data: { studentId: s, teacherId: t },
-        //        success: function (result) {
-        //            $("#data").html("<a class='btn' onclick=RemoveLike('" + s + "','" + t + "')>UnLike</a>")
 
-        //            var follows = $("#Followerscount").html();
-        //            $("#Followerscount").html((parseInt(follows) + 1));
 
-        //        },
-        //        error: function (xhr, status) {
-        //            alert("Add error " + status);
-        //        }
-        //    });
-        //};
-        //function RemoveLike(s, t) {
-        //    $.ajax({
-        //        url: '/Teachers/RemoveFollower',
-        //        data: { studentId: s, teacherId: t },
-        //        success: function (result) {
-        //            $("#data").html("<a class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a>")
+        function AddLike(s, t) {
+            $.ajax({
+                url: '/Teachers/AddLike',
+                data: { studentId: s, teacherId: t },
+                success: function (result) {
+                    $("#data2").html("<a class='btn' onclick=RemoveLike('" + s + "','" + t + "')>UnLike</a>")
 
-        //            var follows = $("#Followerscount").html();
-        //            $("#Followerscount").html((parseInt(follows) - 1));
+                    var follows = $("#Likescount").html();
+                    $("#Likescount").html((parseInt(follows) + 1));
 
-        //        },
-        //        error: function (xhr, status) {
-        //            alert("Remove error " + status);
-        //        }
-        //    });
-        //};
+                },
+                error: function (xhr, status) {
+                    alert("Add error " + status);
+                }
+            });
+        };
+        function RemoveLike(s, t) {
+            $.ajax({
+                url: '/Teachers/RemoveLike',
+                data: { studentId: s, teacherId: t },
+                success: function (result) {
+                    $("#data2").html("<a class='btn' onclick=AddLike('" + s + "','" + t + "')>Follow</a>")
 
-        
-        //function Folow(s, t) {
-        //    $.ajax({
-        //        url: '/Teachers/IsFolowwing',
-        //        data: { studentId: s, teacherId: t },
-        //        success: function (result) {
-        //            if (result) {
-        //                $("#data").html("<a id='Followbtn' class='btn' onclick=Remove('" + s + "','" + t + "')>UnFollow</a><a id='Likbtn' class='btn' onclick=RemoveLike('" + s + "','" + t + "')>UnLike</a>")
-        //            }
-        //            else {
-        //                $("#data").html("<a id='Followbtn' class='btn' onclick=Add('" + s + "','" + t + "')>Follow</a><a id='Likbtn' class='btn' onclick=AddLike('" + s + "','" + t + "')>Like</a>")
-        //            }
-        //        },
-        //        error: function (xhr, status) {
-        //            alert("Follow error " + status);
-        //        }
-        //    });
-        //};
+                    var follows = $("#Likescount").html();
+                    $("#Likescount").html((parseInt(follows) - 1));
+
+                },
+                error: function (xhr, status) {
+                    alert("Remove error " + status);
+                }
+            });
+        };
+
+        function Like(s, t) {
+            $.ajax({
+                url: '/Teachers/IsLike',
+                data: { studentId: s, teacherId: t },
+                success: function (result) {
+                    if (result) {
+                        $("#data2").html("<a id='Likbtn' class='btn' onclick=RemoveLike('" + s + "','" + t + "')>UnLike</a>")
+                    }
+                    else {
+                        $("#data2").html("<a id='Likbtn' class='btn' onclick=AddLike('" + s + "','" + t + "')>Like</a>")
+                    }
+                },
+                error: function (xhr, status) {
+                    alert("Like error " + status);
+                }
+            });
+        };
     </script>
 
 }
