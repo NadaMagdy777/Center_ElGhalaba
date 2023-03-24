@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="col-xl-6">
-                           <form asp-action="New" asp-controller="Lesson" method="post" enctype="multipart/form-data">
+                           <form asp-action="New" id="NewLessonForm" asp-controller="Lesson" method="post" enctype="multipart/form-data">
 
                             <div class="card-body p-md-5 text-black">
                                 <h3 class="mb-5 text-uppercase" style="font-size:2.5rem;">Add new Lesson</h3>
@@ -194,7 +194,38 @@
                     }
                 });
         }
+
+        $("#NewLessonForm").submit(function (e) {
+
+            console.log("hello")
+
+            SendMessage();
+            this.submit()
+
+        });
     </script>
+   
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script>
+            //1-declare hub "URL"
+            var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
+            //2-start connect as online client
+
+            hub.start().then(function(){
+                console.log("Connect Success");
+            });
+
+            //4-send data server
+            function SendMessage(){
+                
+                //call RPC from hub
+                hub.invoke("AddLesson", @Model);
+            }
+            
+
+        
+    </script>
+
     <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
