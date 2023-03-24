@@ -236,17 +236,17 @@
         //////UserLoggedHub/////
         var newUserHub = new signalR.HubConnectionBuilder().withUrl("/UserHub").build();
 
-        hub.start().then(function () {
+        newUserHub.start().then(function () {
             console.log("UserHub Connected Successfully");
         });
 
-        hub.on("UserLoggedIn", function (userId) {
+        newUserHub.on("UserLoggedIn", function (userId) {
             if (userId == "@Model.AppUserID.ToString()") {
                 $("#onlineIndicator").css("border-color", "green");
             }
         });
-        
-        hub.on("UserLoggedOut", function (userId) {
+
+        newUserHub.on("UserLoggedOut", function (userId) {
             if (userId == "@Model.AppUserID.ToString()") {
                 $("#onlineIndicator").css("border-color", "Red");
             }
