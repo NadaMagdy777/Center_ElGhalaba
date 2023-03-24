@@ -47,8 +47,8 @@
                             
                         </div>
                         <div class="ms-3" style="margin-top: 130px;">
-                            <h5>Your Name: @Model.AppUser.FirstName @Model.AppUser.LastName</h5>
-                            <p>Your Email: @Model.AppUser.Email</p>
+                            <h5>@Model.AppUser.FirstName @Model.AppUser.LastName</h5>
+                            <p>Email: @Model.AppUser.Email</p>
                         </div>
                     </div>
 
@@ -71,11 +71,16 @@
                             <div class="p-4" style="background-color: #f8f9fa;">
                                 @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
                                 {
-                                    <p class="font-italic mb-1">Your Balance: @Model.Balance <b><a href="#" class="text-info ml-2">Withdrow</a></b></p>
+                                    <p class="font-italic mb-1">Balance: @Model.Balance 
+                                        <b><a asp-action="Teacher" asp-controller="Payment" asp-route-Id="@Model.ID" class="text-info ml-2">Withdrow</a></b>
+                                    </p>
                                 }
-                                <p class="font-italic mb-1">Your Adress: @Model.AppUser.Address</p>
-                                <p class="font-italic mb-1">Your PhoneNumber: @Model.AppUser.PhoneNumber</p>
-                                <p class="font-italic mb-1">Your Birthdate: @Model.AppUser.Birthdate</p>
+                                <p class="font-italic mb-1">Adress: @Model.AppUser.Address</p>
+                                @if (Model.AppUser.PhoneNumber != null)
+                                {
+                                    <p class="font-italic mb-1">PhoneNumber: @Model.AppUser.PhoneNumber</p>
+                                }
+                                <p class="font-italic mb-1">Birthdate: @Model.AppUser.Birthdate.ToShortDateString()</p>
                             </div>
                         </div>
 
@@ -87,7 +92,19 @@
                                         {
                                             <div class="section-tittle text-center mb-55 d-flex justify-content-between">
                                                 <h2>Your Lessons</h2>
-                                                <h2><a asp-action="TeacherNew" asp-controller="Lesson" asp-route-Id="@user.Id" class="text-info ml-2">Add New</a></h2>
+                                                <h2><a asp-action="New" asp-controller="Lesson" asp-route-Id="@user.Id" class="text-info ml-2">Add New</a></h2>
+                                            @*//////////////////////////////////////////////
+                                                ////////////////////////////////////////////
+                                                Lesson/New/Id  => TeacherID "1 Or 2 ....." not AppUserID
+                                                انت متأكد عايز تبعتلها 
+                                                user.Id 
+                                                مش 
+                                                Model.Id
+                                                ///////////////////////////////////////////
+                                                والحتة بتاعت الكورسيز اللي في النافبار عايزة تاخد لينكات صح
+                                                ////////////////////////////////////////////////
+                                                ////////////////////////////////////////////////
+                                            *@
                                             </div>
                                         }
                                         else
@@ -147,7 +164,7 @@
                                     }
                                     else
                                     {
-                                        <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="AddCourse" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
+                                        <div>You Dont Have Any Courses Yet Do You Want To <a asp-action="New" asp-controller="Lesson" asp-route-id="@Model.ID" style="color:#FF9F67">Create One</a></div>
                                     }
                                     <!-- Single -->
                                 </div>
