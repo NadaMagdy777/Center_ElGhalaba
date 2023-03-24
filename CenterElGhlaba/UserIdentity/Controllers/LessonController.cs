@@ -31,12 +31,12 @@ namespace Center_ElGhlaba.Controllers
 
         //}
 
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {           
             
             return View(await _UnitOfWork.Lessons.GetAllAsync());
         }
-        public async Task<IActionResult> Details(int id, int userID)
+        public async Task<IActionResult> Watch(int id, int userID)
         {
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
                 new[] { "Teacher" });
@@ -52,11 +52,30 @@ namespace Center_ElGhlaba.Controllers
             _mapper.Map<LessonDetailsVM>(student);
             _mapper.Map<LessonDetailsVM>(comments);///////////////////
 
+            return View();
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
+                new[] { "Teacher" });
+
+            
+            List<LessonComment> comments = await _UnitOfWork.comments
+               .FindAllAsync(c => c.LessonID == id, new[] { "Student" });
+
+            //Student student = await _UnitOfWork.Students.FindAsync(s => s.ID == userID,
+            //    new[] { "Orders" });
+
+
+            var result = _mapper.Map<LessonDetailsVM>(lesson);
+            //_mapper.Map<LessonDetailsVM>(student);
+            _mapper.Map<LessonDetailsVM>(comments);///////////////////
+
             return View(result);
         }
-        public async Task<IActionResult> New(int TeacherId)
+        public async Task<IActionResult> New(int Id)
         { 
-            ViewBag.TeacherId = TeacherId;
+            ViewBag.TeacherId = Id;
             ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
             return View();
         }

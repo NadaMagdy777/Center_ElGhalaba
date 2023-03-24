@@ -1,6 +1,13 @@
-﻿@model List<Lesson>
+﻿@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
-    Layout = "_PageLayout";
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+@model List<Lesson>
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -22,31 +29,33 @@
                     {
                         <div class="properties__card">
                             <div class="properties__img overlay1">
-                                <img src="assets/img/gallery/@lesson.CoverPicture" alt="">
+                                <img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt="Cover Picture">
                             </div>
                             <div class="properties__caption">
-                                <p>User Experience</p>
-                                <h3><a href="#">Fundamental of UX for Application design</a></h3>
-                                <p>
-                                    @lesson.Description
-                                </p>
+       
+                                <h3>@lesson.Title</h3>
+                                
                                 <div class="properties__footer d-flex justify-content-between align-items-center">
-                                    <div class="restaurant-name">
-                                        <div class="rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half"></i>
-                                        </div>
-                                        <p><span>(4.5)</span> based on 120</p>
+                                    
+                                    <div>
+                                        <i class="fa fa-eye" style="font-size:24px;color:#FF9F67">
+                                            <span style="color:#FF9F67"> @lesson.Views</span>
+                                        </i>
                                     </div>
+                                    <div>
+                                        <i class='fas fa-thumbs-up' style='font-size:24px;color:#FF9F67'>
+                                            <span class="bi bi-heart-fill" style="color:#FF9F67"> @lesson.Likes</span>
+                                        </i>
+                                    </div>
+                               
                                     <div class="price">
-                                        <span>$@lesson.Price</span>
+                                        <span>@lesson.Price EGP</span>
                                     </div>
                                 </div>
-                                <a asp-action="Student" asp-controller="Payment" asp-route-id="@lesson.ID" asp-route-AppUserID="" class="border-btn border-btn2">Buy</a>
-                            </div>
+                                <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
+
+@*                                <a asp-action="Student" asp-controller="Payment" asp-route-id="@lesson.ID" asp-route-AppUserID="@user.Id" class="border-btn border-btn2">Find Out More</a>
+*@                            </div>
                         </div>
                     }
 

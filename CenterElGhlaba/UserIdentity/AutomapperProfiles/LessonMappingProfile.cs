@@ -13,13 +13,16 @@ namespace Center_ElGhlaba.AutomapperProfiles
                 .ReverseMap();
 
             CreateMap<Student, LessonDetailsVM>()
+                .ForMember(dest => dest.studentID, src => src
+                .MapFrom(src => src.ID))
                 .ForMember(dest => dest.studentName, src => src
                 .MapFrom(src => src.AppUser.FirstName + " " + src.AppUser.LastName))
                 .ReverseMap();
 
             CreateMap<Teacher, LessonDetailsVM>().ReverseMap();
+            CreateMap<StudentOrder, LessonDetailsVM>().ReverseMap();
 
-            CreateMap<LessonComment, LessonDetailsVM>().ReverseMap();
+            CreateMap<IEnumerable<LessonComment>, LessonDetailsVM>().ReverseMap();
         }
     }
 }
