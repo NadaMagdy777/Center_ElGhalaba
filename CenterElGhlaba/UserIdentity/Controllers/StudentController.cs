@@ -1,7 +1,12 @@
-﻿using Center_ElGhalaba.Models;
+﻿using Center_ElGhalaba.Constants;
+using Center_ElGhalaba.Models;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using UserIdentity.Models;
 
 namespace Center_ElGhlaba.Controllers
 {
@@ -32,8 +37,26 @@ namespace Center_ElGhlaba.Controllers
             return Json(data);
         }
 
-        public async Task<IActionResult> Details(string id)
+        [Authorize]
+        public async Task<IActionResult> Details(string id,[FromServices] UserManager<ApplicationUser> userManager)
         {
+            ApplicationUser currUser = await userManager.FindByNameAsync(User.Identity.Name);
+
+            if (id != currUser.Id)
+            {
+                if ( await userManager.IsInRoleAsync(currUser, RolesConsts.Student.ToString()))
+                {
+                    return RedirectToAction("Details", new { id = currUser.Id });
+                }
+                else if (await userManager.IsInRoleAsync(currUser, RolesConsts.Teacher.ToString()))
+                {
+                    return RedirectToAction("Details", "Teachers", new { id = currUser.Id });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             Student student = await services.GetStudent(id);
 
             List<Lesson> lessons = await services.GetStudentLessons(student.ID);
@@ -46,8 +69,6 @@ namespace Center_ElGhlaba.Controllers
             this.ViewBag.Lessons = lessons.Skip(recSkip).Take(pager.PageSize).ToList(); ;
 
             return View(student);
-
-
         }
     }
 }

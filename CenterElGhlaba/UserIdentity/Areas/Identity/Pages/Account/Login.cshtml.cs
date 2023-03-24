@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using UserIdentity.Models;
 using System.Net.Mail;
+using Microsoft.AspNetCore.SignalR;
+using Center_ElGhlaba.Hubs;
 
 namespace UserIdentity.Areas.Identity.Pages.Account
 {
@@ -104,7 +106,7 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync([FromServices] IHubContext<UserHub> hub, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
 
@@ -129,7 +131,8 @@ namespace UserIdentity.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
                     user.IsAvailable = true;
                     await _userManager.UpdateAsync(user);
-                        
+                    hub.Clients.All.SendAsync("UserLoggedIn", user.Id);
+
                     return LocalRedirect(returnUrl);
                 }
 

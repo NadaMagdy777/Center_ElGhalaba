@@ -1,0 +1,122 @@
+﻿@model LessonDetailsVM
+@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <link rel="stylesheet" href="~/assets/css/DetailsPageStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<div>
+    <div class="container">
+
+        <div class="main-video">
+
+            <div>
+                <video src="~/LessonsMaterial/LessonVideos/@Model.FilePath" controls muted class="Wvideo"></video>
+
+                <h2 style="display: inline;">
+                    <a asp-action="Details" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id">@Model.Title</a>                   
+                </h2>
+                <br>
+                <div>
+                    <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
+                       
+                        @{
+                            if (Model.Teacher.AppUser.Image != null)
+                            {
+                                <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Teacher.AppUser.Image)) class="imgg"/>
+                            }
+                            else
+                            {
+                                <img src="~/assets/img/gallery/Blank.png" class="imgg"/>
+                            }
+                        }
+                    </a>
+                    <h4 style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</h4>
+
+                </div>
+                <br>
+
+                <div>
+                    <h4>Video Describtion</h4>
+                    <p>@Model.Description</p>
+                    <p>Subject: @Model.Subject.Name</p>
+                    <p>Level: @Model.Level.Name</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="list">
+            @{
+                if(user.Student.Orders != null)
+                {
+                    @foreach (StudentOrder order in user.Student.Orders)
+                    {
+                        if(order.Lesson.IsDeleted == false)
+                        {
+                            <div class="vid active-video" onclick="ShowVideoDetails()">
+                                <a asp-action="Watch" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id">
+                                    <img src="data:image/*;base64,@(Convert.ToBase64String(order.Lesson.CoverPicture))" class="Lvideo" />
+                                </a>
+
+                                <h3 class="title">@order.Lesson.Title</h3>
+                            </div>
+                        }
+                       
+                    }
+                }
+            }
+            
+
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="inputBox addComment">
+        <input type="text" id="comment" name="comment" class="inputt" placeholder="Add a comment">
+        <button class="btn btn-primary" onclick="AddComment(@Model.LessonID, @user.Student.ID)">Send</button> <br/>
+    </div>
+
+    <div class="comments">
+        <h3>Comments</h3>
+        <div id="comments-Section" class="list">
+            @foreach (LessonComment comment in Model.Comments)
+            {
+                if(comment.IsDeleted == false)
+                {
+                    <div class="vid">
+                        <div>
+                            <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
+                            <span class="gray">@comment.Date</span>
+                            <p>@comment.Body</p>
+                        </div>
+                    </div>
+                }
+               
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/assets/js/commentHub.js"></script>
+}
+
+

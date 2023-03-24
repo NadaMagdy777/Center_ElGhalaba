@@ -4,10 +4,12 @@
 
 using System;
 using System.Threading.Tasks;
+using Center_ElGhlaba.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using UserIdentity.Models;
 
@@ -26,12 +28,14 @@ namespace UserIdentity.Areas.Identity.Pages.Account
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPost([FromServices] IHubContext<UserHub> hub, string returnUrl = null)
         {
             ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
             await _signInManager.SignOutAsync();
             user.IsAvailable = false;
             await userManager.UpdateAsync(user);                      //                      ========> May Throw Exc
+
+            await hub.Clients.All.SendAsync("UserLoggedOut", user.Id);
 
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

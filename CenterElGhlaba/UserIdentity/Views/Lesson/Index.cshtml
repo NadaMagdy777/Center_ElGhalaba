@@ -1,51 +1,86 @@
-﻿@model List<Lesson>
+﻿@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+@model List<Lesson>
 @{
     ViewData["Title"] = "Index";
 }
 
-<!-- Courses area start -->
+
 <div class="courses-area section-padding40 fix">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-7 col-lg-8">
-                <div class="section-tittle text-center mb-55">
-                    <h2>Our featured courses</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="properties properties2 mb-30">
-                    <div class="properties__card">
-                        <div class="properties__img overlay1">
-                            <a href="#"><img src="assets/img/gallery/featured1.png" alt=""></a>
-                        </div>
-                        <div class="properties__caption">
-                            <p>User Experience</p>
-                            <h3><a href="#">Fundamental of UX for Application design</a></h3>
-                            <p>
-                                The automated process all your website tasks. Discover tools and techniques to engage effectively with vulnerable children and young people.
-                            </p>
-                            <div class="properties__footer d-flex justify-content-between align-items-center">
-                                <div class="restaurant-name">
-                                    <div class="rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half"></i>
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="section-tittle text-center mb-55">
+                <h2>Your Lessons</h2>
+                <div class="row justify-content-center" id="LessonContainer">
+                    @foreach (Lesson lesson in Model)
+                    {
+                       if (lesson.IsDeleted == false){
+                          
+                        <div class="col-lg-4 col-md-6  ">
+                            <div class="properties properties2 mb-30">
+                                <div class="properties__card">
+                                    <div class="properties__img overlay1">
+                                        @if(lesson.CoverPicture != null)
+                                        {
+                                            <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
+                                        }
                                     </div>
-                                    <p><span>(4.5)</span> based on 120</p>
-                                </div>
-                                <div class="price">
-                                    <span>$135</span>
+                                    <div class="properties__caption">
+                                        <h3><a href="#">@lesson.Title</a></h3>
+                                        <div class="properties__footer d-flex justify-content-between align-lessons-center">
+
+                                            
+                                                <span class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes</span>
+                                           
+
+                                           
+                                                <span class="fa fa-eye" style="color:#e867ff"> @lesson.Views</span>
+                                            
+                                            <span>@lesson.Price EGP</span>
+
+
+                                        </div>
+
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+                                                if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                                {
+                                                    <a asp-action="Details" asp-route-id="@lesson.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
+                                            }
+                                    </div>
                                 </div>
                             </div>
-                            <a href="#" class="border-btn border-btn2">Find out more</a>
                         </div>
-                    </div>
+                        }
+                    }
+
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
+        hub.start().then(function() {
+            console.log("Connection Success Lesson");
+        });
+        hub.on("NewLessonAdded", function(lessonObj) {
+            console.log("hello");
+            console.log(lessonObj);
+        });
+    </script>
+}

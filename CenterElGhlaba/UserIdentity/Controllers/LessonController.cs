@@ -1,9 +1,12 @@
-﻿using Center_ElGhalaba.Models;
+﻿using AutoMapper;
+using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Services;
 using Center_ElGhlaba.Unit_OfWork;
 using Center_ElGhlaba.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.IO;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -13,11 +16,16 @@ namespace Center_ElGhlaba.Controllers
     {
         private readonly IUnitOfWork _UnitOfWork;
         private readonly IHostingEnvironment hosting;
+        private readonly IMapper _mapper;
 
-        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting)//ILessonService lessonService)
+        public IHubContext<LessonHub> LessonHub { get; }
+
+        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub)//ILessonService lessonService)
         {
             _UnitOfWork = unitOfWork;
             this.hosting = hosting;
+            _mapper = mapper;
+            LessonHub = _LessonHub;
             //_Service = lessonService;
         }
 
@@ -28,23 +36,74 @@ namespace Center_ElGhlaba.Controllers
         //    _Service = new LessonService(new ModelStateWrapper(this.ModelState), new UnitOfWork());
 
         //}
-      
-        public async Task<ActionResult> Index()
+
+        public async Task<IActionResult> Index()
         {           
+            
             return View(await _UnitOfWork.Lessons.GetAllAsync());
         }
+
+        public async Task<IActionResult> Watch(int id, string userID)
+        {
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
+                new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", });
+
+            Student student = await _UnitOfWork.Students.FindAsync(
+                s => s.AppUserID == userID,
+                new[] { "Orders.Lesson" , "AppUser" });
+
+            var result = _mapper.Map<LessonDetailsVM>(lesson);
+
+            _mapper.Map<LessonDetailsVM>(student);
+
+            return View(result);
+        }
+        public async Task<IActionResult> Details(int id, string? userID)
+        {
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id,
+               new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", });
+
+            
+            var result = _mapper.Map<LessonDetailsVM>(lesson);
+            
+
+            if (userID != null)
+            {
+                Student student = await _UnitOfWork.Students.FindAsync(
+                s => s.AppUserID == userID,
+                new[] { "Orders.Lesson" , "AppUser" });
+
+                _mapper.Map<LessonDetailsVM>(student);
+            }
+
+            return View(result);
+        }
+
+        //From Moeen
         public async Task<ActionResult> SubjectLessons(int id)
         {
             List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id);
             return View("Index", lessons);
         }
-        //public IActionResult Details()
-        //{
-
-        //}
-        public async Task<IActionResult> New(int TeacherId)
+        //From Moeen
+        public async Task<ActionResult> TeacherLessons(string id)
         {
-            ViewBag.TeacherId = TeacherId;
+            Teacher teacher = await _UnitOfWork.Teachers.FindAsync(t => t.AppUserID == id);
+            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.TeacherID == teacher.ID);
+            return View("Index", lessons);
+        }
+        //From Moeen
+        public async Task<ActionResult> TeacherNew(string id)
+        {
+            Teacher teacher = await _UnitOfWork.Teachers.FindAsync(t => t.AppUserID == id);
+            ViewBag.TeacherId = teacher.ID;
+            ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
+            return View("New");
+        }
+     
+        public async Task<IActionResult> New(int id)
+        {
+            ViewBag.TeacherId = id;
             ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
             return View();
         }
@@ -70,6 +129,7 @@ namespace Center_ElGhlaba.Controllers
 				lesson.levelID = newLesson.levelID;
 				lesson.TeacherID = newLesson.TeacherID;
                 lesson.Price = newLesson.Price;
+                lesson.PublishDate = DateTime.Now;
 
 				_UnitOfWork.Lessons.Insert(lesson);
 				_UnitOfWork.Complete();
@@ -77,6 +137,7 @@ namespace Center_ElGhlaba.Controllers
                 List<string> resourses = UploadsResoursesToFolder(newLesson.Resourses, "LessonsMaterial\\LessonResourses");
                 insertResoursesDB(resourses, lesson.ID);
 
+                await LessonHub.Clients.Group(lesson.TeacherID.ToString()).SendAsync("NewLessonAdded",lesson);
 
                 return RedirectToAction("Index");
 
@@ -89,6 +150,47 @@ namespace Center_ElGhlaba.Controllers
 
 
 		}
+        public async Task<IActionResult> Edit(int id)
+        {
+
+            Lesson lesson =await _UnitOfWork.Lessons.GetByIdAsync(id);
+            EditLessonVM Lesson = new EditLessonVM();
+            Lesson.Title = lesson.Title;
+            Lesson.Price = lesson.Price;
+            Lesson.Description = lesson.Description;
+            Lesson.Discount= lesson.Discount;
+            Lesson.ID=lesson.ID;
+
+            
+            
+            return View(Lesson);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditLessonVM lesson)
+        {
+            if (ModelState.IsValid)
+            {
+               Lesson Lesson=await  _UnitOfWork.Lessons.GetByIdAsync(lesson.ID);
+
+                Lesson.Title = lesson.Title;
+                Lesson.Price = lesson.Price;
+                Lesson.Description = Lesson.Description;
+                Lesson.Discount = lesson.Discount;
+                Lesson.ID = lesson.ID;
+
+                _UnitOfWork.Lessons.Update(Lesson);
+                _UnitOfWork.Complete();
+
+              
+
+
+                return RedirectToAction("Index");
+            }
+
+            return View(lesson);
+        }
 
         public string UploadsVideoToFolder(IFormFile File,string path)
         {
@@ -96,7 +198,7 @@ namespace Center_ElGhlaba.Controllers
 			if (File != null)
 			{
 				string uploads = Path.Combine(hosting.WebRootPath,path );
-				fileName = File.FileName;
+				fileName = Guid.NewGuid().ToString() + File.FileName;
 				string fullpath = Path.Combine(uploads, fileName);
 				using var fileStream = new FileStream(fullpath, FileMode.Create);
 
@@ -108,6 +210,7 @@ namespace Center_ElGhlaba.Controllers
 
 			return fileName;
         }
+
         public void insertResoursesDB(List<string> resourses,int lessonId)
         {
           
@@ -143,7 +246,7 @@ namespace Center_ElGhlaba.Controllers
                 foreach (var res in Files)
                 {
 
-                    resName = res.FileName;
+                    resName = Guid.NewGuid().ToString() + res.FileName;
                     filesname.Add(resName);
                     string fullpath = Path.Combine(uploads, resName);
                     using var ResStream = new FileStream(fullpath, FileMode.Create);
@@ -189,6 +292,15 @@ namespace Center_ElGhlaba.Controllers
             var levelsubjects = await _UnitOfWork.levelSubjects.FindAllAsync(item => item.StageID == StageID && item.LevelID == LevelID, new[] { "Subject" });
             var subjects = levelsubjects.Select(item => item.Subject);
             return Json(subjects);
+        }
+        public IActionResult CheckDiscount(int Discount, int Price)
+        {
+            if (Discount < Price)
+            {
+                return Json(true);
+            }
+            else
+                return Json(false);
         }
     }
 }

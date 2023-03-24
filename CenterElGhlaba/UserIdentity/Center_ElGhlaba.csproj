@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
+    <Content Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
+    <EmbeddedResource Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
+    <None Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\js\test.js" />
   </ItemGroup>
 
@@ -20,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.3" />
@@ -109,7 +117,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\LessonsMaterial\LessonVideos\" />
-    <Folder Include="wwwroot\LessonsMaterial\LessonResourses\" />
   </ItemGroup>
 
 </Project>

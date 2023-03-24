@@ -21,8 +21,12 @@ namespace Center_ElGhlaba.Unit_OfWork
 
         public IBaseRepository<LevelSubject> levelSubjects { get; private set; }
         public IBaseRepository<LessonResource> resources { get; private set; }
+        public IBaseRepository<TeacherPaymentMethod> TeacherPaymentMethod { get; private set; }
+        public IBaseRepository<TeacherLogs> TeacherLogs { get; private set; }
+        public IBaseRepository<Follows> Follows { get; private set; }
 
-    public UnitOfWork(ApplicationDbContext context) 
+
+        public UnitOfWork(ApplicationDbContext context) 
         {
             _context = context;
 
@@ -37,6 +41,9 @@ namespace Center_ElGhlaba.Unit_OfWork
             stages = new BaseRepository<Stage>(_context);
             levelSubjects = new BaseRepository<LevelSubject>(_context);
             resources= new BaseRepository<LessonResource>(_context);
+            TeacherPaymentMethod = new BaseRepository<TeacherPaymentMethod>(_context);
+            TeacherLogs = new BaseRepository<TeacherLogs>(_context);
+            Follows = new BaseRepository<Follows>(_context);
         }
 
         public UnitOfWork()
