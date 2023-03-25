@@ -1,9 +1,10 @@
 ////lesten To The Server If There Is Follow Added
 hub.on("AddLessonView", function (lessonId) {
-    
-    var views = $(`#V-${lessonId}`).html();   
+    console.log("start AddLessonView")
+    var views = $(`#V-${lessonId}`).html();
+    console.log(views)
     $(`#V-${lessonId}`).html((parseInt(views) + 1));   
-
+    console.log("End AddLessonView")
 });
 
 ////lesten To The Server If There Is Like Removed
@@ -69,13 +70,13 @@ function Remove(lessonId, studentId) {
     });
 };
 function View(lessonId, studentId) {
-
+    console.log("start View")
     $.ajax({
         url: '/Lesson/IsViewed',
         data: {lessonId: lessonId, studentId: studentId },
         success: function (result) {
             if (!result) {
-
+                console.log("Adding LessonView")
                 AddView(lessonId, studentId);
             }
         },
@@ -83,24 +84,24 @@ function View(lessonId, studentId) {
             alert("Follow error " + status);
         }
     });
-
+    console.log(" end View")
 };
 
 
 function AddView(lessonId, studentId) {
-   
+    console.log("start AddView")
 
     $.ajax({
         url: '/Lesson/AddView',
         data: { lessonId: lessonId, studentId: studentId },
         success: function () {
-
+            console.log("success")
         },
         error: function (xhr, status) {
             alert("Add error " + status);
         }
     });
-    
+    console.log("end LessonView")
 
 };
 

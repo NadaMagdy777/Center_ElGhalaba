@@ -42,10 +42,17 @@
                     }
                 </div>
                 <br>
-                <div>
-                    <i class='fas fa-thumbs-up'>@Model.Likes</i>
-                    <i class="fa fa-eye">@Model.Views</i>
+                
+
+                <div class="properties__footer d-flex justify-content-between align-lessons-center">
+
+   
+                    <span id='L-@Model.LessonID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count </span>
+
+                    <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
+
                 </div>
+
                 <div>
                     <p>Presented By:</p>
                     <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
@@ -142,6 +149,9 @@
 {
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
     <script src="~/assets/js/commentHub.js"></script>
+
+    <script src="~/assets/js/ConnectServerLessonHub.js"></script>
+    <script src="~/assets/js/ListenLessonLikes.js"></script>
 }
 
 

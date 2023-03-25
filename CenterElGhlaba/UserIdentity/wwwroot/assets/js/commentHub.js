@@ -1,10 +1,10 @@
-var hub = new signalR.HubConnectionBuilder().withUrl("/lessonComment").build();
+var commentHub = new signalR.HubConnectionBuilder().withUrl("/lessonComment").build();
 
-hub.start().then(function () {
-    console.log("Connect Success");
+commentHub.start().then(function () {
+    console.log("Comment Connect Success");
 });
 
-hub.on("CommentAdded", function (username, comment, date) {
+commentHub.on("CommentAdded", function (username, comment, date) {
 
 
     $("#comments-Section").prepend(
@@ -21,9 +21,10 @@ hub.on("CommentAdded", function (username, comment, date) {
 });
 
 function AddComment(lessonID, studentID) {
-
+   
     let comment = $("#comment").val();
     $("#comment").val('');
-
-    hub.invoke("AddComment", lessonID, studentID, comment, new Date());
+    
+    commentHub.invoke("AddNewComment", lessonID, studentID, comment, new Date());
+   
 }
