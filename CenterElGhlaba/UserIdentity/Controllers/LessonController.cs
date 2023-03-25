@@ -22,6 +22,7 @@ namespace Center_ElGhlaba.Controllers
         public IHubContext<LessonHub> LessonHub { get; }
         public IHubContext<LessonLikesHub> _LessonLikesHub { get; }
 
+        private List<Lesson> lessons = new List<Lesson>();
         public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub, IHubContext<LessonLikesHub> LessonLikesHub)
         {
             _UnitOfWork = unitOfWork;
@@ -34,7 +35,7 @@ namespace Center_ElGhlaba.Controllers
         public async Task<IActionResult> GetLessons(int pg)
         {
 
-            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync();
+  
             const int pageSize = 6;
 
             int recentCount = lessons.Count();
@@ -46,7 +47,7 @@ namespace Center_ElGhlaba.Controllers
         public async Task<IActionResult> Index()
         {
             const int pageSize = 6;
-            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync(new [] {"Likes" , "Views"} );
+            lessons = await _UnitOfWork.Lessons.GetAllAsync(new[] { "Likes", "Views" });
 
             int recentCount = lessons.Count();
             Pager pager = new Pager(recentCount, 1, pageSize);
@@ -148,8 +149,16 @@ namespace Center_ElGhlaba.Controllers
 
         public async Task<ActionResult> SubjectLessons(int id)
         {
-            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id);
-            return View("Index", lessons);
+            const int pageSize = 6;
+            lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id, new[] { "Likes", "Views" });
+
+            int recentCount = lessons.Count();
+            Pager pager = new Pager(recentCount, 1, pageSize);
+            int recSkip = (1 - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+
+            return View("Index", lessons.Skip(recSkip).Take(pager.PageSize).ToList());
+
         }
         //From Moeen
         public async Task<ActionResult> TeacherLessons(string id)
@@ -158,7 +167,6 @@ namespace Center_ElGhlaba.Controllers
             List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.TeacherID == teacher.ID);
             return View("Index", lessons);
         }
-        //From Moeen
         public async Task<ActionResult> TeacherNew(string id)
         {
             Teacher teacher = await _UnitOfWork.Teachers.FindAsync(t => t.AppUserID == id);
