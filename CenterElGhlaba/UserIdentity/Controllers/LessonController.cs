@@ -19,18 +19,16 @@ namespace Center_ElGhlaba.Controllers
         private readonly IUnitOfWork _UnitOfWork;
         private readonly IHostingEnvironment hosting;
         private readonly IMapper _mapper;
-        //private readonly ILessonService _Service;
         public IHubContext<LessonHub> LessonHub { get; }
         public IHubContext<LessonLikesHub> _LessonLikesHub { get; }
 
-        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub, IHubContext<LessonLikesHub> LessonLikesHub)//ILessonService lessonService)
+        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub, IHubContext<LessonLikesHub> LessonLikesHub)
         {
             _UnitOfWork = unitOfWork;
             this.hosting = hosting;
             _mapper = mapper;
             LessonHub = _LessonHub;
             _LessonLikesHub = LessonLikesHub;
-                //_Service = lessonService;
         }
       
         public async Task<IActionResult> GetLessons(int pg)
@@ -38,7 +36,6 @@ namespace Center_ElGhlaba.Controllers
 
             List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync();
             const int pageSize = 6;
-
 
             int recentCount = lessons.Count();
             int recSkip = (pg - 1) * pageSize;
@@ -68,18 +65,12 @@ namespace Center_ElGhlaba.Controllers
             var result = _mapper.Map<LessonDetailsVM>(lesson);
                          _mapper.Map<LessonDetailsVM>(student);
 
-            //result.Likes = lesson.Likes != null ? lesson.Likes.Count : 0;
-            //result.Views = lesson.Views != null ? lesson.Views.Count : 0;
-
             return View(result);
         }
         public async Task<IActionResult> Details(int id, string? userID)
         {
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", "Likes", "Views"});
             var result = _mapper.Map<LessonDetailsVM>(lesson);
-
-            //result.Likes = lesson.Likes != null ? lesson.Likes.Count : 0;
-            //result.Views = lesson.Views != null ? lesson.Views.Count : 0;
 
             if (userID != null)
             {
@@ -129,13 +120,7 @@ namespace Center_ElGhlaba.Controllers
             }
 
         }
-
-        /// <summary>
-        /// /////////////
-        /// </summary>
-        /// <param ></param>
-        /// <returns></returns>
-        /// 
+ 
         public async Task<ActionResult> IsViewed(int lessonId, string studentId)
         {
             Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
@@ -161,12 +146,6 @@ namespace Center_ElGhlaba.Controllers
             await _LessonLikesHub.Clients.All.SendAsync("AddLessonView", lessonId);
         }
 
-        /// <summary>
-        /// //////////////
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //From Moeen
         public async Task<ActionResult> SubjectLessons(int id)
         {
             List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id);
@@ -187,7 +166,6 @@ namespace Center_ElGhlaba.Controllers
             ViewBag.stages = await _UnitOfWork.stages.GetAllAsync();
             return View("New");
         }
-     
         public async Task<IActionResult> New(int id)
         {
             ViewBag.TeacherId = id;
@@ -197,7 +175,6 @@ namespace Center_ElGhlaba.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> New(LessonVM newLesson)
         {
             if (ModelState.IsValid)
@@ -233,9 +210,6 @@ namespace Center_ElGhlaba.Controllers
 			ViewBag.TeacherId=newLesson.TeacherID;
 
 			return View(newLesson);
-
-
-
 		}
         public async Task<IActionResult> Edit(int id)
         {
@@ -247,8 +221,6 @@ namespace Center_ElGhlaba.Controllers
             Lesson.Description = lesson.Description;
             Lesson.Discount= lesson.Discount;
             Lesson.ID=lesson.ID;
-
-            
             
             return View(Lesson);
         }
@@ -270,9 +242,6 @@ namespace Center_ElGhlaba.Controllers
                 _UnitOfWork.Lessons.Update(Lesson);
                 _UnitOfWork.Complete();
 
-              
-
-
                 return RedirectToAction("Index");
             }
 
@@ -291,9 +260,7 @@ namespace Center_ElGhlaba.Controllers
 
 				File.CopyTo(fileStream);
 				fileStream.Close();
-
 			}
-
 
 			return fileName;
         }
@@ -313,14 +280,7 @@ namespace Center_ElGhlaba.Controllers
                     _UnitOfWork.Complete();
 
                 }
-
-
-
-
-
             }
-
-
         }
         public List<string> UploadsResoursesToFolder(List<IFormFile> Files, string path)
         {
@@ -332,7 +292,6 @@ namespace Center_ElGhlaba.Controllers
                 string uploads = Path.Combine(hosting.WebRootPath,path);
                 foreach (var res in Files)
                 {
-
                     resName = Guid.NewGuid().ToString() + res.FileName;
                     filesname.Add(resName);
                     string fullpath = Path.Combine(uploads, resName);
@@ -341,12 +300,7 @@ namespace Center_ElGhlaba.Controllers
                     ResStream.Close();
 
                 }
-
-
-
-
             }
-
 
             return filesname;
         }
@@ -355,19 +309,14 @@ namespace Center_ElGhlaba.Controllers
             byte[] image= null;
             if (imgFile != null)
             {
-
-
                 using (var dataStream = new MemoryStream())
                 {
                     await imgFile.CopyToAsync(dataStream);
                     image = dataStream.ToArray();
                     dataStream.Close();
                 }
-
-
             }
             return image;
-
         }
         public async Task<IActionResult> GetLevels(int StageID)
         {

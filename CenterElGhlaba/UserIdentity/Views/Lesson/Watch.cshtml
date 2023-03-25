@@ -18,9 +18,7 @@
 
 <div>
     <div class="container">
-
         <div class="main-video">
-
             <div>
                 <video src="~/LessonsMaterial/LessonVideos/@Model.FilePath" onplay="View('@Model.LessonID.ToString()','@user.Id.ToString()')" controls muted class="Wvideo"></video>
 
@@ -31,36 +29,29 @@
                 <div class="properties__footer d-flex justify-content-between align-lessons-center">
 
                     @{
-
                         if (SignInManager.IsSignedIn(User))
                         {
                             if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
                             {
                                 <div class="d-flex">
                                     <div id='data-@Model.LessonID.ToString()' class="mx-2">not teacher</div>
-
                                 </div>
                                 <script>
                                     window.addEventListener("load", function (event) {
                                         Like('@Model.LessonID.ToString()', '@user.Id.ToString()')
                                     }, false);
-
-
                                 </script>
                             }
                         }
 
                     }
+
                     <span id='L-@Model.LessonID.ToString()' class ="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count</span>
-
                     <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
-
-
                 </div>
 
                 <div>
                     <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
-                       
                         @{
                             if (Model.Teacher.AppUser.Image != null)
                             {
@@ -73,21 +64,16 @@
                         }
                     </a>
                     <h4 style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</h4>
-
                 </div>
                 <br>
-
                 <div>
                     <h4>Video Describtion</h4>
                     <p>@Model.Description</p>
                     <p>Subject: @Model.Subject.Name</p>
                     <p>Level: @Model.Level.Name</p>
                 </div>
-
             </div>
-
         </div>
-
 
         <div class="list">
             @{
@@ -101,16 +87,12 @@
                                 <a asp-action="Watch" asp-route-id="@order.LessonID" asp-route-userId="@user.Id">
                                     <img src="data:image/*;base64,@(Convert.ToBase64String(order.Lesson.CoverPicture))" class="Lvideo" />
                                 </a>
-
                                 <h3 class="title">@order.Lesson.Title</h3>
                             </div>
                         }
-                       
                     }
                 }
             }
-            
-
         </div>
     </div>
 
@@ -136,9 +118,7 @@
                         </div>
                     </div>
                 }
-               
             }
-
         </div>
     </div>
 </div>
