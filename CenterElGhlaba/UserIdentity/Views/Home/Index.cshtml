@@ -174,11 +174,11 @@
                                         <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID">@item.Title</a></h3>
                                         <div class="properties__footer d-flex justify-content-between align-items-center">
 
-                                            <span class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes.Count</span>
+                                            <span id='L-@item.ID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes.Count</span>
 
 
 
-                                            <span class="fa fa-eye" style="color:#e867ff"> @item.Views.Count</span>
+                                            <span id='V-@item.ID.ToString()' class="fa fa-eye" style="color:#e867ff"> @item.Views.Count</span>
                                            
 
 
@@ -238,11 +238,11 @@
                                         <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID">@item.Title</a></h3>
                                         <div class="properties__footer d-flex justify-content-between align-items-center">
 
-                                            <span class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes</span>
+                                            <span id='L-@item.ID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes.Count</span>
 
 
 
-                                            <span class="fa fa-eye" style="color:#e867ff"> @item.Views</span>
+                                            <span id='V-@item.ID.ToString()' class="fa fa-eye" style="color:#e867ff"> @item.Views.Count</span>
 
 
 
@@ -253,9 +253,18 @@
                                             <span style="font-weight:bold">@(item.Price - item.Discount) LE</span>
                                             <span><del style="color:red">@item.Price LE</del> </span>
                                         </div>
+                                         @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                            {
+                                                <a asp-action="Details" asp-controller="Lesson" asp-route-id="@item.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Details" asp-controller="Lesson" asp-route-id="@item.ID" class="border-btn border-btn2">Find Out More</a>
+                                        }
 
-
-                                        <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID" class="border-btn border-btn2">Find out more</a>
                                     </div>
                                 </div>
                             </div>
@@ -379,3 +388,10 @@
         </div>
     </div>
 </section>
+
+@section Scripts
+{
+    <script src="~/assets/js/ConnectServerLessonHub.js"></script>
+    <script src="~/assets/js/ListenLessonLikes.js"></script>
+}
+

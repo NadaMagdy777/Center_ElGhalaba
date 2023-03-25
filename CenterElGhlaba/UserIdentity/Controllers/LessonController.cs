@@ -61,20 +61,25 @@ namespace Center_ElGhlaba.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Watch(int id, string userID)
         {
-            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", });
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", "Likes", "Views" });
             Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == userID,new[] { "Orders.Lesson" , "AppUser" });
 
+           
             var result = _mapper.Map<LessonDetailsVM>(lesson);
                          _mapper.Map<LessonDetailsVM>(student);
 
+            //result.Likes = lesson.Likes != null ? lesson.Likes.Count : 0;
+            //result.Views = lesson.Views != null ? lesson.Views.Count : 0;
+
             return View(result);
         }
-        [Authorize]
         public async Task<IActionResult> Details(int id, string? userID)
         {
-            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", });
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", "Likes", "Views"});
             var result = _mapper.Map<LessonDetailsVM>(lesson);
-            
+
+            //result.Likes = lesson.Likes != null ? lesson.Likes.Count : 0;
+            //result.Views = lesson.Views != null ? lesson.Views.Count : 0;
 
             if (userID != null)
             {

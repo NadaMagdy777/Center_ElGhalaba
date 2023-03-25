@@ -30,9 +30,30 @@
                 <br>
                 <div class="properties__footer d-flex justify-content-between align-lessons-center">
 
-                    <span id='L-@Model.LessonID.ToString()' class ="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes</span>
+                    @{
 
-                    <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views</span>
+                        if (SignInManager.IsSignedIn(User))
+                        {
+                            if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                            {
+                                <div class="d-flex">
+                                    <div id='data-@Model.LessonID.ToString()' class="mx-2">not teacher</div>
+
+                                </div>
+                                <script>
+                                    window.addEventListener("load", function (event) {
+                                        Like('@Model.LessonID.ToString()', '@user.Id.ToString()')
+                                    }, false);
+
+
+                                </script>
+                            }
+                        }
+
+                    }
+                    <span id='L-@Model.LessonID.ToString()' class ="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count</span>
+
+                    <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
 
 
                 </div>
@@ -77,7 +98,7 @@
                         if(order.Lesson.IsDeleted == false)
                         {
                             <div class="vid active-video" onclick="ShowVideoDetails()">
-                                <a asp-action="Watch" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id">
+                                <a asp-action="Watch" asp-route-id="@order.LessonID" asp-route-userId="@user.Id">
                                     <img src="data:image/*;base64,@(Convert.ToBase64String(order.Lesson.CoverPicture))" class="Lvideo" />
                                 </a>
 
@@ -126,7 +147,6 @@
     {
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
     <script src="~/assets/js/commentHub.js"></script>
-   @* <script src="~/assets/js/LessonHub.js"></script>*@
 
     <script src="~/assets/js/ConnectServerLessonHub.js"></script>
     <script src="~/assets/js/ListenLessonLikes.js"></script>

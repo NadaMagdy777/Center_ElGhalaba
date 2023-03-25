@@ -1,4 +1,5 @@
 ﻿using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Center_ElGhlaba.ViewModels
@@ -13,14 +14,17 @@ namespace Center_ElGhlaba.ViewModels
         public string FilePath { get; set; }
         public byte[] CoverPicture { get; set; }
         public DateTime PublishDate { get; set; }
-        public int Likes { get; set; }
-        public int Views { get; set; }
+        public List<LessonLikes>? Likes { get; set; }
+        public List<LessonViews>? Views { get; set; }
+
+        public int LikesCount { get; set; }
+        public int ViewsCount { get; set; }
         public bool IsDeleted { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public int Duration { get; set; }
-        public virtual Subject? Subject { get; set; }
-        public virtual Level? Level { get; set; }     
+        public Subject? Subject { get; set; }
+        public Level? Level { get; set; }     
         public List<LessonComment> Comments { get; set; }
         #endregion
 

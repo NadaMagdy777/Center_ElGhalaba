@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Center_ElGhalaba.Models;
+using Center_ElGhlaba.Models;
 using Center_ElGhlaba.ViewModels;
 
 namespace Center_ElGhlaba.AutomapperProfiles
@@ -22,6 +23,9 @@ namespace Center_ElGhlaba.AutomapperProfiles
             CreateMap<Teacher, LessonDetailsVM>().ReverseMap(); 
             CreateMap<Subject, LessonDetailsVM>().ReverseMap();
             CreateMap<Level, LessonDetailsVM>().ReverseMap();
+
+            CreateMap<IEnumerable<LessonLikes>, LessonDetailsVM >().ReverseMap();
+            CreateMap< IEnumerable<LessonViews>, LessonDetailsVM>().ReverseMap();
 
             CreateMap<IEnumerable<StudentOrder>, LessonDetailsVM>().ReverseMap();
 

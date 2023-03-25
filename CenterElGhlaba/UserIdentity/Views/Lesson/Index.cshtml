@@ -42,13 +42,13 @@
                                     </div>
                                     <div class="properties__caption">
                                         <h3><a href="#">@lesson.Title</a></h3>
-                                        <div class="properties__footer d-flex justify-content-between align-lessons-center">
-                                            
-                                                <span class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes</span>
-                          
-                                                <span class="fa fa-eye" style="color:#e867ff"> @lesson.Views</span>
+                                            <div class="properties__footer d-flex justify-content-between align-lessons-center">
 
-                                        </div>
+                                                <span id='L-@lesson.ID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes.Count </span>
+
+                                                <span id='V-@lesson.ID.ToString()' class="fa fa-eye" style="color:#e867ff"> @lesson.Views.Count</span>
+
+                                            </div>
 
 
                                         <div class="properties__footer d-flex justify-content-between align-items-center">
@@ -56,22 +56,7 @@
                                                 <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
                                                 <span><del style="color:red">@lesson.Price LE</del> </span>
                                         </div>
-                                            <div class="properties__footer d-flex justify-content-between align-items-center">
-
-
-                                                <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
-                                                <span><del style="color:red">@lesson.Price LE</del> </span>
-
-
-                                            </div>
-                                            <div class="properties__footer d-flex justify-content-between align-items-center">
-
-
-                                                <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
-                                                <span><del style="color:red">@lesson.Price LE</del> </span>
-
-
-                                            </div>
+                                            
 
                                             @if (SignInManager.IsSignedIn(User))
                                             {
@@ -102,6 +87,9 @@
 </div>
 @section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/assets/js/ConnectServerLessonHub.js"></script>
+    <script src="~/assets/js/ListenLessonLikes.js"></script>
+
     <script>
         var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
         hub.start().then(function() {
@@ -249,9 +237,21 @@
             ViewCourseBtn.classList.add('border-btn', 'border-btn2')
             ViewCourseBtn.innerText = 'Find Out More'
 
-          
 
-            ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+                    <script>
+                    ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+        </script>
+        }
+        else
+        {
+        <script>
+            ViewCourseBtn.href = 'Lesson/Details/' + id
+        </script>
+
+        }
 
 
 
