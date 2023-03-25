@@ -50,7 +50,7 @@ namespace Center_ElGhlaba.Controllers
         }
 
         [HttpPost]
-        public IActionResult Student(StudentPaymentVM vm)
+        public async Task<IActionResult> Student(StudentPaymentVM vm)
         {
             if (!ModelState.IsValid)
             {
@@ -62,15 +62,20 @@ namespace Center_ElGhlaba.Controllers
                 }
                 return View(vm);
             }
-
+            Lesson lesson = await unit.Lessons.GetByIdAsync(vm.LessonID);
+            Teacher teacher = await unit.Teachers.GetByIdAsync(lesson.TeacherID);
             StudentOrder order = new StudentOrder();
-             order.LessonID = vm.LessonID;
+            order.LessonID = vm.LessonID;
             order.StudentID = unit.Students.FindAsync(s => s.AppUserID == vm.AppUserID).Result.ID;
             order.Date = DateTime.Now;
             order.Price = vm.Price;
             order.Discount = vm.Discount;
             order.PaymentName = vm.PaymentName;
             order.PaymentValue = vm.PaymentValue;
+
+            teacher.Balance += vm.Net;
+
+            
             unit.Orders.Insert(order);
             unit.Complete();
 
