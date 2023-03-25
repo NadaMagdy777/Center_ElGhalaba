@@ -25,7 +25,8 @@ namespace Center_ElGhlaba.ViewModels
         public int Duration { get; set; }
         public Subject? Subject { get; set; }
         public Level? Level { get; set; }     
-        public List<LessonComment> Comments { get; set; }
+        public List<LessonComment>? Comments { get; set; }
+        public List<LessonResource>? Resources { get; set; }
         #endregion
 
         #region Teacher 

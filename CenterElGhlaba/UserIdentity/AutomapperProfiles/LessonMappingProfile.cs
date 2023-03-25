@@ -20,8 +20,9 @@ namespace Center_ElGhlaba.AutomapperProfiles
 
             CreateMap<IEnumerable<LessonLikes>, LessonDetailsVM >().ReverseMap();
             CreateMap<IEnumerable<LessonViews>, LessonDetailsVM>().ReverseMap();
-            CreateMap<IEnumerable<StudentOrder>, LessonDetailsVM>().ReverseMap();
             CreateMap<IEnumerable<LessonComment>, LessonDetailsVM>().ReverseMap();
+            CreateMap<IEnumerable<LessonResource>, LessonDetailsVM>().ReverseMap();
+            CreateMap<IEnumerable<StudentOrder>, LessonDetailsVM>().ReverseMap();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Center_ElGhlaba.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Watch(int id, string userID)
         {
-            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", "Likes", "Views" });
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", "Likes", "Views" , "Resources" });
             Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == userID,new[] { "Orders.Lesson" , "AppUser" });
 
            
@@ -81,7 +81,6 @@ namespace Center_ElGhlaba.Controllers
 
             return View(result);
         }
-
         public async Task<ActionResult> IsLike(int lessonId, string studentId)
         {
             Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
