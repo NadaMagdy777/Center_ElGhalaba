@@ -28,7 +28,7 @@ namespace Center_ElGhlaba.Controllers
         {            
 
             List<Lesson> lessons =await services.GetStudentLessons(id);
-            const int pageSize = 1;
+            const int pageSize = 6;
 
 
             int recentCount = lessons.Count();
@@ -60,7 +60,7 @@ namespace Center_ElGhlaba.Controllers
             Student student = await services.GetStudent(id);
 
             List<Lesson> lessons = await services.GetStudentLessons(student.ID);
-            const int pageSize = 1;
+            const int pageSize = 6;
 
             int recentCount = lessons.Count();
             Pager pager = new Pager(recentCount, 1, pageSize);
