@@ -84,7 +84,7 @@
                                             <label for="Stage_id" class="form-label-lg" style="font-size:2rem;">Stage</label>
 
                                             <select id="Stage_id" class="select" style=" height:70px; font-size:1.5rem;" onchange="GetLevels()">
-                                                <option disabled>Select Stage</option>
+                                                <option>Select Stage</option>
                                                 @foreach (Stage stage in ViewBag.stages)
                                                 {
                                                     <option value="@stage.ID" style=" height:70px; font-size:1.5rem;">@stage.Name</option>
@@ -151,7 +151,7 @@
                     data: { "StageID": StageID },
 
                     success: function (result) {
-                        $("#levelID").append("<option disabled>Select Level</option>")
+                        $("#levelID").append("<option>Select Level</option>")
                         for (let item of result) {
 
                             $("#levelID").append("<option value=" + item.id + ">" + item.name + "</option>")
@@ -172,7 +172,7 @@
                     data: { "levelID": levelID, "StageID": StageID },
                     success: function (result) {
 
-                        $("#subjectID").append("<option disabled>Select Level</option>");
+                        $("#subjectID").append("<option>Select Level</option>");
                         for (let item of result) {
                             $("#subjectID").append("<option value=" + item.id + ">" + item.name + "</option>");
                         }
