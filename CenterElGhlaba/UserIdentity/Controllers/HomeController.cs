@@ -33,7 +33,7 @@ namespace UserIdentity.Controllers
 
 
             List<Lesson> HighViewslessonModel = unit.Lessons
-                .FindAllAsync(l => true, null, l => l.Views, OrderBy.Descending).Result.Take(3).ToList();
+                .FindAllAsync(l => true, new[] {"Views" , "Likes"} , l => l.Views.Count, OrderBy.Descending).Result.Take(3).ToList();
 
             indexViewModel.Teacherslist = teacherModel == null? new List<Teacher>() : teacherModel;
             indexViewModel.Subjectslist = subjectModel == null? new List<Subject>() : subjectModel;

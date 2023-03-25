@@ -2,11 +2,11 @@
 using Center_ElGhalaba.Models;
 using Center_ElGhlaba.Hubs;
 using Center_ElGhlaba.Interfaces;
-using Center_ElGhlaba.Migrations;
 using Center_ElGhlaba.Models;
 using Center_ElGhlaba.Services;
 using Center_ElGhlaba.Unit_OfWork;
 using Center_ElGhlaba.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.IO;
@@ -19,25 +19,20 @@ namespace Center_ElGhlaba.Controllers
         private readonly IUnitOfWork _UnitOfWork;
         private readonly IHostingEnvironment hosting;
         private readonly IMapper _mapper;
-
+        //private readonly ILessonService _Service;
         public IHubContext<LessonHub> LessonHub { get; }
+        public IHubContext<LessonLikesHub> _LessonLikesHub { get; }
 
-        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub)//ILessonService lessonService)
+        public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub, IHubContext<LessonLikesHub> LessonLikesHub)//ILessonService lessonService)
         {
             _UnitOfWork = unitOfWork;
             this.hosting = hosting;
             _mapper = mapper;
             LessonHub = _LessonHub;
-            //_Service = lessonService;
+            _LessonLikesHub = LessonLikesHub;
+                //_Service = lessonService;
         }
-
-        //private ILessonService _Service;
-
-        //public LessonController()
-        //{
-        //    _Service = new LessonService(new ModelStateWrapper(this.ModelState), new UnitOfWork());
-
-        //}
+      
         public async Task<IActionResult> GetLessons(int pg)
         {
 
@@ -54,7 +49,7 @@ namespace Center_ElGhlaba.Controllers
         public async Task<IActionResult> Index()
         {
             const int pageSize = 6;
-            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync();
+            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync(new [] {"Likes" , "Views"} );
 
             int recentCount = lessons.Count();
             Pager pager = new Pager(recentCount, 1, pageSize);
@@ -63,7 +58,7 @@ namespace Center_ElGhlaba.Controllers
 
             return View(lessons.Skip(recSkip).Take(pager.PageSize).ToList());
         }
-
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Watch(int id, string userID)
         {
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level", "Comments.Student.AppUser", });
@@ -74,6 +69,7 @@ namespace Center_ElGhlaba.Controllers
 
             return View(result);
         }
+        [Authorize]
         public async Task<IActionResult> Details(int id, string? userID)
         {
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == id, new[] { "Teacher.AppUser", "Subject", "Level" , "Comments.Student.AppUser", });
@@ -93,7 +89,7 @@ namespace Center_ElGhlaba.Controllers
         {
             Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
             Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lessonId, new[] { "Likes" });
-            LessonLikes HasLike = lesson.Likes.FirstOrDefault(k => k.ID == lessonId && k.LessonId == lesson.ID);
+            LessonLikes HasLike = lesson.Likes.FirstOrDefault(k => k.LessonId == lessonId && k.StudentId == student.ID);
             if (HasLike != null)
             {
                 return Json(true);
@@ -111,7 +107,7 @@ namespace Center_ElGhlaba.Controllers
             lesson.Likes.Add(new LessonLikes { StudentId = student.ID, LessonId = lessonId });
             _UnitOfWork.Complete();
 
-            //await LessonHub.Clients.Users(teacherId).SendAsync("AddLike", teacherId);
+            await _LessonLikesHub.Clients.All.SendAsync("AddLessonLike", lessonId);
         }
         public async Task RemoveLike(int lessonId, string studentId)
         {
@@ -124,11 +120,47 @@ namespace Center_ElGhlaba.Controllers
                 lesson.Likes.Remove(HasLike);
                 _UnitOfWork.Complete();
 
-                //await LessonHub.Clients.Users(teacherId).SendAsync("RemoveLike", teacherId);
+                await _LessonLikesHub.Clients.All.SendAsync("RemoveLessonLike", lessonId);
             }
 
         }
 
+        /// <summary>
+        /// /////////////
+        /// </summary>
+        /// <param ></param>
+        /// <returns></returns>
+        /// 
+        public async Task<ActionResult> IsViewed(int lessonId, string studentId)
+        {
+            Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lessonId, new[] { "Views" });
+            LessonViews isViewed = lesson.Views.FirstOrDefault(k => k.LessonId == lessonId && k.StudentId == student.ID);
+            if (isViewed != null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
+        public async Task AddView(int lessonId, string studentId)
+        {
+
+            Student student = await _UnitOfWork.Students.FindAsync(s => s.AppUserID == studentId);
+            Lesson lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lessonId, new[] { "Views" });
+            lesson.Views.Add(new LessonViews { StudentId = student.ID, LessonId = lessonId });
+            _UnitOfWork.Complete();
+
+            await _LessonLikesHub.Clients.All.SendAsync("AddLessonView", lessonId);
+        }
+
+        /// <summary>
+        /// //////////////
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         //From Moeen
         public async Task<ActionResult> SubjectLessons(int id)
         {

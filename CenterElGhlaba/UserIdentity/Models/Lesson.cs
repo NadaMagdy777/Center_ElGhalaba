@@ -16,7 +16,7 @@ namespace Center_ElGhalaba.Models
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public virtual List<LessonLikes>? Likes { get; set; }
-        public int Views { get; set; }
+        public virtual List<LessonViews>? Views { get; set; }   
         public bool IsDeleted { get; set; }
        
         [ForeignKey("Subject")]
