@@ -5,24 +5,28 @@
     SelectList lvls = new(Model.Levels, "ID", "Name");
 }
 
-<div class="offset-2 col-8">
-    <form asp-action="CreateSubject" class="form-floating">
-        <div class="d-flex justify-content-evenly form-group">
-            
-            <label asp-for="StageID"></label>
-            <select id="subStage" asp-items="@stages" asp-for="StageID" class="form-select"></select>
-            <span asp-validation-for="StageID" class="text-danger"></span>
+<form asp-action="CreateSubject" class="p-2">
 
-            <label asp-for="LevelID"></label>
-            <select id="subLvl" asp-items="@lvls" asp-for="LevelID" class="form-select LevelSelec"></select>
-            <span asp-validation-for="LevelID" class="text-danger"></span>
+    <div class="mb-3">
+        <label asp-for="StageID"></label>
+        <select id="subStage" asp-items="@stages" asp-for="StageID" class="form-select" aria-label="Default select example"></select>
+        <span asp-validation-for="StageID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LevelID"></label>
+        <select id="subLvl" asp-items="@lvls" asp-for="LevelID" class="form-select LevelSelec"></select>
+        <span asp-validation-for="LevelID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
 
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+    <br />
+    <div class="col-12">
+        <input type="submit" class="btn btn-success" />
+    </div>
 
-            <input type="submit" class="btn btn-outline-success" />
-        </div>
-    </form>
-</div>
+</form>
 

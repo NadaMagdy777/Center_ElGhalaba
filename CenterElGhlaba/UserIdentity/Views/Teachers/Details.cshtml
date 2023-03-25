@@ -23,14 +23,14 @@
                             @if (Model.AppUser.Image != null)
                             {
                                 <img class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1" alt="profile" src="data:image/*;base64,@(Convert.ToBase64String(Model.AppUser.Image))" />
-                                <span id="onlineIndicator" style="width:20px !important; height:20px !important;border-radius:50% !important;border: 13px solid #e70303; !important; z-index: 8 !important; position:absolute !important; top: 220px; left: 156px;"></span>
+                                <span id="onlineIndicator" style="width:20px !important; height:20px !important;border-radius:50% !important;border: 13px solid #e70303 !important; z-index: 8 !important; position:absolute !important; top: 66px; left: 18px;"></span>
                             }
                             else
                             {
                                 <img src="https://i.imgur.com/stD0Q19.jpg"
                                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                                      style="width: 150px; z-index: 1">
-                                <span id="onlineIndicator" style="width:20px !important; height:20px !important;border-radius:50% !important;border: 13px solid #e70303; !important; z-index: 8 !important; position:absolute !important; top: 220px; left: 156px;"></span>
+                                <span id="onlineIndicator" style="width:20px !important; height:20px !important;border-radius:50% !important;border: 13px solid #e70303 !important; z-index: 8 !important; position:absolute !important; top: 66px; left: 18px;"></span>
                             }
                             
                             @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
@@ -102,18 +102,6 @@
                                             <div class="section-tittle text-center mb-55 d-flex justify-content-between">
                                                 <h2>Your Lessons</h2>
                                                 <h2><a asp-action="New" asp-controller="Lesson" asp-route-Id="@Model.ID" class="text-info ml-2">Add New</a></h2>
-                                            @*//////////////////////////////////////////////
-                                                ////////////////////////////////////////////
-                                                Lesson/New/Id  => TeacherID "1 Or 2 ....." not AppUserID
-                                                انت متأكد عايز تبعتلها 
-                                                user.Id 
-                                                مش 
-                                                Model.Id
-                                                ///////////////////////////////////////////
-                                                والحتة بتاعت الكورسيز اللي في النافبار عايزة تاخد لينكات صح
-                                                ////////////////////////////////////////////////
-                                                ////////////////////////////////////////////////
-                                            *@
                                             </div>
                                         }
                                         else
@@ -248,19 +236,19 @@
         //////UserLoggedHub/////
         var newUserHub = new signalR.HubConnectionBuilder().withUrl("/UserHub").build();
 
-        hub.start().then(function () {
+        newUserHub.start().then(function () {
             console.log("UserHub Connected Successfully");
         });
 
-        hub.on("UserLoggedIn", function (userId) {
+        newUserHub.on("UserLoggedIn", function (userId) {
             if (userId == "@Model.AppUserID.ToString()") {
-                $("#onlineIndicator").css("background-color", "green");
+                $("#onlineIndicator").css("border-color", "green");
             }
         });
-        
-        hub.on("UserLoggedOut", function (userId) {
+
+        newUserHub.on("UserLoggedOut", function (userId) {
             if (userId == "@Model.AppUserID.ToString()") {
-                $("#onlineIndicator").css("background-color", "Red");
+                $("#onlineIndicator").css("border-color", "Red");
             }
         });
 

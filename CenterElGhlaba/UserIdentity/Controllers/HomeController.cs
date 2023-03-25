@@ -24,7 +24,7 @@ namespace UserIdentity.Controllers
             IndexViewModel indexViewModel = new IndexViewModel();
 
             List<Teacher> teacherModel = await unit.Teachers            //////////Throw Exception ===> Likes
-                .FindAllAsync(t => true, new string[] { "AppUser" }, t => t.Lessons.SelectMany(l => l.Orders).Count(), OrderBy.Descending);
+                .FindAllAsync(t => true, new string[] { "AppUser", "Likes" }, t => t.Lessons.SelectMany(l => l.Orders).Count(), OrderBy.Descending);
 
             List<Subject> subjectModel = unit.subjects.GetAllAsync().Result.Take(8).ToList();
 

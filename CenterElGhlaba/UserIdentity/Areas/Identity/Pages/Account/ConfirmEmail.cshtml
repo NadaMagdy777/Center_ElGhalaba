@@ -2,7 +2,17 @@
 @model ConfirmEmailModel
 @{
     ViewData["Title"] = "Confirm email";
+    Layout = "_IndexLayout";
 }
 
+<div class="w-75 m-auto text-center">
 <h1>@ViewData["Title"]</h1>
+
+<div class=" row">
+
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+
+</div>
+
+
+</div>
