@@ -38,11 +38,30 @@ namespace Center_ElGhlaba.Controllers
         //    _Service = new LessonService(new ModelStateWrapper(this.ModelState), new UnitOfWork());
 
         //}
+        public async Task<IActionResult> GetLessons(int pg)
+        {
+
+            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync();
+            const int pageSize = 6;
+
+
+            int recentCount = lessons.Count();
+            int recSkip = (pg - 1) * pageSize;
+            var data = lessons.Skip(recSkip).Take(pageSize).ToList();
+            return Json(data);
+        }
 
         public async Task<IActionResult> Index()
-        {           
-            
-            return View(await _UnitOfWork.Lessons.GetAllAsync());
+        {
+            const int pageSize = 6;
+            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync();
+
+            int recentCount = lessons.Count();
+            Pager pager = new Pager(recentCount, 1, pageSize);
+            int recSkip = (1 - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+
+            return View(lessons.Skip(recSkip).Take(pager.PageSize).ToList());
         }
 
         public async Task<IActionResult> Watch(int id, string userID)

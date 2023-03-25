@@ -90,7 +90,7 @@ namespace UserIdentity
             
             app.MapHub<LessonHub>("/NewLesson");
 
-            app.MapHub<LessonHub>("/UserHub");
+            app.MapHub<UserHub>("/UserHub");
 
 
             app.MapControllerRoute(

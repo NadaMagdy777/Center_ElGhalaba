@@ -8,7 +8,16 @@
 
 @model List<Lesson>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Courses";
+    Pager pager = new Pager();
+    int pageNO = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNO = pager.CurrentPage;
+
+    }
+   
 }
 
 
@@ -16,7 +25,7 @@
     <div class="row justify-content-center">
         <div class="col-10">
             <div class="section-tittle text-center mb-55">
-                <h2>Your Lessons</h2>
+                <h2>Our Lessons</h2>
                 <div class="row justify-content-center" id="LessonContainer">
                     @foreach (Lesson lesson in Model)
                     {
@@ -47,6 +56,14 @@
                                                 <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
                                                 <span><del style="color:red">@lesson.Price LE</del> </span>
                                         </div>
+                                            <div class="properties__footer d-flex justify-content-between align-items-center">
+
+
+                                                <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
+                                                <span><del style="color:red">@lesson.Price LE</del> </span>
+
+
+                                            </div>
 
                                             @if (SignInManager.IsSignedIn(User))
                                             {
@@ -60,6 +77,8 @@
                                                 <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
                                             }
                                     </div>
+                                       
+
                                 </div>
                             </div>
                         </div>
@@ -67,6 +86,7 @@
                     }
 
                 </div>
+                <partial name="_Pager" model="@pager"></partial>
 
             </div>
         </div>
@@ -83,5 +103,154 @@
             console.log("hello");
             console.log(lessonObj);
         });
+    </script>
+    <script>
+        var CurrentPage = 1;
+        function GetLessons(value) {
+            pref = CurrentPage;
+
+            if (!Number.isInteger(value)) {
+                if (value == 'next') {
+                    value = CurrentPage + 1
+                    CurrentPage = CurrentPage + 1;
+                }
+                else if (value == 'pref') {
+                    value = CurrentPage - 1
+                    CurrentPage = CurrentPage - 1;
+                }
+                else {
+                    pref = CurrentPage;
+                    CurrentPage = parseInt(value);
+                }
+
+
+
+            }
+
+            if (CurrentPage > @pager.TotalPages) {
+                CurrentPage = CurrentPage - 1;
+                return
+            }
+            if (CurrentPage < @pager.StartPage) {
+                CurrentPage = CurrentPage + 1;
+                return
+            }
+            if (CurrentPage == pref) {
+                return
+            }
+
+
+            var page = parseInt(value)
+
+
+            $.ajax(
+                {
+                    url: "/Lesson/GetLessons",
+                    data: {  "pg": page },
+                    success: function (result) {
+                        $("#LessonContainer").html("");
+                        for (let item of result) {
+
+
+                            addCard(item.title, item.likes, item.price, item.id, item.coverPicture, item.views, item.discount)
+
+
+                        }
+                    }
+                });
+        }
+        function addCard(title, NOLikes, price, id, pic, views, discount) {
+
+
+
+            const cardParent = document.querySelector("#LessonContainer")
+
+            const colDiv = document.createElement('div')
+            colDiv.className = 'col-4'
+
+            cardParent.appendChild(colDiv)
+
+            const card = document.createElement('div')
+            card.classList.add('properties', 'properties2', 'mb-30')
+
+            colDiv.appendChild(card)
+
+            const prpertiesCardDiv = document.createElement('div')
+            prpertiesCardDiv.classList.add('properties__card')
+
+            card.appendChild(prpertiesCardDiv)
+
+            const imgDiv = document.createElement('div')
+            imgDiv.classList.add('properties__img', 'overlay1')
+
+
+
+            const img = document.createElement('img')
+            img.classList.add('img-fluid')
+            img.src = 'data:image/png;base64,' + pic;
+
+            const propertiescaptionDiv = document.createElement('div')
+            propertiescaptionDiv.classList.add('properties__caption')
+
+            const lessonTitle = document.createElement("h3")
+            lessonTitle.innerText = title
+
+            prpertiesCardDiv.appendChild(img)
+            prpertiesCardDiv.appendChild(propertiescaptionDiv)
+
+            propertiescaptionDiv.appendChild(lessonTitle);
+
+            const LikesDiv = document.createElement('div')
+            LikesDiv.classList.add('properties__footer', 'd-flex', 'justify-content-between', 'align-items-center')
+
+            const likies = document.createElement('span')
+            likies.classList.add('bi', 'bi-heart-fill')
+            likies.style.color = '#e867ff'
+            likies.innerText = NOLikes;
+
+            const Lessonviews = document.createElement("span")
+            Lessonviews.classList.add('fa', 'fa-eye')
+            Lessonviews.style.color = '#e867ff'
+            Lessonviews.innerText = views
+
+            propertiescaptionDiv.appendChild(LikesDiv)
+            LikesDiv.appendChild(likies);
+            LikesDiv.appendChild(Lessonviews)
+
+            const PricesDiv = document.createElement('div')
+            PricesDiv.classList.add('properties__footer', 'd-flex', 'justify-content-between', 'align-items-center')
+
+            const Total = document.createElement("span")
+            Total.innerText = (price - discount) + 'LE';
+            Total.style.fontWeight = 'bold'
+
+            const beforeDiscount = document.createElement("span")
+            const deleteDiscount = document.createElement("del")
+            deleteDiscount.innerText = price + 'LE'
+            deleteDiscount.style.color = 'red'
+
+
+            beforeDiscount.appendChild(deleteDiscount)
+
+            propertiescaptionDiv.appendChild(PricesDiv)
+            PricesDiv.appendChild(Total)
+            PricesDiv.appendChild(beforeDiscount)
+
+
+            const ViewCourseBtn = document.createElement('a')
+            ViewCourseBtn.classList.add('border-btn', 'border-btn2')
+            ViewCourseBtn.innerText = 'Find Out More'
+
+          
+
+            ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+
+
+
+            propertiescaptionDiv.appendChild(ViewCourseBtn);
+
+
+
+        }
     </script>
 }

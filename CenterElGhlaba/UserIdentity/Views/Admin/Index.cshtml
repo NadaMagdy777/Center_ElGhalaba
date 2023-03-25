@@ -5,18 +5,16 @@
 
 <h1 class="mt-5 ml-3">Admin panel</h1>
 
-<div class="row justify-content-center align-items-center gap-1 mt-5 fs-5" >
-    <div class="offset-4 col-8 ">
-        <a asp-action="Students" style="text-decoration: underline; color:blue">Students</a>
-        <a asp-action="Teachers" style="text-decoration: underline; color:blue">Teachers</a>
-        <a asp-action="Lessons" style="text-decoration: underline; color:blue">Lessons</a>
-        <a asp-action="Comments" style="text-decoration: underline; color:blue">Comments</a>
+    <div class="btn-group p-3 ">
+    <a asp-action="Students" class="btn">Students</a>
+    <a asp-action="Teachers" class="btn">Teachers</a>
+    <a asp-action="Lessons" class="btn">Lessons</a>
+    <a asp-action="Comments" class="btn">Comments</a>
+   </div>
+    <div class="btn-group p-3">
+    <a asp-action="DeletedStudents" class="btn">Deleted Students</a>
+    <a asp-action="DeletedTeachers" class="btn">Deleted Teachers</a>
+        <a asp-action="DeletedLessons" class="btn">Deleted Lessons</a>
     </div>
-    <div class="offset-3 col-8">
-        <a asp-action="DeletedStudents" style="text-decoration: underline; color:blue">Deleted Students</a>
-        <a asp-action="DeletedTeachers" style="text-decoration: underline; color:blue">Deleted Teachers</a>
-        <a asp-action="DeletedLessons" style="text-decoration: underline; color:blue">Deleted Lessons</a>
-    </div>
-</div>
-<hr />
+
 
