@@ -63,17 +63,14 @@ namespace Center_ElGhlaba.Controllers
                 return View(vm);
             }
 
-            StudentOrder order = new()
-            {
-                LessonID = vm.LessonID,
-                StudentID = unit.Students.FindAsync(s => s.AppUserID == vm.AppUserID).Result.ID,
-                Date = DateTime.Now,
-                Price = vm.Price,
-                Discount = vm.Discount,
-                PaymentName = vm.PaymentName,
-                PaymentValue = vm.PaymentValue,
-            };
-
+            StudentOrder order = new StudentOrder();
+             order.LessonID = vm.LessonID;
+            order.StudentID = unit.Students.FindAsync(s => s.AppUserID == vm.AppUserID).Result.ID;
+            order.Date = DateTime.Now;
+            order.Price = vm.Price;
+            order.Discount = vm.Discount;
+            order.PaymentName = vm.PaymentName;
+            order.PaymentValue = vm.PaymentValue;
             unit.Orders.Insert(order);
             unit.Complete();
 

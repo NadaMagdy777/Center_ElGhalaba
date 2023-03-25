@@ -42,6 +42,7 @@ namespace UserIdentity.Controllers
 
             return View(indexViewModel);
         }
+     
 
         public IActionResult Privacy()
         {
