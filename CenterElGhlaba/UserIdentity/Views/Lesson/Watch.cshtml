@@ -13,128 +13,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
     <link rel="stylesheet" href="~/assets/css/DetailsPageStyle.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<div>
-    <div class="container">
-        <div class="main-video">
-            <div>
-                <video src="~/LessonsMaterial/LessonVideos/@Model.FilePath" onplay="View('@Model.LessonID.ToString()','@user.Id.ToString()')" controls muted class="Wvideo"></video>
 
-                <h2 style="display: inline;">
-                    <a asp-action="Details" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id">@Model.Title</a>                   
-                </h2>
-                <br>
-                <div class="properties__footer d-flex justify-content-between align-lessons-center">
+    <div class="container-fluid mt-5 mb-5">
 
-                    @{
-                        if (SignInManager.IsSignedIn(User))
-                        {
-                            if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
-                            {
-                                <div class="d-flex">
-                                    <div id='data-@Model.LessonID.ToString()' class="mx-2">not teacher</div>
-                                </div>
-                                <script>
-                                    window.addEventListener("load", function (event) {
-                                        Like('@Model.LessonID.ToString()', '@user.Id.ToString()')
-                                    }, false);
-                                </script>
+        <div class="row">
+            <div class="col-8">
+                <div class="main-video col-12">
+                    <div>
+                        <video src="~/LessonsMaterial/LessonVideos/@Model.FilePath" onplay="View('@Model.LessonID.ToString()','@user.Id.ToString()')" controls muted class="Wvideo"></video>
+
+                       
+                        <div class="properties__footer d-flex justify-content-between align-lessons-center mt-2 mb-2">
+
+                            @{
+                                if (SignInManager.IsSignedIn(User))
+                                {
+                                    if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                    {
+                                        <div class="d-flex">
+                                            <div id='data-@Model.LessonID.ToString()' class="mx-2">not teacher</div>
+                                        </div>
+                                        <script>
+                                            window.addEventListener("load", function (event) {
+                                                Like('@Model.LessonID.ToString()', '@user.Id.ToString()')
+                                            }, false);
+                                        </script>
+                                    }
+                                }
+
                             }
-                        }
 
-                    }
+                            <span id='L-@Model.LessonID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count</span>
+                            <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
+                        </div>
+                            <h2 style="display: inline; " class="pl-2">
+                                <a asp-action="Details" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id">@Model.Title</a>
+                            </h2>
 
-                    <span id='L-@Model.LessonID.ToString()' class ="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count</span>
-                    <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
-                </div>
-
-                <div>
-                    <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
-                        @{
-                            if (Model.Teacher.AppUser.Image != null)
+                    <div class="pl-2">
+                            <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
+                                @{
+                                    if (Model.Teacher.AppUser.Image != null)
+                                    {
+                                        <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Teacher.AppUser.Image))"   style="width:50px;height:50px;border-radius:50%"/>
+                                    }
+                                    else
+                                    {
+                                    <img src="~/assets/img/gallery/Blank.png" class="imgg" style="width:50px;height:50px;border-radius:50%" />
+                                    }
+                                }
+                            </a>
+                            <h4 style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</h4>
+                        </div>
+                        <br>
+                    <div class="pl-2">
+                            <h4>Video Describtion</h4>
+                            <p>@Model.Description</p>
+                            @if (Model.Resources.Count > 0)
                             {
-                                <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Teacher.AppUser.Image))" class="imgg" />
+                                <p>Check out the resources here</p>
+                                <ul>
+                                    @foreach (LessonResource resource in Model.Resources)
+                                    {
+                                        <li class="linkColor">
+                                            <a href="~/LessonsMaterial/LessonResourses/@resource.Value" target="_blank" class="linkColor">@resource.Name</a>
+                                        </li>
+                                    }
+                                </ul>
+
                             }
-                            else
-                            {
-                                <img src="~/assets/img/gallery/Blank.png" class="imgg"/>
-                            }
-                        }
-                    </a>
-                    <h4 style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</h4>
-                </div>
-                <br>
-                <div>
-                    <h4>Video Describtion</h4>
-                    <p>@Model.Description</p>
-                    @if(Model.Resources.Count > 0){
-                        <p>Check out the resources here</p>
-                        <ul>
-                            @foreach (LessonResource resource in Model.Resources)
-                            {
-                                <li class="linkColor">
-                                    <a href="~/LessonsMaterial/LessonResourses/@resource.Value" target="_blank" class="linkColor">@resource.Name</a>
-                                </li>
-                            }
-                        </ul>
-                    
-                    }
-                    
-                    <p>Subject: @Model.Subject.Name</p>
-                    <p>Level: @Model.Level.Name</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="list">
-            @{
-                if(user.Student.Orders != null)
-                {
-                    @foreach (StudentOrder order in user.Student.Orders)
-                    {
-                        if(order.Lesson.IsDeleted == false)
-                        {
-                            <div class="vid active-video" onclick="ShowVideoDetails()">
-                                <a asp-action="Watch" asp-route-id="@order.LessonID" asp-route-userId="@user.Id">
-                                    <img src="data:image/*;base64,@(Convert.ToBase64String(order.Lesson.CoverPicture))" class="Lvideo" />
-                                </a>
-                                <h3 class="title">@order.Lesson.Title</h3>
-                            </div>
-                        }
-                    }
-                }
-            }
-        </div>
-    </div>
-
-    <br><br>
-
-    <div class="inputBox addComment">
-        <input type="text" id="comment" name="comment" class="inputt" placeholder="Add a comment">
-        <button class="btn btn-primary" onclick="AddComment(@Model.LessonID, @user.Student.ID)">Send</button> <br/>
-    </div>
-
-    <div class="comments">
-        <h3>Comments</h3>
-        <div id="comments-Section" class="list">
-            @foreach (LessonComment comment in Model.Comments)
-            {
-                if(comment.IsDeleted == false)
-                {
-                    <div class="vid">
-                        <div>
-                            <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
-                            <span class="gray">@comment.Date</span>
-                            <p>@comment.Body</p>
+                            <p>Subject: @Model.Subject.Name</p>
+                            <p>Level: @Model.Level.Name</p>
                         </div>
                     </div>
+                </div>
+
+            </div>
+            <div class="col-4 p-3" style="height:inherit;background:white">
+                @{
+                    if (user.Student.Orders != null)
+                    {
+                        @foreach (StudentOrder order in user.Student.Orders)
+                        {
+                            if (order.Lesson.IsDeleted == false)
+                            {
+                                <a asp-action="Watch" asp-route-id="@order.LessonID" asp-route-userId="@user.Id">
+                                    <div class="row d-flex vid  mb-3" style="height:150px; width:100%; margin:1%">
+                                   
+
+                                                <div class="col-6 text-center" style="" onclick="ShowVideoDetails() ">
+                                                         <img src="data:image/*;base64,@(Convert.ToBase64String(order.Lesson.CoverPicture))" class="img-fluid text-center" />
+                                             
+                                                </div>
+
+                                               <div class="col-4 ">
+                                                  <h3  style="display:inline;color:black ">@order.Lesson.Title</h3>
+                                               </div>
+                                  
+                                       </div>
+                                </a>
+                          
+                            }
+                        }
+                    }
                 }
-            }
+            </div>
+           
         </div>
+
+    <div class="row ">
+        <div class="col-12 mt-3">
+                    <div class="m-2">
+                         <input style="display:inline" type="text" id="comment" name="comment" class="inputt" placeholder="Add a comment">
+                        <button style="display:inline" class="btn btn-primary" onclick="AddComment(@Model.LessonID, @user.Student.ID)">Send</button> <br />
+                    </div>
+
+                    <div class="comments p-3">
+                        <h3>Comments</h3>
+                <div id="comments-Section" class="list">
+                            @foreach (LessonComment comment in Model.Comments)
+                            {
+                                if (comment.IsDeleted == false)
+                                {
+                                    <div class="vid mb-2 mt-1">
+                                        <div>
+                                            <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
+                                            <span class="gray">@comment.Date</span>
+                                            <p>@comment.Body</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+          </div>
+
+
     </div>
-</div>
+
+    
+
+   
 
 @section Scripts
     {

@@ -16,8 +16,10 @@ namespace Center_ElGhlaba.ViewModels
         [MinLength(10, ErrorMessage = "Description Must be more than 10 letter")]
         [MaxLength(50, ErrorMessage = "Description must be less than 50 letter")]
         public string Description { get; set; }
+       
+		[Range(minimum: 1, maximum: 2, ErrorMessage = "Duration Must be between 1 and 2")]
 
-		public int Duration { get; set; }
+        public int Duration { get; set; }
         [Range(minimum: 20, maximum: 1000, ErrorMessage = "Price Must be between 20 and 100")]
         public decimal Price { get; set; }
        

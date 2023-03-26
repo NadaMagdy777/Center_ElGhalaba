@@ -210,10 +210,10 @@ namespace Center_ElGhlaba.Controllers
                 insertResoursesDB(resourses, lesson.ID);
 
                
-              ;
+              
                 Teacher teacher = await _UnitOfWork.Teachers.FindAsync(T => T.ID == lesson.TeacherID,new[] { "AppUser" });
 
-                await LessonHub.Clients.Group(lesson.TeacherID.ToString()).SendAsync("NewLessonAdded", lesson,teacher.AppUser.UserName);
+                await LessonHub.Clients.Group(lesson.TeacherID.ToString()).SendAsync("NewLessonAdded", lesson, teacher.AppUser.FirstName +" "+teacher.AppUser.LastName);
 
                 return RedirectToAction("Index");
 

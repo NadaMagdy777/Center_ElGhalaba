@@ -4,6 +4,12 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ApplicationUser user = await UserManager.GetUserAsync(User);
+    int check = 1;
+    if (user == null)
+    {
+        user = new ApplicationUser();
+        check=0;
+    }
 }
 
 <!doctype html>
@@ -360,7 +366,7 @@
             console.log("Connection Success Lesson");
         });
         NewLessonhub.on("NewLessonAdded", function (lessonObj,teacherName) {
-           
+            console.log("in signalr")
            
             createNotficationCard(lessonObj.title, lessonObj.id, teacherName);
             
@@ -374,8 +380,15 @@
             notification.style.padding = "0px"
             notification.style.cursor = "pointer"
             notification.innerText='Mr '+ Name +' Added '+title+' Lesson '
-            notification.href = 'http://localhost:5266//Lesson//Details//' + id
+           
+            if (@check) {
+                notification.href = 'Lesson/Details/' + id + '?userId=@user.Id'
 
+            }
+            else {
+                notification.href = 'Lesson/Details/' + id
+            }
+           
             document.getElementById("Notification").appendChild(notification);
             $("#Ball").removeClass("d-none")
            
