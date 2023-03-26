@@ -1,27 +1,29 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Teachers";
 }
 
 <partial name="index" />
 
-<h1>Teachers</h1>
-<hr />
 <div class="container">
-    <table id="teachersDT" class="table table-striped table-bordered dt-responsive nowrap">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Join Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="text-center">
+        <h1>Teachers</h1>
+    </div>
+    <div class="table-responsive">
+        <table id="teachersDT" class="table table-striped table-bordered dt-responsive nowrap">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Join Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+        </div>
+    
 </div>
-
 @section Scripts{
     <script src="/lib/datatables/js/jquery.datatables.js"></script>
     <script src="/lib/datatables/js/datatables.bootstrap4.js"></script>

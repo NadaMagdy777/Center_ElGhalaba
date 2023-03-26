@@ -4,7 +4,6 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ApplicationUser user = await UserManager.GetUserAsync(User);
-   
 }
 
 @model List<Lesson>
