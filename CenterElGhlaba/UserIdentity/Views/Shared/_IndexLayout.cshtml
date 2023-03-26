@@ -88,6 +88,22 @@
                                                         <li class="nav-item">
                                                             <a asp-controller="Student" asp-action="Details" asp-route-Id="@user.Id">Hello @user.FirstName!</a>
                                                         </li>
+                                                        <li class="dropdown nav-item hidden-arrow" onclick="notifictionClick()">
+
+                                                            <a class="me-3 dropdown-toggle hidden-arrow" role="button" data-mdb-toggle="dropdown" href="#" id="dropdownMenuButton" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" onclick="notifictionClick()">
+                                                                <i class="fas fa-bell"></i>
+                                                                <span id="Ball" class="d-none position-absolute top-0 start-100 translate-middle p-2 bg-danger  rounded-circle" onclick="notifictionClick()">
+                                                                    <span class="visually-hidden"></span>
+                                                                </span>
+                                                            </a>
+                                                            <div class="dropdown-menu hidden-arrow" aria-labelledby="dropdownMenuButton" id="Notification" onclick="notifictionClick()">
+                                                               
+
+
+                                                               
+
+                                                            </div>
+                                                        </li>
                                                         
 
                                                     }
@@ -328,6 +344,46 @@
     <script src="/assets/js/plugins.js"></script>
     <script src="/assets/js/main.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script>
+        function notifictionClick(){
+
+            $("#Ball").addClass("d-none")
+
+
+        }
+    </script>
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+
+    <script>
+        var NewLessonhub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
+        NewLessonhub.start().then(function () {
+            console.log("Connection Success Lesson");
+        });
+        NewLessonhub.on("NewLessonAdded", function (lessonObj,teacherName) {
+           
+           
+            createNotficationCard(lessonObj.title, lessonObj.id, teacherName);
+            
+        });
+        function createNotficationCard(title,id,Name) {
+
+            let notification = document.createElement("a")
+            notification.classList.add("toast-body", "p-1")
+            notification.style.color = "black"
+            notification.style.margin = "0px"
+            notification.style.padding = "0px"
+            notification.style.cursor = "pointer"
+            notification.innerText='Mr '+ Name +' Added '+title+' Lesson '
+            notification.href = 'http://localhost:5266//Lesson//Details//' + id
+            document.getElementById("Notification").appendChild(notification);
+            $("#Ball").removeClass("d-none")
+           
+           
+
+
+
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

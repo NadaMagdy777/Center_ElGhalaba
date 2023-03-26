@@ -11,7 +11,7 @@ namespace Center_ElGhlaba.Hubs
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task AddComment(int lessonId, int studentId, string comment, DateTime date)
+        public async Task AddNewComment(int lessonId, int studentId, string comment, DateTime date)
         {
             LessonComment newComment = new LessonComment()
             {

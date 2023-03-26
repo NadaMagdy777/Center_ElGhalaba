@@ -2,6 +2,7 @@
 using Center_ElGhalaba.Models;
 using Center_ElGhlaba.Interfaces;
 using Center_ElGhlaba.Services;
+using Center_ElGhlaba.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace Center_ElGhlaba.Controllers
         {            
 
             List<Lesson> lessons =await services.GetStudentLessons(id);
-            const int pageSize = 1;
+            const int pageSize = 6;
 
 
             int recentCount = lessons.Count();
@@ -60,12 +61,13 @@ namespace Center_ElGhlaba.Controllers
             Student student = await services.GetStudent(id);
 
             List<Lesson> lessons = await services.GetStudentLessons(student.ID);
-            const int pageSize = 1;
+            const int pageSize = 6;
 
             int recentCount = lessons.Count();
             Pager pager = new Pager(recentCount, 1, pageSize);
             int recSkip = (1 - 1) * pageSize;
             this.ViewBag.Pager = pager;
+           
             this.ViewBag.Lessons = lessons.Skip(recSkip).Take(pager.PageSize).ToList(); ;
 
             return View(student);

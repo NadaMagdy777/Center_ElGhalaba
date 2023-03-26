@@ -26,6 +26,7 @@ namespace UserIdentity.Data
 		public DbSet<TeacherLogs> TeacherLogs { get; set; }
 		public DbSet<Follows> Follows { get; set; }
 		public DbSet<Likes> Likes { get; set; }
+		public DbSet<LessonLikes> LessonLikes { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

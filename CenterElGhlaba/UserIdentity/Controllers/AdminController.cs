@@ -13,7 +13,7 @@ using Center_ElGhalaba.Models;
 
 namespace Center_ElGhlaba.Controllers
 {
-   // [Authorize (Roles = "Admin")]
+    //[Authorize (Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly AdminServices services;
@@ -235,7 +235,7 @@ namespace Center_ElGhlaba.Controllers
                     ID = l.ID,
                     Title = l.Title,
                     Price = l.Price,
-                    Views = l.Views,  //==> Or Query TO GET TOTAL VIEWS FROM HISTORY l.History.Count(),        
+                    Views = l.Views.Count,  //==> Or Query TO GET TOTAL VIEWS FROM HISTORY l.History.Count(),        
                     Orders = l.Orders.Count(),
                     PublishDate = l.PublishDate,
                 }); 
