@@ -4,7 +4,6 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ApplicationUser user = await UserManager.GetUserAsync(User);
-   
 }
 
 @model List<Lesson>
@@ -201,18 +200,7 @@
 
             propertiescaptionDiv.appendChild(ViewCourseBtn);
 
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <script>
-                    ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
-                </script>
-            }
-            else
-            {
-                <script>
-                    ViewCourseBtn.href = 'Lesson/Details/' + id
-                </script>
-            }
+            
 
         }
     </script>
