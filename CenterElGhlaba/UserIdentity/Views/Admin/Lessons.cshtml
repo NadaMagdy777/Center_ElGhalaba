@@ -1,28 +1,27 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Lessons";
 }
 
 <partial name="index" />
-
-<h2>Lessons</h2>
-
-<hr />
-
-<div class="container">
-    <table id="studentsDT" class="table table-striped table-bordered dt-responsive nowrap">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Views</th>
-                <th>Orders</th>
-                <th>PublishDate</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+<div class="container py-3">
+    <div class="text-center">
+        <h2>Lessons</h2>
+    </div>
+    <div class="table-responsive">
+        <table id="studentsDT" class="table table-striped table-bordered dt-responsive nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Views</th>
+                    <th>Orders</th>
+                    <th>PublishDate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 @section Scripts{
     <script src="/lib/datatables/js/jquery.datatables.js"></script>
@@ -59,7 +58,7 @@
                     {
                         "render": function (data, type, row) {
                             return '<a href="javascript:;" class="btn btn-danger js-Delete-Lesson" data-Id="' + row.id + '">Delete</a>' +
-                            '<a class="btn btn-secondary" href="/Lesson/Details/' + row.id + '">View</a>';
+                                '<a class="btn btn-secondary" href="/Lesson/Details/' + row.id + '">View</a>';
                         },
                         "orderable": false
                     },
@@ -100,5 +99,5 @@
                 });
             });
         });
-        </script>
+    </script>
 }
