@@ -11,13 +11,16 @@
 <div class=" m-auto my-4 w-50 shadow p-3 mb-5 bg-body-tertiary rounded">
     <h1 class="mt-5">AddNew</h1>
     <form>
-        <partial name="_Stage" model="Model.Stage" />
-
-        <partial name="_Lvl" model="Model.LvlVM" />
-
-        <partial name="_Subject" model="Model.subVm" />
+        <div class="mb-3">
+            <partial name="_Stage" model="Model.Stage" />
+        </div>
+        <div class="mb-3">
+            <partial name="_Lvl" model="Model.LvlVM" />
+        </div>
+        <div class="mb-3">
+            <partial name="_Subject" model="Model.subVm" />
+        </div>
     </form>
-
 </div>
 
 
