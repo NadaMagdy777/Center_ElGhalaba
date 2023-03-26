@@ -18,114 +18,129 @@
 
 <div>
 
-    <div class="container">
-
-        <div class="main-video">
-
-            <div>
-
-                <img src="data:image/*;base64,@(Convert.ToBase64String(Model.CoverPicture))" class="cover"/>
-
-                <br>
-                <h2 style="display: inline;"> @Model.Title</h2>
-                <p>@Model.PublishDate</p>
-                <div class="price">
-                    @{
-                        if(Model.Discount > 0)
-                        {
-                            <p>@(Model.Price - Model.Discount)<span style="color:red"> <del> @Model.Price LE </del></span></p>
-                        }
-                        else
-                        {
-                            <p>@Model.Price LE</p>
-                        }
-                    }
-                </div>
-                <br>
-
-                <div class="properties__footer d-flex justify-content-between align-lessons-center">
-                    <span id='L-@Model.LessonID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count </span>
-                    <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
-                </div>
+    <div class="container-fluid mt-2 mb-2">
+        <div class="row m-1 d-flex  justify-content-center" >
+            <div class="col-4 me-5 p-3" style="background-color:white; margin-right:2%;">
 
                 <div>
-                    <p>Presented By:</p>
-                    <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
+
+                    <img src="data:image/*;base64,@(Convert.ToBase64String(Model.CoverPicture))" class="cover img-fluid mb-3" />
+
+                    <br>
+                    <h1 style="display: inline;"> @Model.Title</h1>
+                    <p>@Model.PublishDate</p>
+                    <div class="price">
                         @{
-                            if(Model.Teacher.AppUser.Image != null)
+                            if (Model.Discount > 0)
                             {
-                                <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Teacher.AppUser.Image)) class="imgg"/>
+                                <div class="properties__footer d-flex justify-content-between align-lessons-center">
+                                    <span   style="font-weight:bold">@(Model.Price - Model.Discount) LE </span>
+                                    <span> <del style="color:red"> @Model.Price LE </del></span>
+                                </div>
+                              
                             }
                             else
                             {
-                                <img src="~/assets/img/gallery/Blank.png" class="imgg"/>
+                                <span style="font-weight:bold">@Model.Price LE </span>
                             }
                         }
-                    </a>
-                    
-                    <span style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</span>
-                    
+                      
+                    </div>
+                    <br>
+
+                    <div class="properties__footer d-flex justify-content-between align-lessons-center">
+                        <span id='L-@Model.LessonID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @Model.Likes.Count </span>
+                        <span id='V-@Model.LessonID.ToString()' class="fa fa-eye" style="color:#e867ff"> @Model.Views.Count</span>
+                    </div>
+
+                    <div>
+                        <p style="font-weight:bolder">Presented By:</p>
+                        <a asp-action="Details" asp-controller="Teachers" asp-route-id="@Model.Teacher.AppUserID">
+                            @{
+                                if (Model.Teacher.AppUser.Image != null)
+                                {
+                                    <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Teacher.AppUser.Image))" style="width:50px;height:50px; border-radius:50%" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/gallery/Blank.png" style="width:50px;height:50px; border-radius:50%" />
+                                }
+                            }
+                        </a>
+
+                        <span style="display: inline;">@Model.Teacher.AppUser.FirstName @Model.Teacher.AppUser.LastName</span>
+
+                    </div>
+                    <br>
+                    <div>
+                        <p style="font-weight:bolder">Video Describtion</p>
+                        <p>@Model.Description</p>
+                        <p><span style="font-weight:bolder">Subject: </span> @Model.Subject.Name</p>
+                        <p><span style="font-weight:bolder">Level: </span> @Model.Level.Name</p>
+                       
+                    </div>
+
                 </div>
-                <br>
-                <div>
-                    <p>Video Describtion</p>
-                    <p>@Model.Description</p>
-                    <p>Subject: @Model.Subject.Name</p>
-                    <p>Level: @Model.Level.Name</p>
+
+                @{
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                        {
+                            if (user.Student.Orders.Find(o => o.Lesson.ID == Model.LessonID) != null)
+                            {
+                                <a asp-action="Watch" asp-route-id="@Model.LessonID" asp-route-userId="@user.Id" class="btn btn-primary">Watch</a>
+                            }
+                            else
+                            {
+                                <a href="/Payment/Student?AppUserID=@user.Id&Id=@Model.LessonID" style="width:100%" class="btn btn-primary">Buy Now</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <button href="/Identity/Account/Login"  class="btn btn-primary">Buy Now</button>
+
+                    }
+                }
+
+            </div>
+            <div class="col-7 p-5" style="background:white; height:inherit;">
+                <div class="comment-side d-flex flex-column" >
+                    <h1 class="text-center" style="font-weight:700">Comments</h1>
+                    @{
+                        if (Model.Comments.Count > 0)
+                        {
+                              <div id="comments-Section" class="list">
+                                    @foreach (LessonComment comment in Model.Comments)
+                                    {
+                                        if (comment.IsDeleted == false)
+                                        {
+                                            <div class="vid mb-2 mt-1">
+                                                <div>
+                                                    <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
+                                                    <span class="gray">@comment.Date</span>
+                                                    <p>@comment.Body</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                            </div>
+                     }
+                        else
+                        {
+                            <p class="text-center" style="font-weight:700">This lesson does not have any comments yet!</p>
+                        }
+
+                    }
                 </div>
 
             </div>
-
-            @{
-                if (SignInManager.IsSignedIn(User))
-                {
-                    if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
-                    {
-                        if (user.Student.Orders.Find(o => o.Lesson.ID == Model.LessonID) != null)
-                        {
-                            <a asp-action="Watch" asp-route-id="@Model.LessonID"  asp-route-userId="@user.Id" class="border-btn border-btn2">Watch</a>
-                        }
-                        else
-                        {
-                            <a href="/Payment/Student?AppUserID=@user.Id&Id=@Model.LessonID" class="border-btn border-btn2">Buy Now</a>
-                        }
-                    }
-                }
-                else
-                {
-                    <a href="/Identity/Account/Login" class="border-btn border-btn2">Buy Now</a>
-                }
-            }
-
-        </div>
-        <div class="comment-side">
-            <h4>comments</h4>
-            @{
-                if (Model.Comments.Count > 0)
-                {
-                    <div id="comments-Section" class="list">
-                        @foreach (LessonComment comment in Model.Comments)
-                        {
-                            if (comment.IsDeleted == false)
-                            {
-                                <div class="vid">
-                                    <div>
-                                        <span class="gray">@comment.Student.AppUser.FirstName @comment.Student.AppUser.LastName: </span>
-                                        <span class="gray">@comment.Date</span>
-                                        <p>@comment.Body</p>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                }
-                else
-                {
-                    <p>This lesson does not have any comments yet!</p>
-                }
             
-            }
+
         </div>
+
+       
 
     </div>
 

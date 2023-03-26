@@ -4,6 +4,12 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ApplicationUser user = await UserManager.GetUserAsync(User);
+    int check = 1;
+    if (user == null)
+    {
+        user = new ApplicationUser();
+        check = 0;
+    }
    
 }
 
@@ -201,18 +207,14 @@
 
             propertiescaptionDiv.appendChild(ViewCourseBtn);
 
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <script>
-                    ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
-                </script>
+            if (@check) {
+                ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+
             }
-            else
-            {
-                <script>
-                    ViewCourseBtn.href = 'Lesson/Details/' + id
-                </script>
+            else {
+                ViewCourseBtn.href = 'Lesson/Details/' + id
             }
+
 
         }
     </script>
