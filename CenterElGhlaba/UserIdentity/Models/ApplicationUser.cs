@@ -1,5 +1,6 @@
 ﻿using Center_ElGhalaba.Models;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserIdentity.Models
@@ -17,7 +18,9 @@ namespace UserIdentity.Models
 		public DateTime JoinDate { get; set; }
 		public bool IsAvailable { get; set; }
 		public bool IsDeleted { get; set; }
+        [JsonIgnore]
 		public virtual Student? Student { get; set; }
+        [JsonIgnore]
 		public virtual Teacher? Teacher { get; set; }
 	}
 }

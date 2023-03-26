@@ -156,7 +156,11 @@ namespace Center_ElGhlaba.Controllers
                 List<string> resourses = UploadsResoursesToFolder(newLesson.Resourses, "LessonsMaterial\\LessonResourses");
                 insertResoursesDB(resourses, lesson.ID);
 
-                await LessonHub.Clients.Group(lesson.TeacherID.ToString()).SendAsync("NewLessonAdded",lesson);
+               
+              ;
+                Teacher teacher = await _UnitOfWork.Teachers.FindAsync(T => T.ID == lesson.TeacherID,new[] { "AppUser" });
+
+                await LessonHub.Clients.Group(lesson.TeacherID.ToString()).SendAsync("NewLessonAdded", lesson,teacher.AppUser.UserName);
 
                 return RedirectToAction("Index");
 
