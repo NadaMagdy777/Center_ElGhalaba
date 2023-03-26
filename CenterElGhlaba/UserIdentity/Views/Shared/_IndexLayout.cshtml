@@ -361,29 +361,23 @@
         });
         NewLessonhub.on("NewLessonAdded", function (lessonObj,teacherName) {
            
-
+           
             createNotficationCard(lessonObj.title, lessonObj.id, teacherName);
             
         });
         function createNotficationCard(title,id,Name) {
 
-            let notification = document.createElement('a')
-            notification.classList.add('toast-body', 'p-1')
-            notification.style.color = 'black'
-            notification.style.margin = '0px'
-            notification.style.padding = '0px'
-            notification.innerText = 'Mr ' +Name+' Added New Lesson '+ title
-            @if (SignInManager.IsSignedIn(User))
-            {
-                       <script>
-                        notification.href = 'Lesson/Details/' + id + '?userId=@user.Id'
-                      </script>
-            }
-      
-            notification.style.cursor='hand'
-            document.getElementById('Notification').appendChild(notification);
+            let notification = document.createElement("a")
+            notification.classList.add("toast-body", "p-1")
+            notification.style.color = "black"
+            notification.style.margin = "0px"
+            notification.style.padding = "0px"
+            notification.style.cursor = "pointer"
+            notification.innerText='Mr '+ Name +' Added '+title+' Lesson '
+            notification.href = 'http://localhost:5266//Lesson//Details//' + id
+            document.getElementById("Notification").appendChild(notification);
             $("#Ball").removeClass("d-none")
-
+           
            
 
 
