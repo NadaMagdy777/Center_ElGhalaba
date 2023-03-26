@@ -1,27 +1,27 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Deleted Students";
 }
 
 <partial name="index" />
 
-<h2>Deleted Students</h2>
-
-<hr />
-
-<div class="container">
-    <table id="delStudentsDT" class="table table-striped table-bordered dt-responsive nowrap">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Join Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+<div class="container py-3">
+    <div class="text-center">
+        <h2>Deleted Students</h2>
+    </div>
+    <div class="table-responsive">
+        <table id="delStudentsDT" class="table table-striped table-bordered dt-responsive nowrap">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Join Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
 
@@ -58,7 +58,7 @@
 
                     {
                         "render": function (data, type, row) {
-                            return '<a href="javascript:;" class="btn btn-danger js-unDelete-Student" data-Id="' + row.id + '">Unsuspend</a>' + 
+                            return '<a href="javascript:;" class="btn btn-danger js-unDelete-Student" data-Id="' + row.id + '">Unsuspend</a>' +
                                 '<a class="btn btn-secondary" onclick="viewProfile(this)" href="/Student/Details/' + row.id + '">Profile</a>';
                         },
                         "orderable": false

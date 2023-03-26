@@ -2,7 +2,11 @@
 @model ConfirmEmailChangeModel
 @{
     ViewData["Title"] = "Confirm email change";
+    Layout = "_IndexLayout";
 }
-
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="w-75 m-auto py-3 text-center">
+    <h1>@ViewData["Title"]</h1>
+    <div>
+        <partial name="_StatusMessage" model="Model.StatusMessage" />
+    </div>
+</div>
