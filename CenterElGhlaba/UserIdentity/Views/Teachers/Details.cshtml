@@ -27,7 +27,7 @@
                             }
                             else
                             {
-                                <img src="https://i.imgur.com/stD0Q19.jpg"
+                                <img src="~/assets/img/gallery/Blank.png"
                                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                                      style="width: 150px; z-index: 1">
                                 <span id="onlineIndicator" style="width:20px !important; height:20px !important;border-radius:50% !important;border: 13px solid #e70303 !important; z-index: 8 !important; position:absolute !important; top: 66px; left: 18px;"></span>
@@ -122,7 +122,7 @@
                                             <div class="properties pb-20">
                                                 <div class="properties__card">
                                                     <div class="properties__img overlay1">
-                                                        <a href="#"><img src="https://i.imgur.com/stD0Q19.jpg" alt=""></a>
+                                                        <img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt="">
                                                     </div>
 
                                                     <div class="properties__caption">
@@ -140,8 +140,7 @@
 
                                                         @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
                                                         {
-                                                            <a asp-action="EditCourse" class="text-info">Edit |</a>
-                                                            <a asp-action = "RemoveCourse" class="text-danger">Remove</a>
+                                                            <a asp-action="Edit" asp-controller="Lesson" class="text-info">Edit</a>
                                                         }
                                                         else
                                                         {

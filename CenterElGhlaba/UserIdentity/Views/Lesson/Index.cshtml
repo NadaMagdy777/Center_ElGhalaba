@@ -23,9 +23,7 @@
         pageNO = pager.CurrentPage;
 
     }
-   
 }
-
 
 <div class="courses-area section-padding40 fix">
     <div class="row justify-content-center">
@@ -36,57 +34,42 @@
                     @foreach (Lesson lesson in Model)
                     {
                        if (lesson.IsDeleted == false){
-                          
-                        <div class="col-lg-4 col-md-6  ">
-                            <div class="properties properties2 mb-30">
-                                <div class="properties__card">
-                                    <div class="properties__img overlay1">
-                                        @if(lesson.CoverPicture != null)
-                                        {
-                                            <a href="#"><img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt=""></a>
-                                        }
-                                    </div>
-                                    <div class="properties__caption">
-                                        <h3><a href="#">@lesson.Title</a></h3>
-                                        <div class="properties__footer d-flex justify-content-between align-lessons-center">
-
-                                            
-                                                <span class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes</span>
-                                           
-
-                                           
-                                                <span class="fa fa-eye" style="color:#e867ff"> @lesson.Views</span>
-                                            
-                                           
-
-
+                            <div class="col-lg-4 col-md-6  ">
+                                <div class="properties properties2 mb-30">
+                                    <div class="properties__card">
+                                        <div class="properties__img overlay1">
+                                            @if(lesson.CoverPicture != null)
+                                            {
+                                                <img src="data:image/*;base64,@(Convert.ToBase64String(lesson.CoverPicture))" alt="">
+                                            }
                                         </div>
+                                        <div class="properties__caption">
+                                            <h3><a href="#">@lesson.Title</a></h3>
+                                                <div class="properties__footer d-flex justify-content-between align-lessons-center">
+                                                    <span id='L-@lesson.ID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @lesson.Likes.Count </span>
+                                                    <span id='V-@lesson.ID.ToString()' class="fa fa-eye" style="color:#e867ff"> @lesson.Views.Count</span>
+                                                </div>
+
                                             <div class="properties__footer d-flex justify-content-between align-items-center">
-
-
                                                 <span style="font-weight:bold">@(lesson.Price - lesson.Discount) LE</span>
                                                 <span><del style="color:red">@lesson.Price LE</del> </span>
-
-
                                             </div>
 
-                                            @if (SignInManager.IsSignedIn(User))
-                                            {
-                                                if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                                @if (SignInManager.IsSignedIn(User))
                                                 {
-                                                    <a asp-action="Details" asp-route-id="@lesson.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                                    if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                                    {
+                                                        <a asp-action="Details" asp-route-id="@lesson.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
-                                            }
+                                                else
+                                                {
+                                                    <a asp-action="Details" asp-route-id="@lesson.ID" class="border-btn border-btn2">Find Out More</a>
+                                                }
+                                        </div>
                                     </div>
-                                       
-
                                 </div>
                             </div>
-                        </div>
                         }
                     }
 
@@ -98,8 +81,20 @@
     </div>
 </div>
 @section Scripts{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
- 
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/assets/js/ConnectServerLessonHub.js"></script>
+    <script src="~/assets/js/ListenLessonLikes.js"></script>
+
+    <script>
+        var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
+        hub.start().then(function() {
+            console.log("Connection Success Lesson");
+        });
+        hub.on("NewLessonAdded", function(lessonObj) {
+            console.log("hello");
+            console.log(lessonObj);
+        });
+    </script>
     <script>
         var CurrentPage = 1;
         function GetLessons(value) {
@@ -118,9 +113,6 @@
                     pref = CurrentPage;
                     CurrentPage = parseInt(value);
                 }
-
-
-
             }
 
             if (CurrentPage > @pager.TotalPages) {
@@ -134,11 +126,7 @@
             if (CurrentPage == pref) {
                 return
             }
-
-
             var page = parseInt(value)
-
-
             $.ajax(
                 {
                     url: "/Lesson/GetLessons",
@@ -146,24 +134,16 @@
                     success: function (result) {
                         $("#LessonContainer").html("");
                         for (let item of result) {
-
-
                             addCard(item.title, item.likes, item.price, item.id, item.coverPicture, item.views, item.discount)
-
-
                         }
                     }
                 });
         }
         function addCard(title, NOLikes, price, id, pic, views, discount) {
-
-
-
             const cardParent = document.querySelector("#LessonContainer")
-
             const colDiv = document.createElement('div')
-            colDiv.className = 'col-4'
 
+            colDiv.className = 'col-4'
             cardParent.appendChild(colDiv)
 
             const card = document.createElement('div')
@@ -178,8 +158,6 @@
 
             const imgDiv = document.createElement('div')
             imgDiv.classList.add('properties__img', 'overlay1')
-
-
 
             const img = document.createElement('img')
             img.classList.add('img-fluid')
@@ -225,34 +203,30 @@
             deleteDiscount.innerText = price + 'LE'
             deleteDiscount.style.color = 'red'
 
-
             beforeDiscount.appendChild(deleteDiscount)
 
             propertiescaptionDiv.appendChild(PricesDiv)
             PricesDiv.appendChild(Total)
             PricesDiv.appendChild(beforeDiscount)
 
-
             const ViewCourseBtn = document.createElement('a')
             ViewCourseBtn.classList.add('border-btn', 'border-btn2')
             ViewCourseBtn.innerText = 'Find Out More'
 
-            console.log(@check)
-          
-            if(@check){
-                ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
-               
-            }
-            else{
-                ViewCourseBtn.href = 'Lesson/Details/' + id
-            }
-           
-
-
-
             propertiescaptionDiv.appendChild(ViewCourseBtn);
 
-
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <script>
+                    ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+                </script>
+            }
+            else
+            {
+                <script>
+                    ViewCourseBtn.href = 'Lesson/Details/' + id
+                </script>
+            }
 
         }
     </script>

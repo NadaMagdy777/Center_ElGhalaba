@@ -7,7 +7,13 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 *@
-
+@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
 @model IndexViewModel
 @{
 
@@ -79,7 +85,7 @@
                             <img src="assets/img/gallery/topic1.png" alt="">
                             <div class="topic-content-box">
                                 <div class="topic-content">
-                                    <h3><a asp-action="Index" asp-controller="Lesson">@subject.Name</a></h3>           @*require Action*@
+                                    <h3><a asp-action="SubjectLessons" asp-route-id="@subject.ID" asp-controller="Lesson">@subject.Name</a></h3>           @*require Action*@
                                 </div>
                             </div>
                         </div>
@@ -161,18 +167,18 @@
                                 <div class="properties__card">
                                     <div class="properties__img overlay1">
                                         @if(item.CoverPicture != null){
-                                            <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID"><img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt=""></a>
+                                           <img src="data:image/*;base64,@(Convert.ToBase64String(item.CoverPicture))" alt="">
                                         }
                                     </div>
                                     <div class="properties__caption">
                                         <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID">@item.Title</a></h3>
                                         <div class="properties__footer d-flex justify-content-between align-items-center">
 
-                                            <span class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes</span>
+                                            <span id='L-@item.ID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes.Count</span>
 
 
 
-                                            <span class="fa fa-eye" style="color:#e867ff"> @item.Views</span>
+                                            <span id='V-@item.ID.ToString()' class="fa fa-eye" style="color:#e867ff"> @item.Views.Count</span>
                                            
 
 
@@ -184,9 +190,18 @@
                                             <span><del style ="color:red">@item.Price LE</del> </span>
                                         </div>
 
-
-                                        <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID" class="border-btn border-btn2">Find out more</a>
-                                    </div>
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                            {
+                                                <a asp-action="Details" asp-controller="Lesson" asp-route-id="@item.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Details" asp-controller="Lesson" asp-route-id="@item.ID" class="border-btn border-btn2">Find Out More</a>
+                                        }
+                                   </div>
                                 </div>
                             </div>
                         </div>
@@ -223,11 +238,11 @@
                                         <h3><a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID">@item.Title</a></h3>
                                         <div class="properties__footer d-flex justify-content-between align-items-center">
 
-                                            <span class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes</span>
+                                            <span id='L-@item.ID.ToString()' class="bi bi-heart-fill" style="color:#e867ff"> @item.Likes.Count</span>
 
 
 
-                                            <span class="fa fa-eye" style="color:#e867ff"> @item.Views</span>
+                                            <span id='V-@item.ID.ToString()' class="fa fa-eye" style="color:#e867ff"> @item.Views.Count</span>
 
 
 
@@ -238,9 +253,18 @@
                                             <span style="font-weight:bold">@(item.Price - item.Discount) LE</span>
                                             <span><del style="color:red">@item.Price LE</del> </span>
                                         </div>
+                                         @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            if (await UserManager.IsInRoleAsync(user, RolesConsts.Student.ToString()))
+                                            {
+                                                <a asp-action="Details" asp-controller="Lesson" asp-route-id="@item.ID" asp-route-userId="@user.Id" class="border-btn border-btn2">Find Out More</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Details" asp-controller="Lesson" asp-route-id="@item.ID" class="border-btn border-btn2">Find Out More</a>
+                                        }
 
-
-                                        <a asp-action="Details" asp-controller="Lesson" asp-route-Id="@item.ID" class="border-btn border-btn2">Find out more</a>
                                     </div>
                                 </div>
                             </div>
@@ -323,7 +347,7 @@
                             <img class="rounded-circle" style="width:110px !important; height:110px !important;" src="data:image/*;base64,@(Convert.ToBase64String(teacher.AppUser.Image))" alt="">
                         }
                         else{
-                            <img class="rounded-circle" style="width:110px !important; height:110px !important;" src="/assets/img/gallery/topic1.png" alt="">
+                            <img class="rounded-circle" style="width:110px !important; height:110px !important;" src="~/assets/img/gallery/Blank.png" alt="">
 
                         }
                     </div>
@@ -358,9 +382,16 @@
                         with us.
                     </h2>
                     <p>The automated process all your website tasks. Discover tools and techniques to engage effectively with vulnerable children and young people.</p>
-                    <a href="#" class="btn">Join now for Free</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+@section Scripts
+{
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/assets/js/ConnectServerLessonHub.js"></script>
+    <script src="~/assets/js/ListenLessonLikes.js"></script>
+}
+

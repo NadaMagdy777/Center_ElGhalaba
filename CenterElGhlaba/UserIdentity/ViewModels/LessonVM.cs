@@ -18,7 +18,7 @@ namespace Center_ElGhlaba.ViewModels
         public string Description { get; set; }
 
 		public int Duration { get; set; }
-        [Range(minimum: 20, maximum: 100, ErrorMessage = "Price Must be between 20 and 100")]
+        [Range(minimum: 20, maximum: 1000, ErrorMessage = "Price Must be between 20 and 100")]
         public decimal Price { get; set; }
        
 		[Remote("CheckDiscount", "Lesson", AdditionalFields = "Price",

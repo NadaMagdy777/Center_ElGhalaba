@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
-    <Content Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
-    <EmbeddedResource Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
-    <None Remove="wwwroot\LessonsMaterial\LessonResourses\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\js\test.js" />
   </ItemGroup>
 
@@ -117,6 +110,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\LessonsMaterial\LessonVideos\" />
+    <Folder Include="wwwroot\LessonsMaterial\LessonVideos\" />
+    <Folder Include="wwwroot\LessonsMaterial\LessonResourses\" />
   </ItemGroup>
 
 </Project>

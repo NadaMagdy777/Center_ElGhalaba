@@ -1,4 +1,11 @@
-﻿@model StudentPaymentVM
+﻿@using Microsoft.AspNetCore.Identity
+@using Center_ElGhalaba.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+@model StudentPaymentVM
 @{
     ViewData["Title"] = "PaymentSuccess";
 }
@@ -53,7 +60,7 @@
                         <small class="text-muted">@Model.PaymentValue</small>
                     </div>
 
-                    <a class="btn btn-primary mt-3" asp-action="Details" asp-controller="Lesson" asp-route-ID="@Model.LessonID">Go To Lesson</a>
+                    <a class="btn btn-primary mt-3" asp-action="Watch" asp-controller="Lesson" asp-route-ID="@Model.LessonID" asp-route-userID="@user.Id">Go To Lesson</a>
                     <br />
                     <a class="mt-1" asp-action="Index" asp-controller="Lesson">Browse Lessons</a>
                 </div>

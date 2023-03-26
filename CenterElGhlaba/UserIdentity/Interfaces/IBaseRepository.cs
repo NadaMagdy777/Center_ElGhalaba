@@ -5,7 +5,7 @@ namespace Center_ElGhlaba.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<List<T>> GetAllAsync();
+        Task<List<T>> GetAllAsync(string [] includes = null);
         Task<T> GetByIdAsync(int id);
         Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null);
         Task<List<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[] includes = null, 
@@ -16,5 +16,6 @@ namespace Center_ElGhlaba.Interfaces
 
         Task<int> CountAsync();
         Task<int> CountAsync(Expression<Func<T, bool>> criteria);
+
     }
 }

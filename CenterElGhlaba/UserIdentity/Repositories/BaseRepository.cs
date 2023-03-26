@@ -17,9 +17,18 @@ namespace Center_ElGhlaba.Repositories
         {
             _context = context;
         }
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync(string[] includes = null)
         {
-            return await _context.Set<T>().ToListAsync();
+            IQueryable<T> query = _context.Set<T>();
+
+            if(includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return await query.ToListAsync();
         }
         public async Task<T> GetByIdAsync(int id)
         {
