@@ -201,18 +201,7 @@
 
             propertiescaptionDiv.appendChild(ViewCourseBtn);
 
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <script>
-                    ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
-                </script>
-            }
-            else
-            {
-                <script>
-                    ViewCourseBtn.href = 'Lesson/Details/' + id
-                </script>
-            }
+            
 
         }
     </script>
