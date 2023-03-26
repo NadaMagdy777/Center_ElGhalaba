@@ -345,7 +345,6 @@
     <script src="/assets/js/main.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <script>
-        console.log("in script")
         function notifictionClick(){
 
             $("#Ball").addClass("d-none")
@@ -361,14 +360,12 @@
             console.log("Connection Success Lesson");
         });
         NewLessonhub.on("NewLessonAdded", function (lessonObj,teacherName) {
-            console.log("hello");
-            console.log(lessonObj);
-             console.log(teacherName);
+           
 
-            createNotficationCard(lessonObj.title,lessonObj.id);
+            createNotficationCard(lessonObj.title, lessonObj.id, teacherName);
             
         });
-        function createNotficationCard(title,id) {
+        function createNotficationCard(title,id,teacherName) {
 
             console.log('in function')
             let notification = document.createElement('a')
@@ -376,8 +373,14 @@
             notification.style.color = 'black'
             notification.style.margin = '0px'
             notification.style.padding = '0px'
-            notification.innerText = 'Mr ' +  ' Added New Lesson ' + title
-            notification.href = 'Lesson/Details/' + id
+            notification.innerText = 'Mr ' +teacherName +  ' Added New Lesson ' + title
+            @if (SignInManager.IsSignedIn(User))
+            {
+                       <script>
+                        notification.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+                      </script>
+            }
+      
             notification.style.cursor='hand'
             document.getElementById('Notification').appendChild(notification);
             $("#Ball").removeClass("d-none")

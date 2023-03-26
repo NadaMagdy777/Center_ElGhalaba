@@ -4,12 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ApplicationUser user = await UserManager.GetUserAsync(User);
-    int check = 1;
-    if (user == null)
-    {
-        user = new ApplicationUser();
-        check=0;
-    }
+   
 }
 
 @model List<Lesson>
@@ -85,16 +80,7 @@
     <script src="~/assets/js/ConnectServerLessonHub.js"></script>
     <script src="~/assets/js/ListenLessonLikes.js"></script>
 
-    <script>
-        var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
-        hub.start().then(function() {
-            console.log("Connection Success Lesson");
-        });
-        hub.on("NewLessonAdded", function(lessonObj) {
-            console.log("hello");
-            console.log(lessonObj);
-        });
-    </script>
+
     <script>
         var CurrentPage = 1;
         function GetLessons(value) {
