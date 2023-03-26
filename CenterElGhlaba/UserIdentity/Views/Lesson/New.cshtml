@@ -180,23 +180,11 @@
                 });
         }
 
-        $("#NewLessonForm").submit(function (e) {
-            console.log("Sendin Data");
-            this.submit()
-        });
+
     </script>
    
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
-    <script>
-        //1-declare hub "URL"
-        var hub = new signalR.HubConnectionBuilder().withUrl("/NewLesson").build();
-        //2-start connect as online client
-
-        hub.start().then(function(){
-            console.log("Connect Success lesson");
-        });
-            
-    </script>
+    
 
     <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

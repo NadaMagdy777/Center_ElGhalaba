@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Center_ElGhlaba.Controllers
@@ -285,7 +286,7 @@ namespace Center_ElGhlaba.Controllers
                 {
                     LessonResource resourse = new LessonResource();
                     resourse.LessonID = lessonId;
-                    resourse.Name = name;
+                    resourse.Name = name.Substring(36);
                     resourse.Value = name;
                     _UnitOfWork.resources.Insert(resourse);
                     _UnitOfWork.Complete();
