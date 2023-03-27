@@ -140,7 +140,7 @@
 
                                                         @if (await UserManager.IsInRoleAsync(user, RolesConsts.Teacher.ToString()) && user.Id == Model.AppUserID)
                                                         {
-                                                            <a asp-action="Edit" asp-controller="Lesson" class="text-info">Edit</a>
+                                                            <a asp-action="Edit" asp-controller="Lesson" asp-route-id="@lesson.ID" class="text-info">Edit</a>
                                                         }
                                                         else
                                                         {

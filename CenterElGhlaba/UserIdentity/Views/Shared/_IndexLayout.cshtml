@@ -382,11 +382,11 @@
             notification.innerText='Mr '+ Name +' Added '+title+' Lesson '
            
             if (@check) {
-                notification.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+                notification.href = '/Lesson/Details/' + id + '?userId=@user.Id'
 
             }
             else {
-                notification.href = 'Lesson/Details/' + id
+                notification.href = '/Lesson/Details/' + id
             }
            
             document.getElementById("Notification").appendChild(notification);
