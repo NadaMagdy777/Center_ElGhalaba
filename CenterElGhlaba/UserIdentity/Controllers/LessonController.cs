@@ -34,10 +34,10 @@ namespace Center_ElGhlaba.Controllers
             _LessonLikesHub = LessonLikesHub;
         }
       
-        public async Task<IActionResult> GetLessons(int pg,List<Lesson> lessons)
+        public async Task<IActionResult> GetLessons(int pg)
         {
 
-            //var lessons = await _UnitOfWork.Lessons.GetAllAsync(new[] { "Likes", "Views" });
+            var lessons = await _UnitOfWork.Lessons.GetAllAsync(new[] { "Likes", "Views" });
             const int pageSize = 6;
 
             int recentCount = lessons.Count();
