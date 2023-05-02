@@ -166,7 +166,7 @@ namespace Center_ElGhlaba.Controllers
         public async Task<ActionResult> TeacherLessons(string id)
         {
             Teacher teacher = await _UnitOfWork.Teachers.FindAsync(t => t.AppUserID == id);
-            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.TeacherID == teacher.ID);
+            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.TeacherID == teacher.ID, new[] {"Likes","Views"});
             return View("Index", lessons);
         }
         public async Task<ActionResult> TeacherNew(string id)
@@ -245,7 +245,7 @@ namespace Center_ElGhlaba.Controllers
         {
             if (ModelState.IsValid)
             {
-               Lesson Lesson=await  _UnitOfWork.Lessons.GetByIdAsync(lesson.ID);
+                Lesson Lesson = await _UnitOfWork.Lessons.FindAsync(l => l.ID == lesson.ID, new[] { "Teacher" }) ;
 
                 Lesson.Title = lesson.Title;
                 Lesson.Price = lesson.Price;
@@ -256,7 +256,7 @@ namespace Center_ElGhlaba.Controllers
                 _UnitOfWork.Lessons.Update(Lesson);
                 _UnitOfWork.Complete();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Teachers", new { id = Lesson.Teacher.AppUserID});
             }
 
             return View(lesson);
