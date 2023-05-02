@@ -9,6 +9,7 @@ using Center_ElGhlaba.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
 using System.IO;
 using static System.Net.Mime.MediaTypeNames;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -22,8 +23,8 @@ namespace Center_ElGhlaba.Controllers
         private readonly IMapper _mapper;
         public IHubContext<LessonHub> LessonHub { get; }
         public IHubContext<LessonLikesHub> _LessonLikesHub { get; }
+        
 
-        private List<Lesson> lessons = new List<Lesson>();
         public LessonController(IUnitOfWork unitOfWork, IHostingEnvironment hosting, IMapper mapper, IHubContext<LessonHub> _LessonHub, IHubContext<LessonLikesHub> LessonLikesHub)
         {
             _UnitOfWork = unitOfWork;
@@ -33,10 +34,10 @@ namespace Center_ElGhlaba.Controllers
             _LessonLikesHub = LessonLikesHub;
         }
       
-        public async Task<IActionResult> GetLessons(int pg)
+        public async Task<IActionResult> GetLessons(int pg,List<Lesson> lessons)
         {
 
-  
+            //var lessons = await _UnitOfWork.Lessons.GetAllAsync(new[] { "Likes", "Views" });
             const int pageSize = 6;
 
             int recentCount = lessons.Count();
@@ -48,7 +49,7 @@ namespace Center_ElGhlaba.Controllers
         public async Task<IActionResult> Index()
         {
             const int pageSize = 6;
-            lessons = await _UnitOfWork.Lessons.GetAllAsync(new[] { "Likes", "Views" });
+            List<Lesson> lessons = await _UnitOfWork.Lessons.GetAllAsync(new[] { "Likes", "Views" });
 
             int recentCount = lessons.Count();
             Pager pager = new Pager(recentCount, 1, pageSize);
@@ -150,13 +151,14 @@ namespace Center_ElGhlaba.Controllers
         public async Task<ActionResult> SubjectLessons(int id)
         {
             const int pageSize = 6;
-            lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id, new[] { "Likes", "Views" });
+            List<Lesson> lessons = await _UnitOfWork.Lessons.FindAllAsync(l => l.subjectID == id, new[] { "Likes", "Views" });
 
             int recentCount = lessons.Count();
             Pager pager = new Pager(recentCount, 1, pageSize);
             int recSkip = (1 - 1) * pageSize;
             this.ViewBag.Pager = pager;
 
+            this.ViewBag.subjectLesson = true;
             return View("Index", lessons.Skip(recSkip).Take(pager.PageSize).ToList());
 
         }

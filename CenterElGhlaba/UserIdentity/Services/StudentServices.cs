@@ -19,7 +19,7 @@ namespace Center_ElGhlaba.Services
         }
         public async Task<List<Lesson>> GetStudentLessons(int id)
         {
-            var orders= await unit.Orders.FindAllAsync(O => O.StudentID == id, new[] { "Lesson" }) ;
+            var orders= await unit.Orders.FindAllAsync(O => O.StudentID == id, new[] { "Lesson.Views", "Lesson.Likes" }) ;
             return orders.Select(L => L.Lesson).ToList();
 
         }

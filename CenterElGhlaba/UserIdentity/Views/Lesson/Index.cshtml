@@ -2,6 +2,9 @@
 @using Center_ElGhalaba.Constants
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
+
+@model List<Lesson>
 @{
     ApplicationUser user = await UserManager.GetUserAsync(User);
     int check = 1;
@@ -10,11 +13,6 @@
         user = new ApplicationUser();
         check = 0;
     }
-   
-}
-
-@model List<Lesson>
-@{
     ViewData["Title"] = "Courses";
     Pager pager = new Pager();
     int pageNO = 0;
@@ -92,6 +90,7 @@
         function GetLessons(value) {
             pref = CurrentPage;
 
+
             if (!Number.isInteger(value)) {
                 if (value == 'next') {
                     value = CurrentPage + 1
@@ -119,19 +118,22 @@
                 return
             }
             var page = parseInt(value)
+            console.log('pagination')
             $.ajax(
                 {
                     url: "/Lesson/GetLessons",
-                    data: {  "pg": page },
+                    data: { "pg": page},
                     success: function (result) {
                         $("#LessonContainer").html("");
                         for (let item of result) {
-                            addCard(item.title, item.likes, item.price, item.id, item.coverPicture, item.views, item.discount)
+                            console.log(item)
+
+                            addCard(item.title, item.price, item.id, item.coverPicture, item.views, item.discount,item.likes)
                         }
                     }
                 });
         }
-        function addCard(title, NOLikes, price, id, pic, views, discount) {
+        function addCard(title, price, id, pic, views, discount,likes) {
             const cardParent = document.querySelector("#LessonContainer")
             const colDiv = document.createElement('div')
 
@@ -172,12 +174,12 @@
             const likies = document.createElement('span')
             likies.classList.add('bi', 'bi-heart-fill')
             likies.style.color = '#e867ff'
-            likies.innerText = NOLikes;
+            likies.innerText = likes.length;
 
             const Lessonviews = document.createElement("span")
             Lessonviews.classList.add('fa', 'fa-eye')
             Lessonviews.style.color = '#e867ff'
-            Lessonviews.innerText = views
+            Lessonviews.innerText = views.length
 
             propertiescaptionDiv.appendChild(LikesDiv)
             LikesDiv.appendChild(likies);
@@ -208,11 +210,11 @@
             propertiescaptionDiv.appendChild(ViewCourseBtn);
 
             if (@check) {
-                ViewCourseBtn.href = 'Lesson/Details/' + id + '?userId=@user.Id'
+                ViewCourseBtn.href = '/Lesson/Details/' + id + '?userId=@user.Id'
 
             }
             else {
-                ViewCourseBtn.href = 'Lesson/Details/' + id
+                ViewCourseBtn.href = '/Lesson/Details/' + id
             }
 
 

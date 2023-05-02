@@ -99,7 +99,8 @@
                     {
                         @foreach (StudentOrder order in user.Student.Orders)
                         {
-                            if (order.Lesson.IsDeleted == false)
+
+                        if (order.Lesson.IsDeleted == false && order.LessonID != Model.LessonID)
                             {
                                 <a asp-action="Watch" asp-route-id="@order.LessonID" asp-route-userId="@user.Id">
                                     <div class="row d-flex vid  mb-3" style="height:150px; width:100%; margin:1%">
